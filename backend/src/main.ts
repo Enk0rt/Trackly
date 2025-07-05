@@ -3,12 +3,14 @@ import mongoose from "mongoose";
 
 import { config } from "./configs/config";
 import { ApiError } from "./errors/api.error";
+import { apiRouter } from "./routers/apiRouter";
 import { delay } from "./utils/delay";
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("/api", apiRouter);
 
 app.use((err: ApiError, req: Request, res: Response, next: NextFunction) => {
     const status = err.status || 500;
