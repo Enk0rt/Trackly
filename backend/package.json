@@ -1,0 +1,48 @@
+{
+  "name": "trackly-backend",
+  "version": "1.0.0",
+  "description": "backend packages of trackly web-app",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "rimraf dist && tsc-watch --onSuccess \"npm run watch:server\"",
+    "watch:server": "tsx src/main.ts --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "trackly"
+  },
+  "author": "Enk0rt Dev",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0",
+    "mongoose": "^8.16.0",
+    "jsonwebtoken": "^9.0.2",
+    "bcrypt": "^6.0.0",
+    "mongodb": "^6.17.0",
+    "dotenv": "^16.5.0",
+    "zod": "^3.25.36"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.27.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.34.1",
+    "@types/express": "^5.0.3",
+    "@types/mongoose": "^5.11.97",
+    "@types/bcrypt" : "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^24.0.3",
+    "@types/mongodb": "^4.0.7",
+    "@typescript-eslint/eslint-plugin": "^8.33.0",
+    "@typescript-eslint/parser": "^8.33.0",
+    "eslint": "^9.27.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-prettier": "^5.4.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "globals": "^16.2.0",
+    "rimraf": "^6.0.1",
+    "tsc-watch": "^7.0.0",
+    "tsx": "^4.19.4"
+  }
+}
