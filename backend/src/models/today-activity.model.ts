@@ -10,6 +10,7 @@ const todayActivitySchema = new Schema(
         habits: [{ type: Schema.Types.ObjectId, ref: "habit" }],
         goals: [{ type: Schema.Types.ObjectId, ref: "goal" }],
         plans: [{ type: Schema.Types.ObjectId, ref: "plan" }],
+        meetings: [{ type: Schema.Types.ObjectId, ref: "meeting" }],
     },
     {
         timestamps: true,

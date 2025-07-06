@@ -9,4 +9,5 @@ export interface ITodayActivity extends IBase {
     habits: ObjectId[];
     goals: ObjectId[];
     plans: ObjectId[];
+    meetings: ObjectId[];
 }

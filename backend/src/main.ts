@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 import { config } from "./configs/config";
 import { ApiError } from "./errors/api.error";
-import { apiRouter } from "./routers/apiRouter";
+import { apiRouter } from "./routers/api.router";
 import { delay } from "./utils/delay";
 
 const app = express();
@@ -25,8 +25,6 @@ process.on("uncaughtException", (err) => {
 
 const dbConnection = async () => {
     let dbCon = false;
-    console.log(config.MONGO_DB_URI);
-    console.log(config.PORT);
     while (!dbCon) {
         try {
             console.log("Connecting to Database...");
