@@ -23,7 +23,7 @@ class UserRepository {
     }
 
     public update(id: string, updateData: Partial<IUser>): Promise<IUser> {
-        return User.findByIdAndUpdate(id, updateData);
+        return User.findByIdAndUpdate(id, updateData, { new: true });
     }
 
     public delete(id: string): Promise<void> {

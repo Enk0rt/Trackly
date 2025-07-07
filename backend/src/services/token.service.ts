@@ -6,6 +6,7 @@ import { StatusCodeEnum } from "../enums/status-code.enum";
 import { TokenTypeEnum } from "../enums/token-type.enum";
 import { ApiError } from "../errors/api.error";
 import { ITokenPair, ITokenPayload } from "../interfaces/tokens.interface";
+import { tokenRepository } from "../repositories/token.repository";
 
 class TokenService {
     public generateTokens(payload: ITokenPayload): ITokenPair {
@@ -75,6 +76,16 @@ class TokenService {
         } catch {
             throw new ApiError(StatusCodeEnum.UNAUTHORIZED, "Invalid token");
         }
+    }
+
+    public async isExists(
+        token: string,
+        type: TokenTypeEnum,
+    ): Promise<boolean> {
+        const iTokenPromise = await tokenRepository.findByParams({
+            [type]: token,
+        });
+        return !!iTokenPromise;
     }
 }
 

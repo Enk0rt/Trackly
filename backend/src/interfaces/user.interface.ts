@@ -17,7 +17,9 @@ export interface IUser extends IBase {
     password: string;
     phoneNumber: string;
     height: number;
+    heightUnit: string;
     weight: number;
+    weightUnit: string;
     targetWeight: number;
     targetWaterBalance: number;
     activityStreak: number;

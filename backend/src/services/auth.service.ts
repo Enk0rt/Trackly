@@ -7,30 +7,15 @@ import { tokenRepository } from "../repositories/token.repository";
 import { userRepository } from "../repositories/user.repository";
 import { passwordService } from "./password.service";
 import { tokenService } from "./token.service";
+import { userService } from "./user.service";
 
 class AuthService {
     public async signUp(signUpData: Partial<IUser>): Promise<IUser> {
-        const [userByEmail, userByUsername] = await Promise.all([
-            userRepository.getByEmail(signUpData.email),
-            userRepository.getByUsername(signUpData.username),
-        ]);
+        await userService.isUserUnique(signUpData.email, signUpData.username);
 
-        if (userByEmail) {
-            throw new ApiError(
-                StatusCodeEnum.BAD_REQUEST,
-                "User with this email already exists",
-            );
-        }
-
-        if (userByUsername) {
-            throw new ApiError(
-                StatusCodeEnum.BAD_REQUEST,
-                "User with this username already exists",
-            );
-        }
         const password = await passwordService.hashPass(signUpData.password);
 
-        return await userRepository.create({
+        return await userService.create({
             ...signUpData,
             password,
         });
@@ -89,11 +74,44 @@ class AuthService {
 
         const tokens = tokenService.generateTokens({
             _userId: user._id,
+            username: user.username,
         });
 
         await tokenRepository.create({ ...tokens, _userId: user._id });
 
         return { user, tokens };
+    }
+
+    public async me(id: string): Promise<IUser> {
+        const user = await userService.getById(id);
+        if (!user) {
+            throw new ApiError(
+                StatusCodeEnum.UNAUTHORIZED,
+                "User is not signed in",
+            );
+        }
+        return user;
+    }
+
+    public async updateMe(
+        id: string,
+        updateData: Partial<IUser>,
+    ): Promise<IUser> {
+        const user = await userService.getById(id);
+        if (!user) {
+            throw new ApiError(
+                StatusCodeEnum.UNAUTHORIZED,
+                "User is not signed in",
+            );
+        }
+        if (!updateData) {
+            throw new ApiError(
+                StatusCodeEnum.BAD_REQUEST,
+                "At least one field should be provided",
+            );
+        }
+
+        return await userService.update(id, updateData);
     }
 }
 

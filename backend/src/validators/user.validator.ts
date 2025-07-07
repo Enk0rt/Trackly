@@ -1,4 +1,9 @@
+import { z } from "zod";
+
+import { HeightMeasurementUnitEnum } from "../enums/height-measurement-unit.enum";
 import { RegexEnums } from "../enums/regex.enum";
+import { WeightMeasurementUnitEnum } from "../enums/weight-measurement-unit.enum";
+import { parseMeasurement } from "../utils/parseMeasurement";
 import { zod } from "../zod";
 
 export class UserValidator {
@@ -66,23 +71,35 @@ export class UserValidator {
             .regex(new RegExp(RegexEnums.CITY), "Invalid city format")
             .optional(),
 
-        height: zod.preprocess((val: string): number => {
-            const num: string[] = [];
-            val.split("").map((item) => Number(item) && num.push(item));
-            return Number(num.join(","));
-        }, zod.number().min(0, "Height must be more then 0").max(200, "Height must be less then 200").optional()),
+        height: zod.preprocess((val) => {
+            const { value } = parseMeasurement(val);
+            return value;
+        }, zod.number().min(50, "Height must be more than 50").max(250, "Height must be less than 250").optional()),
 
-        weight: zod.preprocess((val: string): number => {
-            const num: string[] = [];
-            val.split("").map((item) => Number(item) && num.push(item));
-            return Number(num.join(","));
-        }, zod.number().min(0, "Weight must be more then 0").max(300, "Weight must be less then 300").optional()),
+        heightUnit: zod
+            .nativeEnum(HeightMeasurementUnitEnum, {
+                message:
+                    "Invalid height unit, only cm, inch and ft are allowed",
+            })
+            .default(HeightMeasurementUnitEnum.CM)
+            .optional(),
 
-        targetWeight: zod.preprocess((val: string): number => {
-            const num: string[] = [];
-            val.split("").map((item) => Number(item) && num.push(item));
-            return Number(num.join(","));
-        }, zod.number().min(0, "Target weight must be more then 0").max(300, "Target weight must be less then 300").optional()),
+        weight: zod.preprocess((val) => {
+            const { value } = parseMeasurement(val);
+            return value;
+        }, zod.number().min(20, "Weight must be more than 20").max(300, "Weight must be less than 300").optional()),
+
+        weightUnit: zod
+            .nativeEnum(WeightMeasurementUnitEnum, {
+                message: "Invalid weight unit, only kg and lbs are allowed",
+            })
+            .default(WeightMeasurementUnitEnum.KG)
+            .optional(),
+
+        targetWeight: z.preprocess((val) => {
+            const { value } = parseMeasurement(val);
+            return value;
+        }, z.number().min(20, "Target weight must be more than 20").max(300, "Target weight must be less than 300").optional()),
 
         targetWaterBalance: zod.preprocess((val) => {
             if (typeof val === "string") {
