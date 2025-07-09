@@ -41,8 +41,12 @@ class UserService {
         return await userRepository.update(id, updateData);
     }
 
-    public async delete(id: string): Promise<void> {
-        return await userRepository.delete(id);
+    public async delete(id: string): Promise<IUser> {
+        const user = await userRepository.delete(id);
+        if (!user) {
+            throw new ApiError(StatusCodeEnum.NOT_FOUND, "User is not found");
+        }
+        return user;
     }
 
     public async isUserUnique(

@@ -39,6 +39,7 @@ class CommonMiddleware {
                         `Invalid ${key}`,
                     );
                 }
+                next();
             } catch (e) {
                 next(e);
             }

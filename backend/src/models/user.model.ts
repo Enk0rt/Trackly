@@ -29,11 +29,15 @@ const userSchema = new Schema(
         },
         targetWaterBalance: { type: Number, required: false },
         activityStreak: { type: Number, required: false },
-        todayActivity: {
+        userActivity: {
             type: Schema.Types.ObjectId,
             ref: "todayActivity",
             required: false,
         },
+        habits: [
+            { type: Schema.Types.ObjectId, ref: "habit", required: false },
+        ],
+        goals: [{ type: Schema.Types.ObjectId, reg: "goal", required: false }],
         isDeleted: { type: Boolean, required: false },
         isVerified: { type: Boolean, required: false },
         isBlocked: { type: Boolean, required: false },

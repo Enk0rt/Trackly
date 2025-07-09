@@ -4,9 +4,9 @@ import { ImportanceEnum } from "../enums/importance.enum";
 
 export interface IPlan {
     _id: ObjectId;
-    userId: ObjectId;
+    _userId: ObjectId;
     name: string;
-    time: Date;
+    time: string;
     importance: ImportanceEnum;
     isDone: boolean;
 }

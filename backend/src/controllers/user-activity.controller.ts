@@ -2,18 +2,18 @@ import { NextFunction, Request, Response } from "express";
 
 import { StatusCodeEnum } from "../enums/status-code.enum";
 import { IApiSuccessResponse } from "../interfaces/api-success-responce.interface";
-import { IUser } from "../interfaces/user.interface";
-import { userService } from "../services/user.service";
+import { IUserActivity } from "../interfaces/user-activity.interface";
+import { userActivityService } from "../services/user-activity.service";
 
-class UserController {
+class UserActivityController {
     public async getAll(
         req: Request,
-        res: Response<IApiSuccessResponse<IUser[]>>,
+        res: Response<IApiSuccessResponse<IUserActivity[]>>,
         next: NextFunction,
     ) {
         try {
-            const users = await userService.getAll();
-            res.status(StatusCodeEnum.OK).json({ data: users });
+            const userActivities = await userActivityService.getAll();
+            res.status(StatusCodeEnum.OK).json({ data: userActivities });
         } catch (e) {
             next(e);
         }
@@ -21,13 +21,13 @@ class UserController {
 
     public async getById(
         req: Request,
-        res: Response<IApiSuccessResponse<IUser>>,
+        res: Response<IApiSuccessResponse<IUserActivity>>,
         next: NextFunction,
     ) {
         try {
             const { id } = req.params;
-            const user = await userService.getById(id);
-            res.status(StatusCodeEnum.OK).json({ data: user });
+            const userActivity = await userActivityService.getById(id);
+            res.status(StatusCodeEnum.OK).json({ data: userActivity });
         } catch (e) {
             next(e);
         }
@@ -35,15 +35,15 @@ class UserController {
 
     public async delete(
         req: Request,
-        res: Response<IApiSuccessResponse<IUser>>,
+        res: Response<IApiSuccessResponse<void>>,
         next: NextFunction,
     ) {
         try {
             const { id } = req.params;
-            await userService.delete(id);
+            await userActivityService.delete(id);
             res.status(StatusCodeEnum.OK).json({
                 data: null,
-                details: "User is successfully deleted",
+                details: "User activity is successfully deleted",
             });
         } catch (e) {
             next(e);
@@ -51,4 +51,4 @@ class UserController {
     }
 }
 
-export const userController = new UserController();
+export const userActivityController = new UserActivityController();

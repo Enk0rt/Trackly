@@ -15,10 +15,12 @@ class PlanRepository {
     }
 
     public update(id: string, updateData: Partial<IPlan>): Promise<IPlan> {
-        return Plan.findByIdAndUpdate(id, updateData);
+        return Plan.findByIdAndUpdate(id, updateData, {
+            new: true,
+        });
     }
 
-    public delete(id: string): Promise<void> {
+    public delete(id: string): Promise<IPlan> {
         return Plan.findByIdAndDelete(id);
     }
 }

@@ -1,10 +1,9 @@
 import { ObjectId } from "mongodb";
 
 import { IBase } from "./base.interface";
-import { IGoal } from "./goal.interface";
 import { IGymParameters } from "./gym-parameters.interface";
-import { ITodayActivity } from "./today-activity.interface";
 import { ITokenPair } from "./tokens.interface";
+import { IUserActivity } from "./user-activity.interface";
 
 export interface IUser extends IBase {
     _id: ObjectId;
@@ -23,9 +22,10 @@ export interface IUser extends IBase {
     targetWeight: number;
     targetWaterBalance: number;
     activityStreak: number;
-    todayActivity: ITodayActivity;
+    userActivity: IUserActivity;
     gymParameters: IGymParameters;
-    goals: IGoal;
+    goals: ObjectId[];
+    habits: ObjectId[];
     isDeleted: boolean;
     isVerified: boolean;
     isBlocked: boolean;

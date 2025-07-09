@@ -1,11 +1,11 @@
 import { model, Schema } from "mongoose";
 
-import { ITodayActivity } from "../interfaces/today-activity.interface";
+import { IUserActivity } from "../interfaces/user-activity.interface";
 
-const todayActivitySchema = new Schema(
+const userActivitySchema = new Schema(
     {
-        userId: { type: Schema.Types.ObjectId, ref: "user", required: true },
-        date: { type: Date, required: true },
+        _userId: { type: Schema.Types.ObjectId, ref: "user", required: true },
+        date: { type: String, required: true },
         waterBalance: { type: Number, default: 0 },
         habits: [{ type: Schema.Types.ObjectId, ref: "habit" }],
         goals: [{ type: Schema.Types.ObjectId, ref: "goal" }],
@@ -18,7 +18,7 @@ const todayActivitySchema = new Schema(
     },
 );
 
-export const TodayActivity = model<ITodayActivity>(
+export const UserActivity = model<IUserActivity>(
     "todayActivity",
-    todayActivitySchema,
+    userActivitySchema,
 );
