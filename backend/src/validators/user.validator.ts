@@ -1,9 +1,4 @@
-import { z } from "zod";
-
-import { HeightMeasurementUnitEnum } from "../enums/height-measurement-unit.enum";
 import { RegexEnums } from "../enums/regex.enum";
-import { WeightMeasurementUnitEnum } from "../enums/weight-measurement-unit.enum";
-import { parseMeasurement } from "../utils/parseMeasurement";
 import { zod } from "../zod";
 
 export class UserValidator {
@@ -70,43 +65,12 @@ export class UserValidator {
             .string()
             .regex(new RegExp(RegexEnums.CITY), "Invalid city format")
             .optional(),
-
-        height: zod.preprocess((val) => {
-            const { value } = parseMeasurement(val);
-            return value;
-        }, zod.number().min(50, "Height must be more than 50").max(250, "Height must be less than 250").optional()),
-
-        heightUnit: zod
-            .nativeEnum(HeightMeasurementUnitEnum, {
-                message:
-                    "Invalid height unit, only cm, inch and ft are allowed",
-            })
-            .default(HeightMeasurementUnitEnum.CM)
-            .optional(),
-
-        weight: zod.preprocess((val) => {
-            const { value } = parseMeasurement(val);
-            return value;
-        }, zod.number().min(20, "Weight must be more than 20").max(300, "Weight must be less than 300").optional()),
-
-        weightUnit: zod
-            .nativeEnum(WeightMeasurementUnitEnum, {
-                message: "Invalid weight unit, only kg and lbs are allowed",
-            })
-            .default(WeightMeasurementUnitEnum.KG)
-            .optional(),
-
-        targetWeight: z.preprocess((val) => {
-            const { value } = parseMeasurement(val);
-            return value;
-        }, z.number().min(20, "Target weight must be more than 20").max(300, "Target weight must be less than 300").optional()),
-
         targetWaterBalance: zod.preprocess((val) => {
             if (typeof val === "string") {
                 const parsed = Number(val);
                 return isNaN(parsed) ? val : parsed;
             }
             return val;
-        }, zod.number().min(0, "Target water balance must be more then 0").max(10, "Target water balance must be less then 10").optional()),
+        }, zod.number().min(0, "Target water balance must be more then 0").max(999, "Target water balance must be less then 999").optional()),
     });
 }

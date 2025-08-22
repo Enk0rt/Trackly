@@ -1,14 +1,55 @@
 services:
-  app:
+  backend:
     build:
-      context: .
+      context: ./backend
     ports:
       - "5000:5000"
     env_file:
-      - .env
+      - /backend/.env
     volumes:
       - ./backend:/app
       - /app/node_modules
     restart: on-failure
     command: >
       sh -c "npm start"
+
+  frontend-dev:
+      build:
+        context: ./frontend
+        dockerfile: Dockerfile.dev
+      container_name: frontend-dev
+      ports:
+        - "3000:3000"
+      volumes:
+        - ./frontend:/app
+        - /app/node_modules
+      environment:
+        NODE_ENV: development
+        WATCHPACK_POLLING: true
+        WATCHPACK_POLLING_INTERVAL: "1000"
+        CHOKIDAR_USEPOLLING: "true"
+        TAILWIND_DISABLE_TOUCH: "1"
+      command: npm run dev
+
+  frontend-prod:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev.prod
+    container_name: frontend-prod
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./client:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - backend
+      - frontend-dev

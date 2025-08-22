@@ -1,6 +1,8 @@
 import { ObjectId } from "mongodb";
 
-export interface IGoal {
+import { IBase } from "./base.interface";
+
+export interface IGoal extends IBase {
     _id: ObjectId;
     userId: ObjectId;
     name: string;

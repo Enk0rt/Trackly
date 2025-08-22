@@ -1,6 +1,5 @@
 import { model, Schema } from "mongoose";
 
-import { ImportanceEnum } from "../enums/importance.enum";
 import { IPlan } from "../interfaces/plan.interface";
 import { UserActivity } from "./user-activity.model";
 
@@ -8,8 +7,13 @@ const planSchema = new Schema(
     {
         name: { type: String, required: true },
         _userId: { type: Schema.Types.ObjectId, required: false },
-        time: { type: String, required: true },
-        importance: { type: String, enum: ImportanceEnum, required: true },
+        type: { type: String, required: true },
+        description: { type: String, required: false },
+        date: { type: String, required: true },
+        startTime: { type: String, required: false },
+        finishTime: { type: String, required: false },
+        repeat: { type: Boolean, required: false, default: false },
+        linkedHabits: { type: Schema.Types.ObjectId, required: false },
         isDone: { type: Boolean, default: false },
     },
     {

@@ -1,12 +1,17 @@
 import { ObjectId } from "mongodb";
 
-import { ImportanceEnum } from "../enums/importance.enum";
+import { IBase } from "./base.interface";
 
-export interface IPlan {
+export interface IPlan extends IBase {
     _id: ObjectId;
     _userId: ObjectId;
     name: string;
-    time: string;
-    importance: ImportanceEnum;
+    type: string;
+    description: string;
+    linkedHabits: ObjectId[];
+    date: string;
+    startTime: string;
+    finishTime: string;
+    repeat: boolean;
     isDone: boolean;
 }
