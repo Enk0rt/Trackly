@@ -1,15 +1,16 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
 *{
   list-style: none;
   box-sizing: border-box;
 }
 
 
-
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
+
 
 img{
   max-width: none;
@@ -26,4 +27,9 @@ img{
 
 .animate-float-mockup {
   animation: floatY 3.3s ease-in-out infinite;
+}
+
+.gradient {
+  background: linear-gradient(180deg,rgba(255, 255, 255, 0.04) 0%, rgba(51, 103, 78, 0.09) 100%);
+
 }

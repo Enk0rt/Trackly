@@ -1,11 +1,15 @@
 import Image from "next/image";
 import React from "react";
 
-export const Logo = () => {
+type Props ={
+    className?: string
+}
+
+export const Logo = ({className}:Props) => {
     return (
-        <div className="flex items-center gap-[8px] mt-4 sm:mt-0">
+        <div className={`flex items-center gap-[8px] sm:mt-0 ${className}`}>
             <Image src="/svg/app-logo.svg" alt="App logo" width={55} height={55} />
-            <h1 className='text-[42px] font-bold'>TrackLy</h1>
+            <h1 className='text-[42px] font-bold dark:text-[#FFFFFF]'>TrackLy</h1>
         </div>
     );
 };
