@@ -37,7 +37,7 @@ const LoginForm = () => {
 
                 <div className='mt-1 flex gap-1 text-[12px]'>
                     <p className='opacity-[.4] dark:text-[#FFFFFF]/76'>Don`t have account?</p>
-                    <a href="/sign-up" className='opacity-[.8] dark:text-[#FFFFFF]/90'>Sign up</a>
+                    <a href="/sign-up" className='opacity-[.8] underline underline-offset-4 dark:text-[#FFFFFF]/90'>Sign up</a>
                 </div>
 
             </Form>

@@ -6,7 +6,7 @@ import React from "react";
 
 export const MainHero = () => {
     return (
-        <div>
+        <div className='overflow-hidden'>
             <div className="mt-4 flex items-center justify-center pl-0 sm:pl-[20px]">
                 <div className="w-[80%] max-w-[1249px] relative md:w-[94%] lg:w-[84%]">
                     <div className="mt-4 sm:mt-0 w-[82%] max-w-[300px] sm:w-[441x] sm:max-w-[441px]">
@@ -35,7 +35,7 @@ export const MainHero = () => {
                     <h1 className="w-[400px] lg:w-[500px] xl:w-[60%] -z-1  right-0 top-0 text-[122px] lg:text-[162px] xl:text-[241px] opacity-[.10] uppercase font-medium leading-[100px] md:leading-[120px] lg:leading-[160px] xl:leading-[200px] md:text-right xl:text-left
                          hidden md:block
                          absolute
-                         text-[#33674E] dark:text-white/50
+                         text-[#33674E] dark:text-[#418865]/60
                          drop-shadow-[10px_10px_8px_rgba(51,103,78,100)] dark:drop-shadow-[10px_10px_8px_black]
 
                          ">

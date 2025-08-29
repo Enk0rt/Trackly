@@ -1,35 +1,71 @@
 @import 'tailwindcss';
 
 @custom-variant dark (&:where(.dark, .dark *));
-*{
-  list-style: none;
-  box-sizing: border-box;
+* {
+    list-style: none;
+    box-sizing: border-box;
 }
 
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 
-img{
-  max-width: none;
+img {
+    max-width: none;
 }
+
+
 
 @keyframes floatY {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-10px); }
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 .animate-float {
-  animation: floatY 4s ease-in-out infinite;
+    animation: floatY 4s ease-in-out infinite;
 }
 
 .animate-float-mockup {
-  animation: floatY 3.3s ease-in-out infinite;
+    animation: floatY 3.3s ease-in-out infinite;
 }
 
 .gradient {
-  background: linear-gradient(180deg,rgba(255, 255, 255, 0.04) 0%, rgba(51, 103, 78, 0.09) 100%);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(51, 103, 78, 0.09) 100%);
 
+}
+
+.rotateIn {
+    animation: rotateIn .5s ease-in-out forwards;
+
+}
+
+.rotateOut {
+    animation: rotateIn .5s ease-in-out forwards;
+
+}
+
+@keyframes rotateIn {
+    0% {
+        transform: rotate(-180deg) scale(0);
+    }
+    100% {
+        transform: rotate(0deg) scale(1);
+    }
+}
+
+@keyframes rotateOut {
+    0% {
+        transform: rotate(180deg) scale(1);
+
+
+    }
+    100% {
+        transform: rotate(360deg) scale(0);
+    }
 }

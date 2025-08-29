@@ -8,8 +8,9 @@ import { useTheme } from "next-themes";
 
 export const BenefitsCard = () => {
     const { wrapRef, cardRef, handleMouseLeave, handleMouseMove } = use3DTilt("skewX(-25deg) translateZ(0) ");
-    const [mounted, setMounted] = useState(false);
+    const [mounted, setMounted] = useState<boolean>(false);
     const {theme} = useTheme();
+
     const isMobile =
         typeof window !== "undefined" && window.matchMedia("(max-width: 1024px)").matches;
 

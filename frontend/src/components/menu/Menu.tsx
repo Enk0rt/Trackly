@@ -45,8 +45,10 @@ const Menu = () => {
                 </li>
             </ul>
 
-            <ThemeChanger/>
-            <Logo />
+           <div className='flex gap-6 items-center'>
+               <ThemeChanger/>
+               <Logo />
+           </div>
         </div>
     );
 };
