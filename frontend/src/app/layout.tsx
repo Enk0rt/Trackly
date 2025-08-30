@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
+import { Providers } from "@/query/providers/Providers";
 
 
 
@@ -31,9 +32,11 @@ export default function RootLayout({
             <body
                 className={`${poppins.className} text-[#0C312C] antialiased bg-white dark:bg-[#33674E]/54 transition-all duration-300 ease-in-out`}
             >
-            <ThemeProvider attribute='class' defaultTheme="system" enableSystem>
-                {children}
-            </ThemeProvider>
+           <Providers>
+               <ThemeProvider attribute='class' defaultTheme="system" enableSystem>
+                   {children}
+               </ThemeProvider>
+           </Providers>
             </body>
         </html>
     );

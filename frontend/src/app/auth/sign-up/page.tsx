@@ -1,7 +1,7 @@
 import { BackBtn } from "@/components/ui/back-btn/BackBtn";
 import Logo from "@/components/ui/logo/Logo";
-import { RegisterForm } from "@/components/register-form/RegisterForm";
 import { ThemeChanger } from "@/components/theme-changer/ThemeChanger";
+import { RegisterForm } from "@/components/auth/register-form/RegisterForm";
 
 
 const Register = () => {
