@@ -1,46 +1,73 @@
-import Form from "next/form";
+"use client";
 import Image from "next/image";
 import { MainBtn } from "@/components/ui/main-btn/MainBtn";
 import { TypeBtnEnum } from "@/enums/typeBtnEnum";
+import { FormInput } from "@/components/ui/input/formInput";
+import { useForm } from "react-hook-form";
+import { SignInForm, signInValidation } from "@/validators/authValidator";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { signIn } from "@/services/api/auth";
+import { FormChanger } from "@/components/ui/form-changer/FormChanger";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
+
+    const { register, reset, handleSubmit } = useForm<SignInForm>({ resolver: zodResolver(signInValidation) });
+
+    const queryClient = useQueryClient()
+    const router = useRouter();
+
+    const [mounted, setMounted] = useState<boolean>(false);
+
+    const { mutate,isPending } = useMutation({
+            mutationFn: signIn<SignInForm>,
+            onSuccess: async () => {
+                await queryClient.invalidateQueries({ queryKey: ["user"] });
+                router.push("/");
+                reset();
+            },
+            onError: (error) => {
+                throw new Error("Something went wrong", error);
+            },
+        })
+    ;
+
+
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) return null;
+
     return (
-        <div className=' max-w-[300px]  mx-auto gradient transform-[translateY(30%)]  shadow-xl rounded-[18px]'>
-            <Form action={''} className='px-[34px] py-[24px] flex flex-col  items-center
-            '>
+        <div className=" max-w-[300px]  mx-auto gradient transform-[translateY(30%)]  shadow-xl rounded-[18px]">
+            <form onSubmit={handleSubmit(data => mutate(data))} className="px-[34px] py-[24px] flex flex-col  items-center
+            ">
+                <Image src="/svg/app-logo.svg" alt="App logo icon" width={40} height={40} />
 
-                <Image src='/svg/app-logo.svg' alt='App logo icon' width={40} height={40}/>
+                <h3 className="mt-2 text-[#34684F] dark:text-[#FFFFFF] text-[20px] font-medium">Sign in to TrackLy</h3>
 
-                <h3 className='mt-2 text-[#34684F] dark:text-[#FFFFFF] text-[20px] font-medium'>Sign in to TrackLy</h3>
-
-                <div className='w-full mt-6'>
-                    <label htmlFor="login" className='flex flex-col gap-1  font-light'>
-                        <span className='opacity-[.6]  dark:opacity-40 text-[14px] dark:text-[#FFFFFF]'>Username or email address</span>
-                        <input type="text" name='login' className='pl-3 py-1 border border-[#34684F]/10 dark:border-[#FFFFFF]/10  outline-[#34684F]/80 dark:focus:outline-[#FFFFFF]/50 rounded-md  font-medium text-[#33674E] dark:text-[#FFFFFF]/90'/>
-                    </label>
-
-                    <label htmlFor="password" className="flex flex-col gap-1  mt-1 font-light">
-                        <span className="opacity-[.6]  dark:opacity-40 text-[14px] dark:text-[#FFFFFF]">Password</span>
-                        <input type="password" name="password"
-                               className="pl-3 py-1 border border-[#34684F]/10 dark:border-[#FFFFFF]/10 outline-[#34684F]/80 dark:outline-[#FFFFFF]/50 rounded-md  font-medium text-[#33674E] dark:text-[#FFFFFF]/90" />
-                    </label>
-
+                <div className="w-full mt-6">
+                    <FormInput labelFor={"login"} labelText={"Username or email address"} type={"text"} id={"login"}
+                               register={register} value={"login"} />
+                    <FormInput labelFor={"password"} labelText={"Password"} type={"password"} id={"password"}
+                               register={register} value={"password"} />
                 </div>
 
                 <MainBtn
                     type={TypeBtnEnum.BTN}
-                    path={'/sign-in'} className='bg-[#34684F] text-[#FFFFFF] text-[16px] mt-8'>
+                    disabledValue={isPending}
+                    path={"/sign-in"} className="bg-[#34684F] text-[#FFFFFF] text-[16px] mt-8">
                     Sign in
                 </MainBtn>
 
-                <a className='mt-4 opacity-[.4] text-[12px] dark:text-[#FFFFFF]/90'>Forgot password</a>
+                <a className="mt-4 opacity-[.4] text-[12px] dark:text-[#FFFFFF]/90">Forgot password</a>
 
-                <div className='mt-1 flex gap-1 text-[12px]'>
-                    <p className='opacity-[.4] dark:text-[#FFFFFF]/76'>Don`t have account?</p>
-                    <a href="/sign-up" className='opacity-[.8] underline underline-offset-4 dark:text-[#FFFFFF]/90'>Sign up</a>
-                </div>
-
-            </Form>
+                <FormChanger text={"Don`t have an account?"} link={"/sign-up"} linkText={"Sign up"} />
+            </form>
         </div>
     );
 };

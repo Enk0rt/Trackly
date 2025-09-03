@@ -15,6 +15,7 @@ export interface IUser{
     city: string;
     password: string;
     phoneNumber: string;
+    avatar:string;
     targetWaterBalance: number;
     activityStreak: number;
     userActivity: IUserActivity[];

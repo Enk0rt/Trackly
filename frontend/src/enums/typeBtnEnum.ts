@@ -1,4 +1,6 @@
 export enum TypeBtnEnum {
     LINK='link',
-    BTN='button'
+    BTN='button',
+    SUBMIT='submit',
+    RESET='reset'
 }

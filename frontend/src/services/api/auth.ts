@@ -1,7 +1,6 @@
 import { ISignUp } from "@/interfaces/auth/ISignUp";
-import { IUserSignUp, IUserWithTokens } from "@/interfaces/user/IUser";
+import { IUser, IUserSignUp, IUserWithTokens } from "@/interfaces/user/IUser";
 import { api } from "@/services/api/axiosInstanse";
-import { ISignIn } from "@/interfaces/auth/ISignIn";
 
 
 export const signUp = async <T> (signUpData: T): Promise<IUserSignUp> => {
@@ -9,8 +8,18 @@ export const signUp = async <T> (signUpData: T): Promise<IUserSignUp> => {
 };
 
 
-export const signIn = async (signInData: ISignIn): Promise<IUserWithTokens> => {
-    const { user, tokens } = await api.post<ISignIn, IUserWithTokens>("/auth/sign-in", signInData);
-    return { user, tokens };
-
+export const signIn = async <T>(signInData: T): Promise<IUserWithTokens> => {
+    const { data } = await api.post("/auth/sign-in", signInData);
+    console.log('AXIOS RESPONSE:',data.data)
+    return data.data
 };
+
+export const getMe = async ():Promise<IUser> => {
+   const res = await api.get('/auth/me')
+    console.log('USER - ',res)
+    return res.data
+}
+
+export const logout = async ():Promise<void>=> {
+    await api.post('/auth/logout')
+}

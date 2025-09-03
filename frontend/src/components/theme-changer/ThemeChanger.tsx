@@ -20,7 +20,7 @@ export const ThemeChanger = () => {
 
     return (
             <button
-                className="flex items-center relative h-[20px] w-[20px] "
+                className="flex items-center relative h-[20px] w-[20px] cursor-pointer"
                 onClick={() =>
                     setTheme(resolvedTheme === "light" ? "dark" : "light")
                 }

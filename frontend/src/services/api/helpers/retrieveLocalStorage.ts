@@ -1,8 +1,8 @@
 export const retrieveLocalStorage = <T>(key: string) => {
-    const obj = localStorage.getItem(key) || "";
+    const obj = localStorage.getItem(key);
 
     if (!obj) {
-        return {} as T;
+        return null
     }
 
     const parse = JSON.parse(obj);
