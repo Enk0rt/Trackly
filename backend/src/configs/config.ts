@@ -3,8 +3,8 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 interface IConfig {
+    NODE_ENV: string;
     PORT: string;
-
     MONGO_DB_URI: string;
     MONGO_DB_USER: string;
     MONGO_DB_PASSWORD: string;
@@ -20,6 +20,7 @@ interface IConfig {
 }
 
 export const config: IConfig = {
+    NODE_ENV: process.env.NODE_ENV,
     PORT: process.env.PORT,
 
     MONGO_DB_URI: process.env.MONGO_DB_URI,

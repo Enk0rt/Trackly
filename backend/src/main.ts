@@ -1,3 +1,4 @@
+import cookieParser from "cookie-parser";
 import express, { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 
@@ -8,6 +9,7 @@ import { delay } from "./utils/delay";
 
 const app = express();
 
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api", apiRouter);

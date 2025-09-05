@@ -113,6 +113,16 @@ class AuthService {
 
         return await userService.update(id, updateData);
     }
+
+    // public async refresh(refreshToken: string): Promise<ITokenPair> {
+    //     if (!refreshToken) {
+    //         throw new ApiError(StatusCodeEnum.BAD_REQUEST, "No refresh token");
+    //     }
+    //
+    //     const tokens = await tokenService.generateTokens({});
+    //
+    //     return;
+    // }
 }
 
 export const authService = new AuthService();

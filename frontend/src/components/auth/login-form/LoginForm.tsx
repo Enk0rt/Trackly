@@ -8,7 +8,7 @@ import { SignInForm, signInValidation } from "@/validators/authValidator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { signIn } from "@/services/api/auth";
-import { FormChanger } from "@/components/ui/form-changer/FormChanger";
+import { FormChangerLink } from "@/components/ui/form-changer-link/FormChangerLink";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -23,8 +23,8 @@ const LoginForm = () => {
 
     const { mutate,isPending } = useMutation({
             mutationFn: signIn<SignInForm>,
-            onSuccess: async () => {
-                await queryClient.invalidateQueries({ queryKey: ["user"] });
+            onSuccess: async (res) => {
+                await queryClient.setQueryData(["user"],res.user);
                 router.push("/");
                 reset();
             },
@@ -60,13 +60,14 @@ const LoginForm = () => {
                 <MainBtn
                     type={TypeBtnEnum.BTN}
                     disabledValue={isPending}
-                    path={"/sign-in"} className="bg-[#34684F] text-[#FFFFFF] text-[16px] mt-8">
+                    path={"/sign-in"}
+                    className="bg-[#34684F] text-[#FFFFFF] text-[16px] mt-8 hover:shadow-[0_2px_16px_rgba(12,49,44,40)] hover:dark:shadow-[0px_2px_16px_rgba(255,255,255,40)]">
                     Sign in
                 </MainBtn>
 
                 <a className="mt-4 opacity-[.4] text-[12px] dark:text-[#FFFFFF]/90">Forgot password</a>
 
-                <FormChanger text={"Don`t have an account?"} link={"/sign-up"} linkText={"Sign up"} />
+                <FormChangerLink text={"Don`t have an account?"} link={"/sign-up"} linkText={"Sign up"} />
             </form>
         </div>
     );

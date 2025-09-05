@@ -13,14 +13,19 @@ import { useQueryClient } from "@tanstack/react-query";
 
 const Menu = () => {
     const pathname = usePathname();
+    // const router = useRouter()
     const [active, setActive] = useState<string>("signUp");
-    const {data:user,isLoading} = useAuth()
     const queryClient = useQueryClient();
+    const {data:user,isLoading,isError} = useAuth()
 
     const handleLogout = async () => {
         await logout();
-        await queryClient.setQueryData(["me"], null);
+        await queryClient.setQueryData(["user"], null);
     };
+
+    // if(pathname !== '/' && isError && pathname !=='/sign-in' && pathname !== '/sign-up'){
+    //     router.push('/')
+    // }
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -39,7 +44,7 @@ const Menu = () => {
                                     type={TypeBtnEnum.LINK}
                                     path={"/sign-in"}
                                     className={`${
-                                        active === "signIn" ? "bg-[#34684F] text-white dark:bg-[#FFFFFF] dark:text-[#34684F]" : "hover:bg-[#34684F] text-[#34684F] dark:text-white hover:text-white dark:hover:bg-[#FFFFFF] dark:hover:text-[#34684F]"
+                                        active === "signIn" ? "bg-[#34684F] text-white dark:bg-[#FFFFFF] dark:text-[#34684F] hover:drop-shadow-[0px_2px_6px_rgba(12,49,44,40)] hover:dark:shadow-[0px_2px_6px_rgba(255,255,255,40)] hover:shadow-[inset_0_2px_16px_rgba(12,49,44,10)]" : "hover:bg-[#34684F] text-[#34684F] dark:text-white hover:text-white dark:hover:bg-[#FFFFFF] dark:hover:text-[#34684F] "
                                     }`}
                                 >
                                     Sign in
@@ -53,7 +58,7 @@ const Menu = () => {
                                     type={TypeBtnEnum.LINK}
                                     path={"/sign-up"}
                                     className={`${
-                                        active === "signUp" ? "bg-[#34684F] text-white dark:bg-[#FFFFFF] dark:text-[#34684F]" : "hover:bg-[#34684F] text-[#34684F] dark:text-white hover:text-white dark:hover:bg-[#FFFFFF] dark:hover:text-[#34684F]"
+                                        active === "signUp" ? "bg-[#34684F] text-white dark:bg-[#FFFFFF] dark:text-[#34684F]  hover:drop-shadow-[0px_2px_6px_rgba(12,49,44,40)] hover:shadow-[inset_0_2px_16px_rgba(12,49,44,10)] hover:dark:shadow-[0px_2px_6px_rgba(255,255,255,40)]" : "hover:bg-[#34684F]  text-[#34684F] dark:text-white hover:text-white dark:hover:bg-[#FFFFFF] dark:hover:text-[#34684F]"
                                     }`}
                                 >
                                     Sign up

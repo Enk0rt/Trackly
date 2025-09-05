@@ -35,10 +35,23 @@ class AuthController {
             const signInData = req.body as Partial<IAuth>;
             const type = isLoginUsernameOrEmail(signInData.login);
             const newUser = await authService.signIn(signInData, type);
-            res.status(StatusCodeEnum.OK).json({
-                data: newUser,
-                details: "Sign-in is successful",
-            });
+            res.status(StatusCodeEnum.OK)
+                .cookie("accessToken", newUser.tokens.accessToken, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: "strict",
+                    maxAge: 1000 * 60 * 15,
+                })
+                .cookie("refreshToken", newUser.tokens.refreshToken, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: "strict",
+                    maxAge: 1000 * 60 * 60 * 24 * 7,
+                })
+                .json({
+                    data: newUser,
+                    details: "Sign-in is successful",
+                });
         } catch (e) {
             next(e);
         }
@@ -74,6 +87,33 @@ class AuthController {
             );
 
             res.status(StatusCodeEnum.OK).json({ data: user });
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async logout(
+        req: Request,
+        res: Response<IApiSuccessResponse<null>>,
+        next: NextFunction,
+    ) {
+        try {
+            res.clearCookie("accessToken", {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "strict",
+                maxAge: 1000 * 60 * 15,
+            });
+            res.clearCookie("refreshToken", {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "strict",
+                maxAge: 1000 * 60 * 60 * 24 * 7,
+            });
+            res.status(StatusCodeEnum.OK).json({
+                data: null,
+                details: "Logged out",
+            });
         } catch (e) {
             next(e);
         }

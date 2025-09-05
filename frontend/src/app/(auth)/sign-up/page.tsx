@@ -2,6 +2,8 @@ import { BackBtn } from "@/components/ui/back-btn/BackBtn";
 import Logo from "@/components/ui/logo/Logo";
 import { ThemeChanger } from "@/components/theme-changer/ThemeChanger";
 import { RegisterForm } from "@/components/auth/register-form/RegisterForm";
+import Menu from "@/components/menu/Menu";
+import React from "react";
 
 
 const Register = () => {
@@ -11,7 +13,7 @@ const Register = () => {
                 <div className="flex justify-between items-center">
                     <BackBtn />
                     <div className='flex gap-4 items-center'>
-                        <ThemeChanger/>
+                        <ThemeChanger />
                         <Logo className={"hidden sm:flex"} />
                     </div>
                 </div>

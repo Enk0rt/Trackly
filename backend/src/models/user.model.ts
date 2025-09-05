@@ -12,6 +12,7 @@ const userSchema = new Schema(
         email: { type: String, required: true },
         password: { type: String, required: true },
         phoneNumber: { type: String, required: false },
+        avatar: { type: String, required: false, default: null },
         targetWaterBalance: { type: Number, required: false },
         activityStreak: { type: Number, required: false },
         userActivity: {

@@ -14,6 +14,7 @@ export interface IUser extends IBase {
     city: string;
     password: string;
     phoneNumber: string;
+    avatar: string;
     targetWaterBalance: number;
     activityStreak: number;
     userActivity: IUserActivity;
@@ -27,5 +28,5 @@ export interface IUser extends IBase {
 
 export interface IUserWithTokens {
     user: IUser;
-    tokens: ITokenPair;
+    tokens?: ITokenPair;
 }

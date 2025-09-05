@@ -13,7 +13,7 @@ export default function Home() {
                 </div>
             </header>
             <main className="overflow-x-hidden ">
-                <MainHero/>
+                <MainHero />
             </main>
             <footer>
 

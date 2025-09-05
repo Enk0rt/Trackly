@@ -3,12 +3,8 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { Providers } from "@/query/providers/Providers";
-import { getMe } from "@/services/api/auth";
-import { IUser } from "@/interfaces/user/IUser";
 import React from "react";
-
-
-
+import Menu from "@/components/menu/Menu";
 
 const poppins = Poppins({
     subsets: ['latin'],
@@ -30,13 +26,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-    let user = null
 
-    try{
-        user = await getMe()
-    }catch{
-        user = null
-    }
 
 
   return (
@@ -51,5 +41,5 @@ export default async function RootLayout({
            </Providers>
             </body>
         </html>
-    );
+  );
 }

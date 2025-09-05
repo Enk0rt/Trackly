@@ -3,9 +3,8 @@ import { getMe } from "@/services/api/auth";
 
 export const useAuth = () => {
     return useQuery({
-        queryKey: ["me"],
+        queryKey: ["user"],
         queryFn: getMe,
         retry: false,
-        select: (data) => data ?? null,
     });
 };

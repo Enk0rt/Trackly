@@ -12,15 +12,16 @@ class AuthMiddleware {
         next: NextFunction,
     ) {
         try {
-            const authorizationHeader = req.headers.authorization;
-            if (!authorizationHeader) {
-                throw new ApiError(
-                    StatusCodeEnum.UNAUTHORIZED,
-                    "No token provided",
-                );
+            let accessToken: string | undefined;
+
+            if (req.cookies?.accessToken) {
+                accessToken = req.cookies.accessToken;
             }
 
-            const accessToken = authorizationHeader.split(" ")[1];
+            if (!accessToken && req.headers.authorization) {
+                accessToken = req.headers.authorization.split(" ")[1];
+            }
+
             if (!accessToken) {
                 throw new ApiError(
                     StatusCodeEnum.UNAUTHORIZED,
@@ -41,7 +42,7 @@ class AuthMiddleware {
                 throw new ApiError(StatusCodeEnum.FORBIDDEN, "Invalid token");
             }
 
-            req.res.locals.tokenPayload = tokenPayload;
+            res.locals.tokenPayload = tokenPayload;
             next();
         } catch (e) {
             next(e);
