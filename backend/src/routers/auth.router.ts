@@ -21,6 +21,12 @@ router.post(
 );
 router.get("/me", authMiddleware.checkAccessToken, authController.me);
 
+router.get(
+    "/refresh",
+    authMiddleware.checkRefreshToken,
+    authController.refresh,
+);
+
 router.post("/logout", authController.logout);
 
 export const authRouter = router;

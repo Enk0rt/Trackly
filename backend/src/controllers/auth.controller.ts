@@ -3,9 +3,10 @@ import { NextFunction, Request, Response } from "express";
 import { StatusCodeEnum } from "../enums/status-code.enum";
 import { IApiSuccessResponse } from "../interfaces/api-success-responce.interface";
 import { IAuth } from "../interfaces/auth.interface";
-import { ITokenPayload } from "../interfaces/tokens.interface";
+import { ITokenPair, ITokenPayload } from "../interfaces/tokens.interface";
 import { IUser, IUserWithTokens } from "../interfaces/user.interface";
 import { authService } from "../services/auth.service";
+import { tokenService } from "../services/token.service";
 import { isLoginUsernameOrEmail } from "../utils/isLoginUsernameOrEmail";
 
 class AuthController {
@@ -87,6 +88,40 @@ class AuthController {
             );
 
             res.status(StatusCodeEnum.OK).json({ data: user });
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async refresh(
+        req: Request,
+        res: Response<IApiSuccessResponse<ITokenPair>>,
+        next: NextFunction,
+    ) {
+        try {
+            const { _userId, username } = req.res.locals
+                .tokenPayload as ITokenPayload;
+            const tokens = tokenService.generateTokens({
+                _userId,
+                username,
+            });
+            res.status(StatusCodeEnum.OK)
+                .cookie("accessToken", tokens.accessToken, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: "strict",
+                    maxAge: 1000 * 60 * 15,
+                })
+                .cookie("refreshToken", tokens.refreshToken, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: "strict",
+                    maxAge: 1000 * 60 * 60 * 24 * 7,
+                })
+                .json({
+                    data: tokens,
+                    details: "Tokens were refreshed successfully",
+                });
         } catch (e) {
             next(e);
         }

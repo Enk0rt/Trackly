@@ -6,7 +6,7 @@ import LoginForm from "@/components/auth/login-form/LoginForm";
 
 const Login = () => {
     return (
-        <div className="mt-[34px] h-[100vh] pb-40 bg-[url(/cubes.png)] bg-no-repeat  bg-top">
+        <div className="mt-[34px] h-[100vh] pb-40 bg-[url(/cubes.png)] bg-no-repeat  bg-top relative">
             <header className=" w-[84%] max-w-[1249px] mx-auto">
                 <div className="flex justify-between items-center">
                     <BackBtn />

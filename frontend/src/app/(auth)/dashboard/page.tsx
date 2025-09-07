@@ -6,9 +6,11 @@ const Page =async () => {
 
     return (
         <div>
-            <div className="w-[84%] max-w-[1249px]">
-                <Menu />
-            </div>
+            <header className="pt-[34px]  flex items-center justify-center ">
+                <div className="w-[84%] max-w-[1249px]">
+                    <Menu />
+                </div>
+            </header>
             Dashboard
         </div>
     );

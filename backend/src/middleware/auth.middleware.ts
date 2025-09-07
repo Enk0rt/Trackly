@@ -55,7 +55,7 @@ class AuthMiddleware {
         next: NextFunction,
     ) {
         try {
-            const refreshToken = req.body;
+            const refreshToken = req.cookies["refreshToken"];
             if (!refreshToken) {
                 throw new ApiError(
                     StatusCodeEnum.UNAUTHORIZED,
@@ -77,6 +77,7 @@ class AuthMiddleware {
             }
 
             req.res.locals.tokenPayload = tokenPayload;
+            next();
         } catch (e) {
             next(e);
         }

@@ -14,12 +14,13 @@ import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
 
-    const { register, reset, handleSubmit } = useForm<SignInForm>({ resolver: zodResolver(signInValidation) });
+    const { register, reset, handleSubmit, formState:{errors} } = useForm<SignInForm>({ resolver: zodResolver(signInValidation),mode:"onBlur",criteriaMode:"all"});
 
     const queryClient = useQueryClient()
     const router = useRouter();
 
     const [mounted, setMounted] = useState<boolean>(false);
+
 
     const { mutate,isPending } = useMutation({
             mutationFn: signIn<SignInForm>,
@@ -34,13 +35,12 @@ const LoginForm = () => {
         })
     ;
 
-
-
     useEffect(() => {
         setMounted(true);
     }, []);
 
     if (!mounted) return null;
+
 
     return (
         <div className=" max-w-[300px]  mx-auto gradient transform-[translateY(30%)]  shadow-xl rounded-[18px]">
@@ -52,9 +52,9 @@ const LoginForm = () => {
 
                 <div className="w-full mt-6">
                     <FormInput labelFor={"login"} labelText={"Username or email address"} type={"text"} id={"login"}
-                               register={register} value={"login"} />
+                               register={register} value={"login"} error={errors.login} />
                     <FormInput labelFor={"password"} labelText={"Password"} type={"password"} id={"password"}
-                               register={register} value={"password"} />
+                               register={register} value={"password"} error={errors.password} />
                 </div>
 
                 <MainBtn

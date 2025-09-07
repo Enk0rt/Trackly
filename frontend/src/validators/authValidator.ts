@@ -6,7 +6,7 @@ export const signUpValidation = zod.object({
     password: zod.string().min(6),
     confirmPassword: zod.string().min(6).optional(),
     name: zod.string().optional(),
-    surname: zod.string().optional()
+    surname: zod.string().optional(),
 })
     .refine((data) => data.password === data.confirmPassword, {
         path: ["confirmPassword"],
@@ -14,9 +14,11 @@ export const signUpValidation = zod.object({
     });
 
 export const signInValidation = zod.object({
-    login:zod.string().min(3),
-    password: zod.string().min(6)
-})
+    login: zod.string().nonempty("Required").min(3, "Minimum 3 characters" ),
+
+    password: zod.string().nonempty("Password is required").min(6,"Minimum 6 chars"),
+});
+
 
 export type SignUpForm = zod.infer<typeof signUpValidation>;
 export type SignInForm = zod.infer<typeof signInValidation>;

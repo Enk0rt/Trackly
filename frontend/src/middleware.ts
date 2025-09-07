@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(req: NextRequest) {
-    const token = req.cookies.get("accessToken")?.value;
+    const refreshToken = req.cookies.get("refreshToken")?.value;
 
-    if (!token) {
+    if (!refreshToken) {
         const signInUrl = new URL("/sign-in", req.url);
         signInUrl.searchParams.set("from", req.nextUrl.pathname);
         return NextResponse.redirect(signInUrl);
