@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { use3DTilt } from "@/components/ui/benefits-card/hooks/use3DTilt";
 import { useTheme } from "next-themes";
-import { memo, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export const Mockup = () => {
     const { wrapRef, cardRef, handleMouseLeave, handleMouseMove } = use3DTilt("skew(38deg,-8deg) scale(0.9)");
@@ -22,8 +22,6 @@ export const Mockup = () => {
     useEffect(() => {
         setMounted(true)
     }, []);
-
-
 
 
     const isMobile =
@@ -50,9 +48,8 @@ export const Mockup = () => {
                         <Image key='mockup' src={src} alt="App Mokup" width={1000} height={1000}
                                className="w-[600px] sm:w-full lg:w-[800px] lg:h-[400px] object-cover
                                mt-8
-                               lg:object-fill
-
-                               " />
+                               lg:object-fill"
+                        />
                     </div>
                 }
             </div>

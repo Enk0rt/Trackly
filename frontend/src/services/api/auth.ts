@@ -1,7 +1,8 @@
 import { ISignUp } from "@/interfaces/auth/ISignUp";
 import { IUser, IUserSignUp, IUserWithTokens } from "@/interfaces/user/IUser";
 import { api } from "@/services/api/axiosInstanse";
-import { IToken } from "@/interfaces/auth/IToken";
+import { IUserResponse } from "@/interfaces/user/IUserResponse";
+import { AxiosError } from "axios";
 
 
 export const signUp = async <T>(signUpData: T): Promise<IUserSignUp> => {
@@ -17,11 +18,12 @@ export const signIn = async <T>(signInData: T): Promise<IUserWithTokens> => {
 
 export const getMe = async (): Promise<IUser> => {
     try {
-        const res = await api.get("/auth/me");
-        return res.data
+        const { data } = await api.get<IUserResponse>("/auth/me");
+        return data.data;
 
-    } catch (err: any) {
-        if (err.response?.status === 401) {
+    } catch (err) {
+        const error = err as AxiosError<{ message: string }>;
+        if (error.response?.status === 401) {
             await refresh();
             return await getMe();
         }

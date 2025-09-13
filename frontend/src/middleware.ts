@@ -15,5 +15,5 @@ export function middleware(req: NextRequest) {
 
 // middleware запускається ТІЛЬКИ на приватних секціях
 export const config = {
-    matcher: ["/app/:path*", "/dashboard/:path*", "/profile/:path*", "/habits/:path*","/goals/:path*","/planner/:path*"],
+    matcher: ["/app/:path*", "/dashboard/:path*", "/profile/:username/:path*", "/habits/:path*","/goals/:path*","/planner/:path*"],
 };

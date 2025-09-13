@@ -1,6 +1,6 @@
-import { IPlan } from "@/interfaces/IPlan";
-import { IHabit } from "@/interfaces/IHabit";
-import { IGoal } from "@/interfaces/IGoal";
+import { IHabit } from "@/interfaces/habits/IHabit";
+import { IGoal } from "@/interfaces/goals/IGoal";
+import { IPlan } from "@/interfaces/plans/IPlan";
 
 export interface IUserActivity{
     _id: string;

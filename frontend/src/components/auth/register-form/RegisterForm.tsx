@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 
 
 export const RegisterForm = () => {
-    const {register,reset, handleSubmit } = useForm<SignUpForm>({ resolver: zodResolver(signUpValidation) });
+    const {register,reset, handleSubmit,formState:{errors} } = useForm<SignUpForm>({ resolver: zodResolver(signUpValidation),mode:"onBlur",criteriaMode:"all" });
     const [mounted,setMounted] = useState<boolean>(false);
     const { mutate } = useMutation({
         mutationFn: signUp<SignUpForm>,
@@ -46,12 +46,12 @@ export const RegisterForm = () => {
                         TrackLy</h3>
 
                     <div className="w-full mt-6 grid grid-cols-2 gap-4">
-                        <FormInput type={'text'} id={'username'} register={register} value={'username'} labelText={'Username'} labelFor={'username'}/>
-                        <FormInput type={'email'} id={'email'} register={register} value={'email'} labelText={'Email'} labelFor={'email'}/>
-                        <FormInput type={'password'} id={'password'} register={register} value={'password'} labelText={'Password'} labelFor={'password'}/>
-                        <FormInput type={'password'} id={'confirmPassword'} register={register} value={'confirmPassword'} labelText={'Confirm Password'} labelFor={'confirmPassword'}/>
-                        <FormInput type={'text'} id={'name'} register={register} value={'name'} labelText={'Name'} labelFor={'name'}/>
-                        <FormInput type={'text'} id={'surname'} register={register} value={'surname'} labelText={'Surname'} labelFor={'surname'}/>
+                        <FormInput type={'text'} id={'username'} register={register} value={'username'} labelText={'Username'} labelFor={'username'} error={errors.username}/>
+                        <FormInput type={'email'} id={'email'} register={register} value={'email'} labelText={'Email'} labelFor={'email'} error={errors.email}/>
+                        <FormInput type={'password'} id={'password'} register={register} value={'password'} labelText={'Password'} labelFor={'password'} error={errors.password}/>
+                        <FormInput type={'password'} id={'confirmPassword'} register={register} value={'confirmPassword'} labelText={'Confirm Password'} labelFor={'confirmPassword'} error={errors.confirmPassword}/>
+                        <FormInput type={'text'} id={'name'} register={register} value={'name'} labelText={'Name'} labelFor={'name'} error={errors.name}/>
+                        <FormInput type={'text'} id={'surname'} register={register} value={'surname'} labelText={'Surname'} labelFor={'surname'} error={errors.surname}/>
                     </div>
 
                     <MainBtn

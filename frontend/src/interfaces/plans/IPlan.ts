@@ -1,4 +1,4 @@
-import { IHabit } from "@/interfaces/IHabit";
+import { IHabit } from "@/interfaces/habits/IHabit";
 
 export interface IPlan{
     _id: string;

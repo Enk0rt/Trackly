@@ -7,25 +7,20 @@ import { Logout } from "@/components/auth/logout/Logout";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { links } from "@/components/menu/data/links";
-import { logout } from "@/services/api/auth";
 import { useAuth } from "@/hooks/useAuth";
 import { useQueryClient } from "@tanstack/react-query";
+import Image from "next/image";
+import { useTheme } from "next-themes";
+import Link from "next/link";
+import { handleLogout } from "@/components/auth/logout/helpers/handleLogout";
 
 const Menu = () => {
+    const { resolvedTheme } = useTheme();
     const pathname = usePathname();
     const router = useRouter();
     const [active, setActive] = useState<string>("signUp");
     const queryClient = useQueryClient();
     const { data: user, isLoading } = useAuth();
-
-    const handleLogout = async () => {
-        await logout();
-        await queryClient.setQueryData(["user"], null);
-        if (!pathname.startsWith("/sign-in")|| !pathname.startsWith("/sign-up") || !pathname.startsWith("/")) {
-            router.push("/");
-        }
-    };
-
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -44,7 +39,7 @@ const Menu = () => {
                                 type={TypeBtnEnum.LINK}
                                 path={"/sign-in"}
                                 className={`${
-                                    active === "signIn" ? "bg-[#34684F] text-white dark:bg-[#FFFFFF] dark:text-[#34684F] hover:drop-shadow-[0px_2px_6px_rgba(12,49,44,40)] hover:dark:shadow-[0px_2px_6px_rgba(255,255,255,40)] hover:shadow-[inset_0_2px_16px_rgba(12,49,44,10)]" : "hover:bg-[#34684F] text-[#34684F] dark:text-white hover:text-white dark:hover:bg-[#FFFFFF] dark:hover:text-[#34684F] "
+                                    active === "signIn" ? "bg-[#34684F] text-white dark:bg-[#FFFFFF] dark:text-[#34684F] shadow-[0_2px_16px_rgba(12,49,44,10)] dark:shadow-[0px_2px_6px_rgba(255,255,255,40)]   hover:dark:shadow-[0px_2px_6px_rgba(255,255,255,40)] " : "hover:bg-[#34684F] text-[#34684F] dark:text-white hover:text-white dark:hover:bg-[#FFFFFF] dark:hover:text-[#34684F] "
                                 }`}
                             >
                                 Sign in
@@ -58,7 +53,7 @@ const Menu = () => {
                                 type={TypeBtnEnum.LINK}
                                 path={"/sign-up"}
                                 className={`${
-                                    active === "signUp" ? "bg-[#34684F] text-white dark:bg-[#FFFFFF] dark:text-[#34684F]  hover:drop-shadow-[0px_2px_6px_rgba(12,49,44,40)] hover:shadow-[inset_0_2px_16px_rgba(12,49,44,10)] hover:dark:shadow-[0px_2px_6px_rgba(255,255,255,40)]" : "hover:bg-[#34684F]  text-[#34684F] dark:text-white hover:text-white dark:hover:bg-[#FFFFFF] dark:hover:text-[#34684F]"
+                                    active === "signUp" ? "bg-[#34684F] text-white dark:bg-[#FFFFFF] dark:text-[#34684F] shadow-[0_2px_16px_rgba(12,49,44,10)]    dark:shadow-[0px_2px_6px_rgba(255,255,255,40)] hover:dark:shadow-[0px_2px_6px_rgba(255,255,255,40)]" : "hover:bg-[#34684F]  text-[#34684F] dark:text-white hover:text-white dark:hover:bg-[#FFFFFF] dark:hover:text-[#34684F] "
                                 }`}
                             >
                                 Sign up
@@ -81,8 +76,8 @@ const Menu = () => {
                                     path={link.path}
                                     className={`${
                                         pathname === link.path
-                                            ? "bg-[#34684F] text-white dark:bg-white dark:text-[#34684F]"
-                                            : "hover:bg-[#34684F] hover:text-white text-[#34684F] dark:text-white dark:hover:bg-white dark:hover:text-[#34684F]"
+                                            ? "bg-[#34684F] text-white dark:bg-white dark:text-[#34684F] dark:shadow-[0px_2px_6px_rgba(255,255,255,40)] shadow-[0_2px_16px_rgba(12,49,44,10)] hover:dark:shadow-[0px_2px_6px_rgba(255,255,255,40)] hover:shadow-[0_2px_16px_rgba(12,49,44,10)]"
+                                            : " hover:bg-[#34684F] hover:text-white text-[#34684F] dark:text-white dark:hover:bg-white dark:hover:text-[#34684F] hover:dark:shadow-[0px_2px_6px_rgba(255,255,255,40)] hover:shadow-[0_2px_16px_rgba(12,49,44,10)]"
                                     }`}
                                 >
                                     {link.label}
@@ -92,9 +87,25 @@ const Menu = () => {
                     </ul>
 
                     <div className="flex gap-6 items-center">
+                        <div
+                            className="rounded-[100%] w-[34px] h-[34px] border border-[#0C312C] dark:border-[#ffffff] flex items-center justify-center cursor-pointer transition-all duration-300 ease-in-out hover:scale-[1.1] will-change-transform origin-center">
+                            {
+                                !user.avatar && resolvedTheme === "light" ?
+                                    <Link href={`/profile/${user.username}`}>
+                                        < Image src="/light-theme/svg/user-icon-light.svg" alt="User icon" width={18}
+                                                height={18} />
+                                    </Link>
+                            :
+                                <Link href={`/profile/${user.username}`}>
+                                    < Image src="/dark-theme/svg/user-icon-dark.svg" alt="User icon" width={18}
+                                            height={18} />
+                                </Link>
+
+                            }
+                        </div>
                         <ThemeChanger />
                         <Logo />
-                        <Logout action={handleLogout} />
+                        <Logout action={() => handleLogout(queryClient, pathname, router)} />
                     </div>
                 </div>
             )}

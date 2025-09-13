@@ -4,7 +4,6 @@ import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { Providers } from "@/query/providers/Providers";
 import React from "react";
-import Menu from "@/components/menu/Menu";
 
 const poppins = Poppins({
     subsets: ['latin'],
