@@ -22,7 +22,7 @@ class UserService {
     }
 
     public async getByUsername(username: string): Promise<IUser> {
-        return await userRepository.getByEmail(username);
+        return await userRepository.getByUsername(username);
     }
 
     public async create(createData: Partial<IUser>): Promise<IUser> {
@@ -62,6 +62,7 @@ class UserService {
             throw new ApiError(
                 StatusCodeEnum.BAD_REQUEST,
                 "User with this email already exists",
+                "email",
             );
         }
 
@@ -69,6 +70,7 @@ class UserService {
             throw new ApiError(
                 StatusCodeEnum.BAD_REQUEST,
                 "User with this username already exists",
+                "username",
             );
         }
         return;

@@ -1,10 +1,11 @@
 import zod from "@/zod/zod";
+import { RegexEnums } from "@/enums/regexEnum";
 
 export const signUpValidation = zod.object({
-    username: zod.string().nonempty("Username required").min(3,"Minimum 3 characters"),
-    email: zod.string().nonempty("Email required"),
-    password: zod.string().nonempty("Password required").min(6,"Minimum 6 chars"),
-    confirmPassword: zod.string().nonempty("Confirm password required").min(6).optional(),
+    username: zod.string().nonempty("Username required").min(3, "Minimum 3 characters required"),
+    email: zod.string().nonempty("Email required").regex(new RegExp(RegexEnums.EMAIL), "Invalid email format (ex. a1a@gmail.com)"),
+    password: zod.string().nonempty("Password required").min(6, "Minimum 6 characters required").regex(new RegExp(RegexEnums.PASSWORD), "Invalid password format (ex. Pa$$123)"),
+    confirmPassword: zod.string().nonempty("Confirm password required").optional(),
     name: zod.string().optional(),
     surname: zod.string().optional(),
 })
@@ -14,9 +15,8 @@ export const signUpValidation = zod.object({
     });
 
 export const signInValidation = zod.object({
-    login: zod.string().nonempty("Login is required").min(3, "Minimum 3 characters" ),
-
-    password: zod.string().nonempty("Password is required").min(6,"Minimum 6 chars"),
+    login: zod.string().nonempty("Login is required"),
+    password: zod.string().nonempty("Password is required"),
 });
 
 

@@ -29,6 +29,7 @@ class AuthService {
             throw new ApiError(
                 StatusCodeEnum.BAD_REQUEST,
                 "Email or username is required",
+                "login",
             );
         }
 
@@ -40,7 +41,7 @@ class AuthService {
                 if (!user) {
                     throw new ApiError(
                         StatusCodeEnum.BAD_REQUEST,
-                        "Invalid email/username or password",
+                        "Invalid login or password",
                     );
                 }
                 break;
@@ -49,14 +50,14 @@ class AuthService {
                 if (!user) {
                     throw new ApiError(
                         StatusCodeEnum.BAD_REQUEST,
-                        "Invalid email/username or password",
+                        "Invalid login or password",
                     );
                 }
                 break;
             default:
                 throw new ApiError(
                     StatusCodeEnum.BAD_REQUEST,
-                    "Invalid email/username or password",
+                    "Invalid login or password",
                 );
         }
 
@@ -68,7 +69,7 @@ class AuthService {
         if (!isValidPass) {
             throw new ApiError(
                 StatusCodeEnum.BAD_REQUEST,
-                "Invalid email or password",
+                "Invalid login or password",
             );
         }
 

@@ -6,6 +6,7 @@ import { config } from "./configs/config";
 import { swaggerDocument, swaggerUi } from "./configs/swagger.config";
 import { cronRunner } from "./crons";
 import { ApiError } from "./errors/api.error";
+import { errorHandler } from "./middleware/error.middleware";
 import { apiRouter } from "./routers/api.router";
 import { delay } from "./utils/delay";
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api", apiRouter);
+app.use(errorHandler);
 
 app.use((err: ApiError, req: Request, res: Response, next: NextFunction) => {
     const status = err.status || 500;

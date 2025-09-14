@@ -11,26 +11,37 @@ import { signIn } from "@/services/api/auth";
 import { FormChangerLink } from "@/components/ui/form-changer-link/FormChangerLink";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
+import { IApiErrorResponse } from "@/interfaces/errors/IError";
 
 const LoginForm = () => {
 
-    const { register, reset, handleSubmit, formState:{errors} } = useForm<SignInForm>({ resolver: zodResolver(signInValidation),mode:"onBlur",criteriaMode:"all"});
+    const {
+        register,
+        reset,
+        handleSubmit,
+        setError,
+        formState: { errors },
+    } = useForm<SignInForm>({ resolver: zodResolver(signInValidation), mode: "onBlur", criteriaMode: "all" });
 
-    const queryClient = useQueryClient()
+    const queryClient = useQueryClient();
     const router = useRouter();
 
     const [mounted, setMounted] = useState<boolean>(false);
 
 
-    const { mutate,isPending } = useMutation({
+    const { mutate, isPending } = useMutation({
             mutationFn: signIn<SignInForm>,
             onSuccess: async (res) => {
-                await queryClient.setQueryData(["user"],res.user);
+                await queryClient.setQueryData(["user"], res.user);
                 router.push("/");
                 reset();
             },
             onError: (error) => {
-                throw new Error("Something went wrong", error);
+                const axiosError = error as AxiosError<IApiErrorResponse>;
+                const backendMessage = axiosError.response?.data?.details || "Unexpected error";
+
+                setError(("root"), { type: "server", message: backendMessage });
             },
         })
     ;
@@ -49,6 +60,13 @@ const LoginForm = () => {
                 <Image src="/svg/app-logo.svg" alt="App logo icon" width={40} height={40} />
 
                 <h3 className="mt-2 text-[#34684F] dark:text-[#FFFFFF] text-[20px] font-medium">Sign in to TrackLy</h3>
+
+                {
+                    errors.root?.message &&
+                    <p className="text-red-500 text-[12px] mt-1 space-y-1">
+                        {errors.root.message}
+                    </p>
+                }
 
                 <div className="w-full mt-6">
                     <FormInput labelFor={"login"} labelText={"Username or email address"} type={"text"} id={"login"}
