@@ -1,6 +1,7 @@
 This is a goals and habits tracking system Trackly. 
 Project developed with following stack of technologies:
 - Next.js v15
+- TypeScript
 - React Hook Form v7
 - Tanstack Query
 - Tailwind v4
