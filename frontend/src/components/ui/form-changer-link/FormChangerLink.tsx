@@ -1,3 +1,4 @@
+import Link from "next/link";
 
 type Props = {
     text:string,
@@ -11,9 +12,9 @@ export const FormChangerLink = ({text,link,linkText}:Props) => {
             <p className='opacity-[.4] dark:text-[#FFFFFF]/76'>
                 {text}
             </p>
-            <a href={link} className='opacity-[.8] hover:underline underline-offset-4 dark:text-[#FFFFFF]/90'>
+            <Link href={link} className='opacity-[.8] hover:underline underline-offset-4 dark:text-[#FFFFFF]/90'>
                 {linkText}
-            </a>
+            </Link>
         </div>
     );
 };

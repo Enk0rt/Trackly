@@ -12,6 +12,20 @@ export const signUpValidation = zod.object({
     .refine((data) => data.password === data.confirmPassword, {
         path: ["confirmPassword"],
         message: "Passwords do not match",
+    })
+    .refine((data) => {
+        if (!data.name) return true;
+        else return new RegExp(RegexEnums.NAME).test(data.name);
+    }, {
+        path: ["name"],
+        message: "Invalid name format",
+    })
+    .refine((data) => {
+        if (!data.surname) return true;
+        else return new RegExp(RegexEnums.NAME).test(data.surname);
+    }, {
+        path: ["surname"],
+        message: "Invalid surname format",
     });
 
 export const signInValidation = zod.object({

@@ -1,13 +1,17 @@
 import { BackBtn } from "@/components/ui/back-btn/BackBtn";
 import Logo from "@/components/ui/logo/Logo";
 import { ThemeChanger } from "@/components/theme-changer/ThemeChanger";
+import LoginForm from "@/components/auth/login-form/LoginForm";
 import { RegisterForm } from "@/components/auth/register-form/RegisterForm";
-import React from "react";
 
+type Props={
+    params: {authMode:string}
+}
 
-const Register = () => {
+const Auth = async ({params}:Props) => {
+    const {authMode} = await params
     return (
-        <div className="mt-[34px] min-h-screen flex flex-col bg-[url(/cubes.png)] bg-no-repeat  bg-top">
+        <div className="mt-[34px] h-[100vh] pb-40 bg-[url(/cubes.png)] bg-no-repeat  bg-top relative">
             <header className=" w-[84%] max-w-[1249px] mx-auto">
                 <div className="flex justify-between items-center">
                     <BackBtn />
@@ -17,11 +21,13 @@ const Register = () => {
                     </div>
                 </div>
             </header>
-            <main className="flex h-full justify-center">
-                <RegisterForm />
+            <main className="flex">
+                {
+                    authMode === "sign-in" ?  <LoginForm /> : <RegisterForm/>
+                }
             </main>
         </div>
     );
 };
 
-export default Register;
+export default Auth;

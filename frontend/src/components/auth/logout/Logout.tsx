@@ -1,5 +1,5 @@
 
-import Image from "next/image";
+import LogoutIcon from "@/components/ui/svg/buttons/LogoutIcon";
 
 type Props = {
     action: () => object;
@@ -8,7 +8,7 @@ type Props = {
 export const Logout = ({action}:Props) => {
     return (
         <button onClick={action} className='cursor-pointer'>
-           <Image src={'/svg/logout-icon.svg'} alt={'Logout icon'} width={60} height={60}/>
+            <LogoutIcon className='w-[60px] h-[60px] text-[#33674E] dark:text-white'/>
         </button>
     );
 };

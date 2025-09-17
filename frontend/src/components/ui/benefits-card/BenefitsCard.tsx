@@ -1,15 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import { use3DTilt } from "@/components/ui/benefits-card/hooks/use3DTilt";
-import { benefits } from "@/data/benefitsCardData";
-import { useTheme } from "next-themes";
+import { BenefitCardList } from "@/components/ui/benefits-card/BenefutCardList";
 
 
 export const BenefitsCard = () => {
     const { wrapRef, cardRef, handleMouseLeave, handleMouseMove } = use3DTilt("skewX(-25deg) translateZ(0) ");
     const [mounted, setMounted] = useState<boolean>(false);
-    const {theme} = useTheme();
 
     const isMobile =
         typeof window !== "undefined" && window.matchMedia("(max-width: 1024px)").matches;
@@ -43,21 +40,7 @@ export const BenefitsCard = () => {
                           dark:text-[#FFFFFF]
                         "
             >
-                <ul className="flex flex-col justify-center  gap-7">
-                    {
-                        benefits.map((item, i) => <li key={i}>
-                            <div className="flex items-center">
-                                <Image
-                                    src={theme === "dark" ? `/light-theme/svg/${item.icon}-light.svg` : `/dark-theme/svg/${item.icon}-dark.svg`}
-                                    alt={"Benefit icon"} width={24} height={24} />
-                                <h3 className={`relative pl-4 text-[16px] sm:text-[18px]`}>
-                                    {item.title}
-                                </h3>
-                            </div>
-                            <p className="pl-10 text-[12px] sm:text-[14px]">{item.text}</p>
-                        </li>)
-                    }
-                </ul>
+                <BenefitCardList/>
             </div>
         </div>
     );

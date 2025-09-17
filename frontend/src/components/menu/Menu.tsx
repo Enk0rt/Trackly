@@ -10,12 +10,10 @@ import { links } from "@/components/menu/data/links";
 import { useAuth } from "@/hooks/useAuth";
 import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
-import { useTheme } from "next-themes";
 import Link from "next/link";
 import { handleLogout } from "@/components/auth/logout/helpers/handleLogout";
 
 const Menu = () => {
-    const { resolvedTheme } = useTheme();
     const pathname = usePathname();
     const router = useRouter();
     const [active, setActive] = useState<string>("signUp");
@@ -90,17 +88,18 @@ const Menu = () => {
                         <div
                             className="rounded-[100%] w-[34px] h-[34px] border border-[#0C312C] dark:border-[#ffffff] flex items-center justify-center cursor-pointer transition-all duration-300 ease-in-out hover:scale-[1.1] will-change-transform origin-center">
                             {
-                                !user.avatar && resolvedTheme === "light" ?
+                                !user.avatar ?
                                     <Link href={`/profile/${user.username}`}>
                                         < Image src="/light-theme/svg/user-icon-light.svg" alt="User icon" width={18}
-                                                height={18} />
-                                    </Link>
-                            :
-                                <Link href={`/profile/${user.username}`}>
-                                    < Image src="/dark-theme/svg/user-icon-dark.svg" alt="User icon" width={18}
-                                            height={18} />
-                                </Link>
+                                                height={18} className="block dark:hidden" />
+                                        < Image src="/dark-theme/svg/user-icon-dark.svg" alt="User icon" width={18}
+                                                height={18} className="hidden dark:block" />
+                                    </Link> :
 
+                                    <Link href={`/profile/${user.username}`}>
+                                        < Image src={user.avatar} alt="User icon" width={18}
+                                                height={18} className="hidden dark:block" />
+                                    </Link>
                             }
                         </div>
                         <ThemeChanger />

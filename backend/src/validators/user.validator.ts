@@ -16,14 +16,8 @@ export class UserValidator {
             .string({ required_error: "Password is required" })
             .regex(new RegExp(RegexEnums.PASSWORD), "Invalid password format")
             .nonempty("Password is required"),
-        name: zod
-            .string()
-            .regex(new RegExp(RegexEnums.NAME), "Invalid name format")
-            .optional(),
-        surname: zod
-            .string()
-            .regex(new RegExp(RegexEnums.NAME), "Invalid surname format")
-            .optional(),
+        name: zod.string().optional(),
+        surname: zod.string().optional(),
         age: zod.preprocess((val) => {
             if (typeof val === "string") {
                 const parsed = Number(val);

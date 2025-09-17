@@ -63,7 +63,7 @@ export const RegisterForm = () => {
     if (!mounted) return null;
 
     return (
-        <div>
+        <>
             <div className="mx-auto gradient transform-[translateY(20%)]  shadow-xl rounded-[18px]">
                 <form onSubmit={handleSubmit(onSubmit)} className="px-[34px] py-[24px] flex flex-col  items-center
             ">
@@ -102,7 +102,7 @@ export const RegisterForm = () => {
 
                 </form>
             </div>
-        </div>
+        </>
     );
 };
 

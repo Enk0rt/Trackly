@@ -33,6 +33,20 @@ class UserController {
         }
     }
 
+    public async getByUsername(
+        req: Request,
+        res: Response<IApiSuccessResponse<IUser>>,
+        next: NextFunction,
+    ) {
+        try {
+            const { username } = req.params;
+            const user = await userService.getByUsername(username);
+            res.status(StatusCodeEnum.OK).json({ data: user });
+        } catch (e) {
+            next(e);
+        }
+    }
+
     public async delete(
         req: Request,
         res: Response<IApiSuccessResponse<IUser>>,

@@ -23,8 +23,7 @@ export class AuthValidator {
             .nonempty("Email or username is required"),
         password: zod
             .string({ required_error: "Password is required" })
-            .nonempty("Password is required")
-            .regex(new RegExp(RegexEnums.PASSWORD), "Invalid password format"),
+            .nonempty("Password is required"),
     });
 
     public static refreshToken = zod.object({
