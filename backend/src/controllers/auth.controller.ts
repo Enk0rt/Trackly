@@ -153,6 +153,40 @@ class AuthController {
             next(e);
         }
     }
+
+    public async verifyEmail(
+        req: Request,
+        res: Response<IApiSuccessResponse<IUser>>,
+        next: NextFunction,
+    ) {
+        try {
+            const { token } = req.params;
+            const user = await authService.verifyEmail(token);
+            res.status(StatusCodeEnum.OK).json({
+                data: user,
+                details: "Email is successfully verified",
+            });
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async sendVerifyEmailRequest(
+        req: Request,
+        res: Response<IApiSuccessResponse<IUser>>,
+        next: NextFunction,
+    ) {
+        try {
+            const { email, name, username } = req.body;
+            await authService.sendVerifyEmailRequest(email, name, username);
+            res.status(StatusCodeEnum.OK).json({
+                data: null,
+                details: "Email request is successfully sent",
+            });
+        } catch (e) {
+            next(e);
+        }
+    }
 }
 
 export const authController = new AuthController();

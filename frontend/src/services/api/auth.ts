@@ -38,3 +38,23 @@ export const refresh = async (): Promise<void> => {
 export const logout = async (): Promise<void> => {
     await api.post("/auth/logout");
 };
+
+export const verifyEmail = async (token: string): Promise<IUser | null> => {
+    try {
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://nginx/api";
+        const res = await fetch(`${baseUrl}/auth/verify/confirm/${token}`, {
+            method: "GET",
+            credentials: "include",
+            cache: "no-store",
+        });
+
+        if (!res.ok) {
+            return null;
+        }
+        const data: IUserResponse = await res.json();
+        return data.data;
+    } catch (e) {
+        console.error("Failed to verify email:", e);
+        return null;
+    }
+};

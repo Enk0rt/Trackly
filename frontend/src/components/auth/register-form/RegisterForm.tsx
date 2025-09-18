@@ -29,7 +29,7 @@ export const RegisterForm = () => {
     const { mutate } = useMutation({
         mutationFn: signUp<SignUpForm>,
         onSuccess: () => {
-            router.push("/");
+            router.push("/verify");
         },
         onError: (error => {
             const axiosError = error as AxiosError<IApiErrorResponse>;
@@ -92,7 +92,6 @@ export const RegisterForm = () => {
 
                     <MainBtn
                         type={TypeBtnEnum.BTN}
-                        path={"/sign-in"}
                         className="bg-[#34684F] text-[#FFFFFF] text-[16px] mt-8 hover:shadow-[0_2px_16px_rgba(12,49,44,40)] hover:dark:shadow-[0px_2px_16px_rgba(255,255,255,40)] mb-2">
                         Sign up
                     </MainBtn>

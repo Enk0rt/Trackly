@@ -29,4 +29,11 @@ router.get(
 
 router.post("/logout", authController.logout);
 
+router.post(
+    "/verify/email",
+    authMiddleware.checkAccessToken,
+    authController.sendVerifyEmailRequest,
+);
+router.get("/verify/confirm/:token", authController.verifyEmail);
+
 export const authRouter = router;

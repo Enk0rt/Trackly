@@ -1,0 +1,6 @@
+export enum EmailEnum {
+    WELCOME = "WELCOME",
+    VERIFY = "VERIFY",
+    RECOVERY = "RECOVERY",
+    RECOVERY_SUCCESS = "RECOVERY_SUCCESS",
+}

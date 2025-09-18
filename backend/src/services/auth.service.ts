@@ -1,10 +1,16 @@
+import { config } from "../configs/config";
+import { emailConstants } from "../constants/email.constants";
+import { ActionTokenTypeEnum } from "../enums/action-token-type.enum";
+import { EmailEnum } from "../enums/email.enum";
 import { LoginTypeEnum } from "../enums/login-type.enum";
 import { StatusCodeEnum } from "../enums/status-code.enum";
+import { TokenTypeEnum } from "../enums/token-type.enum";
 import { ApiError } from "../errors/api.error";
 import { IAuth } from "../interfaces/auth.interface";
 import { IUser, IUserWithTokens } from "../interfaces/user.interface";
 import { tokenRepository } from "../repositories/token.repository";
 import { userRepository } from "../repositories/user.repository";
+import { emailService } from "./email.service";
 import { passwordService } from "./password.service";
 import { tokenService } from "./token.service";
 import { userService } from "./user.service";
@@ -15,10 +21,30 @@ class AuthService {
 
         const password = await passwordService.hashPass(signUpData.password);
 
-        return await userService.create({
+        const user = await userService.create({
             ...signUpData,
             password,
         });
+
+        const verifyToken = tokenService.generateActionToken(
+            {
+                _userId: user._id,
+                username: user.username,
+            },
+            ActionTokenTypeEnum.VERIFY,
+        );
+
+        await emailService.sendMail(
+            user.email,
+            emailConstants[EmailEnum.VERIFY],
+            {
+                name: user.name,
+                username: user.username,
+                url: `${config.FRONTEND_URL}/verify/${verifyToken}`,
+            },
+        );
+
+        return user;
     }
 
     public async signIn(
@@ -113,6 +139,63 @@ class AuthService {
         }
 
         return await userService.update(id, updateData);
+    }
+
+    public async sendVerifyEmailRequest(
+        email: string,
+        name: string,
+        username: string,
+    ): Promise<void> {
+        if (!email) {
+            throw new ApiError(
+                StatusCodeEnum.BAD_REQUEST,
+                "Email is not provided",
+            );
+        }
+
+        const user = await userService.getByEmail(email);
+        if (!user) {
+            throw new ApiError(StatusCodeEnum.NOT_FOUND, "User is not found");
+        }
+
+        const verifyToken = tokenService.generateActionToken(
+            {
+                _userId: user._id,
+                username: user.username,
+            },
+            ActionTokenTypeEnum.VERIFY,
+        );
+        await emailService.sendMail(email, emailConstants[EmailEnum.VERIFY], {
+            name,
+            username,
+            url: `${config.FRONTEND_URL}/verify/${verifyToken}`,
+        });
+    }
+
+    public async verifyEmail(token: string): Promise<IUser> {
+        if (!token) {
+            throw new ApiError(
+                StatusCodeEnum.BAD_REQUEST,
+                "Verify token is not provided",
+            );
+        }
+        const { _userId } = tokenService.verifyToken(
+            token,
+            TokenTypeEnum.VERIFY,
+        );
+        const user = await userService.update(String(_userId), {
+            isVerified: true,
+        });
+
+        if (!user) {
+            throw new ApiError(StatusCodeEnum.NOT_FOUND, "User is not found");
+        }
+
+        await emailService.sendMail(user.email, emailConstants.WELCOME, {
+            name: user.name,
+        });
+
+        return user;
     }
 }
 

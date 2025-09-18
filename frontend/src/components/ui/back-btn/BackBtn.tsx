@@ -1,28 +1,26 @@
-"use client"
-import Image from "next/image";
-import Link from "next/link";
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+"use client";
+
+import { useRouter } from "next/navigation";
+import BackIcon from "@/components/ui/svg/buttons/BackIcon";
 
 export const BackBtn = () => {
-    const { resolvedTheme } = useTheme()
-    const [mounted, setMounted] = useState<boolean>(false);
+    const router = useRouter();
 
-    useEffect(() => {
-        setMounted(true)
-    }, []);
+    const handleBack = () => {
+        if (window.history.length > 1) {
+            router.back();
+        } else {
+            router.push("/");
+        }
+    };
 
     return (
-        <div>
-            <Link href='/' className='flex gap-2 items-center cursor-pointer'>
-                <span className='hidden sm:block dark:text-[#FFFFFF]'>Back</span>
-                {
-                    !mounted ? <div className="h-[20px] w-[20px]" /> : <Image
-                        src={resolvedTheme === 'dark' ? '/light-theme/svg/back-ico-light.svg' : '/dark-theme/svg/back-ico-dark.svg'}
-                        alt='Back button icon' width={30} height={30} />
-                }
-            </Link>
-        </div>
+        <button
+            onClick={handleBack}
+            className="flex gap-2 items-center cursor-pointer"
+        >
+            <span className="hidden sm:block dark:text-[#FFFFFF]">Back</span>
+            <BackIcon className="w-[24px] h-[24px] text-[#34684F] dark:text-white" />
+        </button>
     );
 };
-

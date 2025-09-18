@@ -12,6 +12,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { handleLogout } from "@/components/auth/logout/helpers/handleLogout";
+import UserAvatarIcon from "@/components/ui/svg/user/UserAvatarIcon";
 
 const Menu = () => {
     const pathname = usePathname();
@@ -90,10 +91,7 @@ const Menu = () => {
                             {
                                 !user.avatar ?
                                     <Link href={`/profile/${user.username}`}>
-                                        < Image src="/light-theme/svg/user-icon-light.svg" alt="User icon" width={18}
-                                                height={18} className="block dark:hidden" />
-                                        < Image src="/dark-theme/svg/user-icon-dark.svg" alt="User icon" width={18}
-                                                height={18} className="hidden dark:block" />
+                                        <UserAvatarIcon className='w-[18px] h-[18px] text-[#34684F] dark:text-white'/>
                                     </Link> :
 
                                     <Link href={`/profile/${user.username}`}>

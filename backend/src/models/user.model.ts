@@ -29,9 +29,9 @@ const userSchema = new Schema(
         ],
         plans: [{ type: Schema.Types.ObjectId, ref: "plans", required: false }],
         goals: [{ type: Schema.Types.ObjectId, reg: "goal", required: false }],
-        isDeleted: { type: Boolean, required: false },
-        isVerified: { type: Boolean, required: false },
-        isBlocked: { type: Boolean, required: false },
+        isDeleted: { type: Boolean, required: false, default: false },
+        isVerified: { type: Boolean, required: false, default: false },
+        isBlocked: { type: Boolean, required: false, default: false },
     },
     {
         timestamps: true,
