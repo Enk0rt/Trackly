@@ -1,4 +1,3 @@
-import { BackBtn } from "@/components/ui/back-btn/BackBtn";
 import Logo from "@/components/ui/logo/Logo";
 import { ThemeChanger } from "@/components/theme-changer/ThemeChanger";
 import { verifyEmail } from "@/services/api/auth";
@@ -25,7 +24,7 @@ const Confirm = async ({ params }: Props) => {
             <main className="flex justify-center items-center h-[70vh] my-auto">
                 {
 
-                        <div className="px-[30px] py-[24px] max-w-[400px] text-[#33674E] dark:text-white border shadow-[0_3px_8px_rgba(52,104,79,10)] dark:shadow-[0px_2px_6px_rgba(255,255,255,40)] rounded-[14px]">
+                        <div className="px-[30px] py-[24px] max-w-[400px] text-[#33674E] dark:text-white shadow-[0_3px_8px_rgba(52,104,79,10)] dark:shadow-[0px_2px_6px_rgba(255,255,255,40)] rounded-[14px]">
                             {
                                 user ?
                                     <div>

@@ -1,6 +1,7 @@
 import { BackBtn } from "@/components/ui/back-btn/BackBtn";
 import Logo from "@/components/ui/logo/Logo";
 import { ThemeChanger } from "@/components/theme-changer/ThemeChanger";
+import Link from "next/link";
 
 
 
@@ -17,9 +18,16 @@ const Verify = async () => {
                 </div>
             </header>
             <main className="flex justify-center items-center h-[70vh] my-auto">
-                <h3 className='px-[30px] py-[24px] max-w-[400px] text-[#33674E] dark:text-white border border-white rounded-[14px]'>
-                    We’ve sent you a confirmation email. Please check your inbox (and spam folder) to verify your email address and activate your account.
-                </h3>
+                <div className='px-[30px] py-[24px] max-w-[400px] text-[#33674E] dark:text-white shadow-[0_3px_8px_rgba(52,104,79,10)] dark:shadow-[0px_2px_6px_rgba(255,255,255,40)] rounded-[14px]'>
+                    <h2 className='text-[22px]'>Email verification 📬</h2>
+                    <h3 className='mt-3'>
+                        We’ve sent you a confirmation email. Please check your inbox (and spam folder) to verify your
+                        email address and activate your account.
+                    </h3>
+                    <p className='my-3'>Confirmation link will be unavailable in 5 minutes, chop-chop!</p>
+                    <Link href='/'
+                          className='w-fit mt-2 block text-[#33674E] dark:text-white underline underline-offset-2 transition duration-300 ease-in-out will-change-transform origin-center hover:scale-110'>To home page</Link>
+                </div>
             </main>
         </div>
     );

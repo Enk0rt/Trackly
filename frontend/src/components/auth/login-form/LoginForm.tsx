@@ -9,7 +9,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { signIn } from "@/services/api/auth";
 import { FormChangerLink } from "@/components/ui/form-changer-link/FormChangerLink";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import { IApiErrorResponse } from "@/interfaces/errors/IError";
@@ -27,9 +26,6 @@ const LoginForm = () => {
     const queryClient = useQueryClient();
     const router = useRouter();
 
-    const [mounted, setMounted] = useState<boolean>(false);
-
-
     const { mutate, isPending } = useMutation({
             mutationFn: signIn<SignInForm>,
             onSuccess: async (res) => {
@@ -46,11 +42,7 @@ const LoginForm = () => {
         })
     ;
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
 
-    if (!mounted) return null;
 
 
     return (
