@@ -1,7 +1,7 @@
 import { FieldError, FieldPath, UseFormRegister } from "react-hook-form";
-import { SignInForm, SignUpForm } from "@/validators/authValidator";
+import { ChangePasswordForm, EmailPasswordRecoveryForm, SignInForm, SignUpForm } from "@/validators/authValidator";
 
-type Props<T extends SignUpForm | SignInForm> = {
+type Props<T extends SignUpForm | SignInForm | ChangePasswordForm | EmailPasswordRecoveryForm> = {
     labelFor: string,
     labelText: string,
     type: string,
@@ -12,7 +12,7 @@ type Props<T extends SignUpForm | SignInForm> = {
 
 }
 
-export const FormInput = <T extends SignUpForm | SignInForm>({
+export const FormInput = <T extends SignUpForm | SignInForm | ChangePasswordForm | EmailPasswordRecoveryForm>({
                                                                  labelFor,
                                                                  labelText,
                                                                  type,
@@ -31,7 +31,7 @@ export const FormInput = <T extends SignUpForm | SignInForm>({
                 type={type}
                 id={id}
                 {...register(value)}
-                className={`pl-3 py-1 border rounded-md font-medium text-[#33674E] dark:text-[#FFFFFF]/90
+                className={`pl-3 py-1 border rounded-md font-light text-[#33674E] dark:text-[#FFFFFF]/90 space tracking-[2px]
           ${
                     error
                         ? "border-red-500 outline-red-500"

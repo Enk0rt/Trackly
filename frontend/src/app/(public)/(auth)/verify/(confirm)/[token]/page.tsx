@@ -7,7 +7,7 @@ type Props = {
     params: { token: string }
 }
 
-const Confirm = async ({ params }: Props) => {
+const EmailConfirm = async ({ params }: Props) => {
     const { token } = await params;
     const user = await verifyEmail(token);
 
@@ -52,4 +52,4 @@ const Confirm = async ({ params }: Props) => {
     );
 };
 
-export default Confirm;
+export default EmailConfirm;

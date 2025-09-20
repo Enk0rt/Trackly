@@ -12,6 +12,7 @@ import { FormChangerLink } from "@/components/ui/form-changer-link/FormChangerLi
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import { IApiErrorResponse } from "@/interfaces/errors/IError";
+import Link from "next/link";
 
 const LoginForm = () => {
 
@@ -27,22 +28,19 @@ const LoginForm = () => {
     const router = useRouter();
 
     const { mutate, isPending } = useMutation({
-            mutationFn: signIn<SignInForm>,
-            onSuccess: async (res) => {
-                await queryClient.setQueryData(["user"], res.user);
-                router.push("/");
-                reset();
-            },
-            onError: (error) => {
-                const axiosError = error as AxiosError<IApiErrorResponse>;
-                const backendMessage = axiosError.response?.data?.details || "Unexpected error";
+        mutationFn: signIn<SignInForm>,
+        onSuccess: async (res) => {
+            await queryClient.setQueryData(["user"], res.user);
+            router.push("/");
+            reset();
+        },
+        onError: (error) => {
+            const axiosError = error as AxiosError<IApiErrorResponse>;
+            const backendMessage = axiosError.response?.data?.details || "Unexpected error";
 
-                setError(("root"), { type: "server", message: backendMessage });
-            },
-        })
-    ;
-
-
+            setError(("root"), { type: "server", message: backendMessage });
+        },
+    });
 
 
     return (
@@ -75,7 +73,10 @@ const LoginForm = () => {
                     Sign in
                 </MainBtn>
 
-                <a className="mt-4 opacity-[.4] text-[12px] dark:text-[#FFFFFF]/90">Forgot password</a>
+                <Link href={'/recovery'}
+                      className="mt-4 opacity-[.4] text-[12px] dark:text-[#FFFFFF]/90 text-[#34684F] cursor-pointer hover:opacity-100 transition duration-300 ease-in-out">
+                    Forgot password
+                </Link>
 
                 <FormChangerLink text={"Don`t have an account?"} link={"/sign-up"} linkText={"Sign up"} />
             </form>

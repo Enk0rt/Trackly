@@ -197,6 +197,105 @@ class AuthService {
 
         return user;
     }
+
+    public async sendRecoveryRequest(email: string): Promise<void> {
+        const user = await userService.getByEmail(email);
+
+        if (!user) {
+            throw new ApiError(StatusCodeEnum.NOT_FOUND, "User is not found");
+        }
+
+        const recoveryToken = tokenService.generateActionToken(
+            {
+                _userId: user._id,
+                username: user.username,
+            },
+            ActionTokenTypeEnum.RECOVERY,
+        );
+
+        await emailService.sendMail(email, emailConstants[EmailEnum.RECOVERY], {
+            name: user.name,
+            url: `${config.FRONTEND_URL}/recovery/confirm/${recoveryToken}`,
+        });
+    }
+
+    public async recoverPasswordFromEmail(
+        token: string,
+        newPass: string,
+    ): Promise<IUser> {
+        if (!token) {
+            throw new ApiError(
+                StatusCodeEnum.BAD_REQUEST,
+                "Recovery token is not provided",
+            );
+        }
+
+        const { _userId } = tokenService.verifyToken(
+            token,
+            TokenTypeEnum.RECOVERY,
+        );
+
+        const password = await passwordService.hashPass(newPass);
+
+        const user = await userService.update(String(_userId), { password });
+
+        if (!user) {
+            throw new ApiError(StatusCodeEnum.NOT_FOUND, "User is not found");
+        }
+
+        await emailService.sendMail(
+            user.email,
+            emailConstants[EmailEnum.RECOVERY_SUCCESS],
+            {
+                name: user.name,
+            },
+        );
+
+        return user;
+    }
+
+    public async changePasswordFromProfile(
+        token: string,
+        oldPass: string,
+        newPass: string,
+    ): Promise<IUser> {
+        if (!token) {
+            throw new ApiError(
+                StatusCodeEnum.BAD_REQUEST,
+                "Access token is not provided",
+            );
+        }
+
+        const { _userId } = tokenService.verifyToken(
+            token,
+            TokenTypeEnum.ACCESS,
+        );
+
+        const hashedOldPass = await passwordService.hashPass(oldPass);
+        if (!(await passwordService.comparePass(oldPass, hashedOldPass))) {
+            throw new ApiError(StatusCodeEnum.FORBIDDEN, "Invalid password");
+        }
+
+        const newHashedPassword = await passwordService.hashPass(newPass);
+
+        const user = await userService.update(String(_userId), {
+            password: newHashedPassword,
+        });
+
+        if (!user) {
+            throw new ApiError(StatusCodeEnum.NOT_FOUND, "User is not found");
+        }
+
+        await emailService.sendMail(
+            user.email,
+            emailConstants[EmailEnum.RECOVERY_SUCCESS],
+            {
+                name: user.name,
+            },
+        );
+
+        return user;
+    }
 }
 
 export const authService = new AuthService();

@@ -9,7 +9,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signUpValidation, SignUpForm } from "@/validators/authValidator";
 import { FormInput } from "@/components/ui/input/formInput";
 import { FormChangerLink } from "@/components/ui/form-changer-link/FormChangerLink";
-import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import { IApiErrorResponse } from "@/interfaces/errors/IError";
 import { useRouter } from "next/navigation";
@@ -24,7 +23,6 @@ export const RegisterForm = () => {
         formState: { errors },
     } = useForm<SignUpForm>({ resolver: zodResolver(signUpValidation), mode: "onBlur", criteriaMode: "all" });
 
-    const [mounted, setMounted] = useState<boolean>(false);
     const router = useRouter();
     const { mutate } = useMutation({
         mutationFn: signUp<SignUpForm>,
@@ -55,12 +53,6 @@ export const RegisterForm = () => {
             },
         });
     };
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
-    if (!mounted) return null;
 
     return (
         <>

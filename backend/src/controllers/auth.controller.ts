@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 import { StatusCodeEnum } from "../enums/status-code.enum";
+import { TokenTypeEnum } from "../enums/token-type.enum";
 import { IApiSuccessResponse } from "../interfaces/api-success-responce.interface";
 import { IAuth } from "../interfaces/auth.interface";
 import { ITokenPair, ITokenPayload } from "../interfaces/tokens.interface";
@@ -173,7 +174,7 @@ class AuthController {
 
     public async sendVerifyEmailRequest(
         req: Request,
-        res: Response<IApiSuccessResponse<IUser>>,
+        res: Response<IApiSuccessResponse<void>>,
         next: NextFunction,
     ) {
         try {
@@ -181,7 +182,89 @@ class AuthController {
             await authService.sendVerifyEmailRequest(email, name, username);
             res.status(StatusCodeEnum.OK).json({
                 data: null,
-                details: "Email request is successfully sent",
+                details:
+                    "Email verification request is successfully sent,check your email",
+            });
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async sendRecoveryRequest(
+        req: Request,
+        res: Response<IApiSuccessResponse<void>>,
+        next: NextFunction,
+    ) {
+        try {
+            const { email } = req.body;
+            await authService.sendRecoveryRequest(email);
+            res.status(StatusCodeEnum.OK).json({
+                data: null,
+                details:
+                    "Password recovery request is successfully sent, check your email",
+            });
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async validatePasswordRecoveryToken(
+        req: Request,
+        res: Response<IApiSuccessResponse<ITokenPayload>>,
+        next: NextFunction,
+    ) {
+        try {
+            const { token } = req.params;
+            const payload = tokenService.verifyToken(
+                token,
+                TokenTypeEnum.RECOVERY,
+            );
+            res.status(StatusCodeEnum.OK).json({
+                data: payload,
+                details: "Password is changed successfully",
+            });
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async recoverPasswordFromEmail(
+        req: Request,
+        res: Response<IApiSuccessResponse<IUser>>,
+        next: NextFunction,
+    ) {
+        try {
+            const { newPass } = req.body;
+            const { token } = req.params;
+            const user = await authService.recoverPasswordFromEmail(
+                token,
+                newPass,
+            );
+            res.status(StatusCodeEnum.OK).json({
+                data: user,
+                details: "Password is changed successfully",
+            });
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async changePasswordFromProfile(
+        req: Request,
+        res: Response<IApiSuccessResponse<IUser>>,
+        next: NextFunction,
+    ) {
+        try {
+            const { oldPass, newPass } = req.body;
+            const token = req.cookies["accessToken"];
+            const user = await authService.changePasswordFromProfile(
+                token,
+                oldPass,
+                newPass,
+            );
+            res.status(StatusCodeEnum.OK).json({
+                data: user,
+                details: "Password is changed successfully",
             });
         } catch (e) {
             next(e);
