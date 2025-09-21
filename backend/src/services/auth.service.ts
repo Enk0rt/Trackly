@@ -30,6 +30,7 @@ class AuthService {
             {
                 _userId: user._id,
                 username: user.username,
+                role: user.role,
             },
             ActionTokenTypeEnum.VERIFY,
         );
@@ -102,6 +103,7 @@ class AuthService {
         const tokens = tokenService.generateTokens({
             _userId: user._id,
             username: user.username,
+            role: user.role,
         });
 
         await tokenRepository.create({ ...tokens, _userId: user._id });
@@ -162,6 +164,7 @@ class AuthService {
             {
                 _userId: user._id,
                 username: user.username,
+                role: user.role,
             },
             ActionTokenTypeEnum.VERIFY,
         );
@@ -209,6 +212,7 @@ class AuthService {
             {
                 _userId: user._id,
                 username: user.username,
+                role: user.role,
             },
             ActionTokenTypeEnum.RECOVERY,
         );

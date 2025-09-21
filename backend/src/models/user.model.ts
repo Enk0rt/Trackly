@@ -1,5 +1,6 @@
 import { model, Schema } from "mongoose";
 
+import { RoleEnum } from "../enums/role.enum";
 import { IUser } from "../interfaces/user.interface";
 
 const userSchema = new Schema(
@@ -28,7 +29,15 @@ const userSchema = new Schema(
             { type: Schema.Types.ObjectId, ref: "habit", required: false },
         ],
         plans: [{ type: Schema.Types.ObjectId, ref: "plans", required: false }],
-        goals: [{ type: Schema.Types.ObjectId, reg: "goal", required: false }],
+        goals: [{ type: Schema.Types.ObjectId, ref: "goal", required: false }],
+        achievements: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "achievement",
+                required: false,
+            },
+        ],
+        role: { type: String, required: false, default: RoleEnum.USER },
         isDeleted: { type: Boolean, required: false, default: false },
         isVerified: { type: Boolean, required: false, default: false },
         isBlocked: { type: Boolean, required: false, default: false },

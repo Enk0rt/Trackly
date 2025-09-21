@@ -4,7 +4,7 @@ import { IGoal } from "../interfaces/goal.interface";
 
 const goalSchema = new Schema(
     {
-        userId: { type: Schema.Types.ObjectId, required: true },
+        userId: { type: Schema.Types.ObjectId, ref: "user", required: true },
         name: { type: String, required: true },
         description: { type: String, required: true },
         deadline: { type: Date, required: true },

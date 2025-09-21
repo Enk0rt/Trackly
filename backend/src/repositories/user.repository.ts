@@ -2,8 +2,8 @@ import { IUser } from "../interfaces/user.interface";
 import { User } from "../models/user.model";
 
 class UserRepository {
-    public getAll(): Promise<IUser[]> {
-        return User.find().populate({
+    public getAll(filter?: object): Promise<IUser[]> {
+        return User.find(filter).populate({
             path: "userActivity",
             populate: { path: "plans" },
         });

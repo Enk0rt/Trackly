@@ -100,11 +100,12 @@ class AuthController {
         next: NextFunction,
     ) {
         try {
-            const { _userId, username } = req.res.locals
+            const { _userId, username, role } = req.res.locals
                 .tokenPayload as ITokenPayload;
             const tokens = tokenService.generateTokens({
                 _userId,
                 username,
+                role,
             });
             res.status(StatusCodeEnum.OK)
                 .cookie("accessToken", tokens.accessToken, {

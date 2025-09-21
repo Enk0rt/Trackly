@@ -46,23 +46,6 @@ class UserController {
             next(e);
         }
     }
-
-    public async delete(
-        req: Request,
-        res: Response<IApiSuccessResponse<IUser>>,
-        next: NextFunction,
-    ) {
-        try {
-            const { id } = req.params;
-            await userService.delete(id);
-            res.status(StatusCodeEnum.OK).json({
-                data: null,
-                details: "User is successfully deleted",
-            });
-        } catch (e) {
-            next(e);
-        }
-    }
 }
 
 export const userController = new UserController();

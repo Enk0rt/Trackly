@@ -12,6 +12,7 @@ export interface ITokens extends IBase {
 export type ITokenPayload = {
     _userId: ObjectId;
     username: string;
+    role: string;
 };
 
 export type ITokenPair = {

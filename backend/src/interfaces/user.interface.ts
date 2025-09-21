@@ -21,6 +21,8 @@ export interface IUser extends IBase {
     goals: ObjectId[];
     habits: ObjectId[];
     plans: ObjectId[];
+    achievement: ObjectId[];
+    role: string;
     isDeleted: boolean;
     isVerified: boolean;
     isBlocked: boolean;

@@ -5,8 +5,8 @@ import { UserActivity } from "./user-activity.model";
 
 const planSchema = new Schema(
     {
-        name: { type: String, required: true },
-        _userId: { type: Schema.Types.ObjectId, required: false },
+        title: { type: String, required: true },
+        _userId: { type: Schema.Types.ObjectId, ref: "user", required: false },
         type: { type: String, required: true },
         description: { type: String, required: false },
         date: { type: String, required: true },

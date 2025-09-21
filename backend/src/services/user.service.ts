@@ -4,8 +4,8 @@ import { IUser } from "../interfaces/user.interface";
 import { userRepository } from "../repositories/user.repository";
 
 class UserService {
-    public async getAll(): Promise<IUser[]> {
-        return await userRepository.getAll();
+    public async getAll(filter?: object): Promise<IUser[]> {
+        return await userRepository.getAll(filter);
     }
 
     public async getById(id: string): Promise<IUser> {
