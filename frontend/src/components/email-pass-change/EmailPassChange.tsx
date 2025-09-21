@@ -20,7 +20,7 @@ export const EmailPassChange = ({ token }: Props) => {
                         <div className='flex justify-between items-center'>
                             <h2 className="text-[22px]">Password change 🔑</h2>
                             {
-                                !isTimeRunOut ? <Timer initialMinutesValue={2} initialSecondsValue={30} setIsTimeRunOut={setIsTimeRunOut} />
+                                !isTimeRunOut ? <Timer initialMinutesValue={2} initialSecondsValue={0} setIsTimeRunOut={setIsTimeRunOut} />
                                     :
                                     <Link href={'/recovery'}
                                           className="w-fit mt-2 block text-[#33674E] dark:text-white sm:text-[14px] opacity-60 hover:opacity-100 underline underline-offset-2 transition duration-300 ease-in-out will-change-transform origin-center">

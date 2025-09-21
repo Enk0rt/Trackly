@@ -34,11 +34,18 @@ const PassConfirmPage = async ({ params }: Props) => {
                                 <div>
                                     <h2 className="text-[22px]">Error 😥</h2>
                                     <h3 className="mt-3">
-                                        Something went wrong :(
+                                        Looks like password recovery link expired. Try again or come back home
                                     </h3>
-                                    <Link href="/"
-                                          className="w-fit mt-2 block text-[#33674E] dark:text-white underline underline-offset-2 transition duration-300 ease-in-out will-change-transform origin-center hover:scale-110">
-                                        To home page</Link>
+                                   <div className='mt-2 flex gap-5 items-center'>
+                                       <Link href={'/recovery'}
+                                             className="w-fit block text-[#33674E] dark:text-white opacity-60 hover:opacity-100 underline underline-offset-2 transition duration-300 ease-in-out ">
+                                           Try again
+                                       </Link>
+                                       <Link href="/"
+                                             className="w-fit block text-[#33674E] dark:text-white opacity-60 hover:opacity-100 underline underline-offset-2 transition duration-300 ease-in-out ">
+                                           To home page
+                                       </Link>
+                                   </div>
                                 </div>
                         }
                     </div>

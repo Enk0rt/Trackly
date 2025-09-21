@@ -1,5 +1,5 @@
 "use client";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, memo, SetStateAction, useEffect, useState } from "react";
 
 type Props = {
     initialMinutesValue: number,
@@ -7,7 +7,7 @@ type Props = {
     setIsTimeRunOut: Dispatch<SetStateAction<boolean>>
 }
 
-export const Timer = ({ initialMinutesValue, initialSecondsValue, setIsTimeRunOut }: Props) => {
+export const Timer = memo(function Timer ({ initialMinutesValue, initialSecondsValue, setIsTimeRunOut }: Props){
 
     const [minutes, setMinutes] = useState<number>(initialMinutesValue);
     const [seconds, setSeconds] = useState<number>(initialSecondsValue);
@@ -20,9 +20,6 @@ export const Timer = ({ initialMinutesValue, initialSecondsValue, setIsTimeRunOu
 
         if (savedEndTime) {
             endTime = parseInt(savedEndTime, 10);
-        } else {
-            endTime = Date.now() + (initialMinutesValue * 60 + initialSecondsValue) * 1000;
-            localStorage.setItem(storageKey, endTime.toString());
         }
 
         const interval = setInterval(() => {
@@ -57,5 +54,5 @@ export const Timer = ({ initialMinutesValue, initialSecondsValue, setIsTimeRunOu
 
 
     );
-};
+});
 
