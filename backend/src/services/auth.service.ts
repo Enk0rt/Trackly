@@ -235,23 +235,39 @@ class AuthService {
             TokenTypeEnum.RECOVERY,
         );
 
-        const password = await passwordService.hashPass(newPass);
-
-        const user = await userService.update(String(_userId), { password });
+        const user = await userService.getById(String(_userId));
 
         if (!user) {
             throw new ApiError(StatusCodeEnum.NOT_FOUND, "User is not found");
         }
 
+        const password = await passwordService.hashPass(newPass);
+
+        const isSame = await passwordService.comparePass(
+            newPass,
+            user.password,
+        );
+
+        if (isSame) {
+            throw new ApiError(
+                StatusCodeEnum.BAD_REQUEST,
+                "This password have already been in use recently, come up with new one",
+            );
+        }
+
+        const updatedUser = await userService.update(String(_userId), {
+            password,
+        });
+
         await emailService.sendMail(
-            user.email,
+            updatedUser.email,
             emailConstants[EmailEnum.RECOVERY_SUCCESS],
             {
-                name: user.name,
+                name: updatedUser.name,
             },
         );
 
-        return user;
+        return updatedUser;
     }
 
     public async changePasswordFromProfile(

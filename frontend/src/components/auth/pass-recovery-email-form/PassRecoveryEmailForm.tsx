@@ -15,9 +15,10 @@ import { Dispatch, SetStateAction } from "react";
 type Props = {
     token: string;
     setIsSuccess: Dispatch<SetStateAction<boolean>>
+    isTimeRunOut: boolean;
 }
 
-export const PassRecoveryEmailForm = ({ token,setIsSuccess }: Props) => {
+export const PassRecoveryEmailForm = ({ token, setIsSuccess, isTimeRunOut }: Props) => {
     const {
         register,
         formState: { errors },
@@ -26,10 +27,10 @@ export const PassRecoveryEmailForm = ({ token,setIsSuccess }: Props) => {
         setError,
     } = useForm<ChangePasswordForm>({ resolver: zodResolver(passwordValidation) });
 
-    const { mutate } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: changePasswordFromEmail,
         onSuccess: () => {
-            setIsSuccess(true)
+            setIsSuccess(true);
         },
         onError: (error => {
             const axiosError = error as AxiosError<IApiErrorResponse>;
@@ -46,12 +47,22 @@ export const PassRecoveryEmailForm = ({ token,setIsSuccess }: Props) => {
 
     const onSubmit = (data: ChangePasswordForm) => {
         mutate({ token, password: data.password }, {
-            onSuccess: () => reset(),
+            onSuccess: () => {
+                localStorage.removeItem('passwordRecoveryTimer');
+                reset()
+            },
         });
     };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="mt-2">
+            {
+                errors.root?.message &&
+                <p className="text-red-500 text-[12px] mt-1 space-y-1">
+                    {errors.root.message}
+                </p>
+            }
+
             <FormInput type={"password"} id={"password"} register={register} value={"password"}
                        labelText={"Password"} labelFor={"password"} error={errors.password} />
             <FormInput type={"password"} id={"confirmPassword"} register={register}
@@ -60,7 +71,8 @@ export const PassRecoveryEmailForm = ({ token,setIsSuccess }: Props) => {
                        error={errors.confirmPassword} />
             <div className="mt-3 flex gap-5 items-center">
                 <MainBtn type={TypeBtnEnum.SUBMIT}
-                         className="bg-[#34684F] text-[#FFFFFF] sm:text-[16px] mt-3 hover:shadow-[0_2px_16px_rgba(12,49,44,40)] hover:dark:shadow-[0px_2px_16px_rgba(255,255,255,40)]">
+                         disabledValue={!(isPending || !isTimeRunOut)}
+                         className={`bg-[#34684F] text-[#FFFFFF] sm:text-[16px] ${isTimeRunOut && 'opacity-50 !cursor-default hover:shadow-[unset]'}  mt-3 hover:shadow-[0_2px_16px_rgba(12,49,44,40)] hover:dark:shadow-[0px_2px_16px_rgba(255,255,255,40)]`}>
                     Change password
                 </MainBtn>
                 <Link href="/"

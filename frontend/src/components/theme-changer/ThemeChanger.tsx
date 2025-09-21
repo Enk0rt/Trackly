@@ -27,12 +27,12 @@ export const ThemeChanger = () => {
             >
                 <FaMoon
                     key={resolvedTheme === "light" ? "in" : "out"}
-                    className={`absolute h-full w-full top-0 opacity-100 dark:opacity-0 will-change-transform transition-all duration-500 ease-in-out
+                    className={`absolute h-full w-full top-0 opacity-100 dark:opacity-0 will-change-transform transition-all duration-500 ease-in-out cursor-pointer
             ${resolvedTheme === "light" ? "rotateIn" : "rotateOut"}`}
                 />
                 <FaSun
                     key={resolvedTheme === "dark" ? "in" : "out"}
-                    className={`absolute h-full w-full top-0  text-white opacity-0 dark:opacity-100 will-change-transform transition-all duration-500 ease-in-out
+                    className={`absolute h-full w-full top-0  text-white opacity-0 dark:opacity-100 will-change-transform transition-all duration-500 ease-in-out cursor-pointer
             ${resolvedTheme === "dark" ? "rotateIn" : "rotateOut"}`}
                 />
             </button>
