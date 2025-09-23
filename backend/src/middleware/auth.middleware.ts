@@ -24,13 +24,6 @@ class AuthMiddleware {
                 );
             }
 
-            if (!accessToken) {
-                throw new ApiError(
-                    StatusCodeEnum.UNAUTHORIZED,
-                    "No token provided",
-                );
-            }
-
             const tokenPayload = tokenService.verifyToken(
                 accessToken,
                 TokenTypeEnum.ACCESS,
@@ -64,12 +57,6 @@ class AuthMiddleware {
                     "Refresh token is not provided",
                 );
             }
-
-            const tokenPayload = tokenService.verifyToken(
-                refreshToken,
-                TokenTypeEnum.REFRESH,
-            );
-
             const isTokenExists = await tokenService.isExists(
                 refreshToken,
                 TokenTypeEnum.REFRESH,
@@ -78,7 +65,10 @@ class AuthMiddleware {
                 throw new ApiError(StatusCodeEnum.FORBIDDEN, "Invalid token");
             }
 
-            req.res.locals.tokenPayload = tokenPayload;
+            req.res.locals.tokenPayload = tokenService.verifyToken(
+                refreshToken,
+                TokenTypeEnum.REFRESH,
+            );
             next();
         } catch (e) {
             next(e);

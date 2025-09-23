@@ -4,17 +4,19 @@ import { useAuth } from "@/hooks/useAuth";
 import Image from "next/image";
 import NewOnATrackIcon from "@/components/ui/svg/achievements/NewOnATrackIcon";
 import UserAvatarIcon from "@/components/ui/svg/user/UserAvatarIcon";
-import { ProfileHeaderIconsList } from "@/components/profile/profile-header/ProfileHeaderIconsList";
+import {
+    ProfileHeaderPointsList,
+} from "@/components/profile/profile-header/ProfileHeaderIconsList";
 import { IUser } from "@/interfaces/user/IUser";
-import { ActionButton } from "@/components/ui/action-button/ActionButton";
 import EditIcon from "@/components/ui/svg/buttons/EditIcon";
 import React from "react";
+import { ActionButton } from "@/components/ui/buttons/action-button/ActionButton";
 
 type Props = {
     user: IUser
 }
 
-export const ProfileHeader = ({user}:Props) => {
+export const ProfileHeader = ({ user }: Props) => {
     const { data: currentUser } = useAuth();
 
     return (
@@ -23,7 +25,8 @@ export const ProfileHeader = ({user}:Props) => {
                 <h3 className="text-[24px] md:text-[30px] xl:text-[44px] 2xl:text-[50px] text-[#33674E] dark:text-white">Profile</h3>
 
                 {
-                    user.username===currentUser?.username && <ActionButton Icon={EditIcon} iconLabel={"Edit button icon"} text={"Edit profile"} />
+                    user.username === currentUser?.username &&
+                    <ActionButton Icon={EditIcon} iconLabel={"Edit button icon"} text={"Edit profile"} />
                 }
 
             </div>
@@ -69,7 +72,7 @@ export const ProfileHeader = ({user}:Props) => {
                         </div>
                         <p className="text-[#33674E] dark:text-white text-[14px] md:text-[18px] xl:text-[22px]">I
                             create myself with my hands and mind</p>
-                        <ProfileHeaderIconsList />
+                        <ProfileHeaderPointsList user={user}/>
                     </div>
                 </div>
             }

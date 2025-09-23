@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import { MainBtn } from "@/components/ui/main-btn/MainBtn";
 import { TypeBtnEnum } from "@/enums/typeBtnEnum";
 import { FormInput } from "@/components/ui/input/formInput";
 import { useForm } from "react-hook-form";
@@ -13,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import { IApiErrorResponse } from "@/interfaces/errors/IError";
 import Link from "next/link";
+import { MainBtn } from "@/components/ui/buttons/main-btn/MainBtn";
 
 const LoginForm = () => {
 

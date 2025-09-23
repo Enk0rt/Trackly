@@ -68,3 +68,32 @@ img {
         transform: rotate(360deg) scale(0);
     }
 }
+
+.animate-appear {
+    animation: appear .6s ease-in-out forwards;
+}
+
+
+@keyframes appear {
+    0%{
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    100%{
+        opacity: 100;
+        transform: translateY(0);
+    }
+}
+
+
+.animate-opacity{
+    animation: opacity 1s ease-in-out forwards;
+}
+@keyframes opacity {
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 100;
+    }
+}

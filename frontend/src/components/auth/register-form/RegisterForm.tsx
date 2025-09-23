@@ -3,7 +3,6 @@ import Image from "next/image";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { signUp } from "@/services/api/auth";
-import { MainBtn } from "@/components/ui/main-btn/MainBtn";
 import { TypeBtnEnum } from "@/enums/typeBtnEnum";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signUpValidation, SignUpForm } from "@/validators/authValidator";
@@ -12,6 +11,7 @@ import { FormChangerLink } from "@/components/ui/form-changer-link/FormChangerLi
 import { AxiosError } from "axios";
 import { IApiErrorResponse } from "@/interfaces/errors/IError";
 import { useRouter } from "next/navigation";
+import { MainBtn } from "@/components/ui/buttons/main-btn/MainBtn";
 
 
 export const RegisterForm = () => {

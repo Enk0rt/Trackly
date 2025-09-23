@@ -28,7 +28,7 @@ export const Mockup = () => {
         typeof window !== "undefined" && window.matchMedia("(max-width: 1024px)").matches;
     return (
         <div
-             className="w-full min-h-[20vh]">
+             className="w-full min-h-[20vh] ">
             <div ref={wrapRef}
                  onMouseMove={isMobile ? undefined :handleMouseMove}
                  onMouseLeave={isMobile ? undefined :handleMouseLeave}
@@ -38,11 +38,14 @@ export const Mockup = () => {
                     !mounted ? null : <div
                         ref={cardRef}
                         className="
+                          opacity-0
+                          animate-opacity
                           relative left-[-100px]
                           h-full
                           skew-x-[38deg] skew-y-[-8deg] scale-[1]
                           transition-transform duration-250 ease-out
                           will-change-transform transform-gpu
+
                           "
                     >
                         <Image key='mockup' src={src} alt="App Mokup" width={1000} height={1000}

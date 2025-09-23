@@ -4,7 +4,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 
 export const handleLogout = async (queryClient: QueryClient, pathname: string, router: AppRouterInstance) => {
     await logout();
-    await queryClient.setQueryData(["user"], null);
+    queryClient.setQueryData(["user"], null);
     if (!pathname.startsWith("/sign-in") || !pathname.startsWith("/sign-up") || !pathname.startsWith("/")) {
         router.push("/");
     }

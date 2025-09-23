@@ -28,6 +28,7 @@ export const BenefitsCard = () => {
                       animate-float
                       will-change-transform
                       select-none
+                      opacity-0  animate-opacity
                     "
         >
             <div

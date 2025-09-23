@@ -1,35 +1,42 @@
 "use client";
-import { MainBtn } from "@/components/ui/main-btn/MainBtn";
 import Logo from "@/components/ui/logo/Logo";
 import { TypeBtnEnum } from "@/enums/typeBtnEnum";
 import { ThemeChanger } from "@/components/theme-changer/ThemeChanger";
 import { Logout } from "@/components/auth/logout/Logout";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-import { links } from "@/components/menu/data/links";
-import { useAuth } from "@/hooks/useAuth";
 import { useQueryClient } from "@tanstack/react-query";
-import Image from "next/image";
-import Link from "next/link";
 import { handleLogout } from "@/components/auth/logout/helpers/handleLogout";
-import UserAvatarIcon from "@/components/ui/svg/user/UserAvatarIcon";
+import MenuList from "@/components/menu/MenuList";
+import { ProfileButton } from "@/components/ui/buttons/profile-button/ProfileButton";
+import { MainBtn } from "../ui/buttons/main-btn/MainBtn";
+import { useAuth } from "@/hooks/useAuth";
 
-const Menu = () => {
+export const Menu = () => {
+    const [active, setActive] = useState<string>("signUp");
     const pathname = usePathname();
     const router = useRouter();
-    const [active, setActive] = useState<string>("signUp");
     const queryClient = useQueryClient();
-    const { data: user, isLoading } = useAuth();
+    const { data: user, isLoading } = useAuth()
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
+
+    const hideMenu =
+        pathname.startsWith("/sign-in") ||
+        pathname.startsWith("/sign-up") ||
+        pathname.startsWith("/recovery") ||
+        pathname.startsWith("/confirm") ||
+        pathname.startsWith("/verify");
+
+
+    if (hideMenu) return null;
+
+    if (isLoading) return <div className="h-[111px]"></div>;
 
     return (
-        <>
-            {!user ? (
-                <div className="flex flex-col sm:flex-row justify-between items-center">
-                    <ul className="flex items-center gap-[4px]">
+        <div className="py-[24px] flex flex-col sm:flex-row justify-between items-center ">
+            <ul className="flex items-center gap-[4px] opacity-0 animate-appear">
+                {!user ? (
+                    <>
                         <li
                             onMouseEnter={() => setActive("signIn")}
                             onMouseLeave={() => setActive("signUp")}
@@ -38,7 +45,9 @@ const Menu = () => {
                                 type={TypeBtnEnum.LINK}
                                 path={"/sign-in"}
                                 className={`${
-                                    active === "signIn" ? "bg-[#34684F] text-white dark:bg-[#FFFFFF] dark:text-[#34684F] shadow-[0_2px_16px_rgba(12,49,44,10)] dark:shadow-[0px_2px_6px_rgba(255,255,255,40)]   hover:dark:shadow-[0px_2px_6px_rgba(255,255,255,40)] " : "hover:bg-[#34684F] text-[#34684F] dark:text-white hover:text-white dark:hover:bg-[#FFFFFF] dark:hover:text-[#34684F] "
+                                    active === "signIn"
+                                        ? "bg-[#34684F] text-white dark:bg-[#FFFFFF] dark:text-[#34684F] shadow-[0_2px_16px_rgba(12,49,44,10)] dark:shadow-[0px_2px_6px_rgba(255,255,255,40)]"
+                                        : "hover:bg-[#34684F] text-[#34684F] dark:text-white hover:text-white dark:hover:bg-[#FFFFFF] dark:hover:text-[#34684F]"
                                 }`}
                             >
                                 Sign in
@@ -52,62 +61,30 @@ const Menu = () => {
                                 type={TypeBtnEnum.LINK}
                                 path={"/sign-up"}
                                 className={`${
-                                    active === "signUp" ? "bg-[#34684F] text-white dark:bg-[#FFFFFF] dark:text-[#34684F] shadow-[0_2px_16px_rgba(12,49,44,10)]    dark:shadow-[0px_2px_6px_rgba(255,255,255,40)] hover:dark:shadow-[0px_2px_6px_rgba(255,255,255,40)]" : "hover:bg-[#34684F]  text-[#34684F] dark:text-white hover:text-white dark:hover:bg-[#FFFFFF] dark:hover:text-[#34684F] "
+                                    active === "signUp"
+                                        ? "bg-[#34684F] text-white dark:bg-[#FFFFFF] dark:text-[#34684F] shadow-[0_2px_16px_rgba(12,49,44,10)] dark:shadow-[0px_2px_6px_rgba(255,255,255,40)]"
+                                        : "hover:bg-[#34684F] text-[#34684F] dark:text-white hover:text-white dark:hover:bg-[#FFFFFF] dark:hover:text-[#34684F]"
                                 }`}
                             >
                                 Sign up
                             </MainBtn>
                         </li>
-                    </ul>
+                    </>
+                ) : (
+                    <MenuList pathname={pathname} />
+                )}
+            </ul>
 
-                    <div className="flex gap-6 items-center">
-                        <ThemeChanger />
-                        <Logo />
-                    </div>
-                </div>
-            ) : (
-                <div className="flex flex-col sm:flex-row justify-between items-center">
-                    <ul className="flex items-center gap-[4px]">
-                        {links.map((link) => (
-                            <li key={link.path}>
-                                <MainBtn
-                                    type={TypeBtnEnum.LINK}
-                                    path={link.path}
-                                    className={`${
-                                        pathname === link.path
-                                            ? "bg-[#34684F] text-white dark:bg-white dark:text-[#34684F] dark:shadow-[0px_2px_6px_rgba(255,255,255,40)] shadow-[0_2px_16px_rgba(12,49,44,10)] hover:dark:shadow-[0px_2px_6px_rgba(255,255,255,40)] hover:shadow-[0_2px_16px_rgba(12,49,44,10)]"
-                                            : " hover:bg-[#34684F] hover:text-white text-[#34684F] dark:text-white dark:hover:bg-white dark:hover:text-[#34684F] hover:dark:shadow-[0px_2px_6px_rgba(255,255,255,40)] hover:shadow-[0_2px_16px_rgba(12,49,44,10)]"
-                                    }`}
-                                >
-                                    {link.label}
-                                </MainBtn>
-                            </li>
-                        ))}
-                    </ul>
-
-                    <div className="flex gap-6 items-center">
-                        <div
-                            className="rounded-[100%] w-[34px] h-[34px] border border-[#0C312C] dark:border-[#ffffff] flex items-center justify-center cursor-pointer transition-all duration-300 ease-in-out hover:scale-[1.1] will-change-transform origin-center">
-                            {
-                                !user.avatar ?
-                                    <Link href={`/profile/${user.username}`}>
-                                        <UserAvatarIcon className='w-[18px] h-[18px] text-[#34684F] dark:text-white'/>
-                                    </Link> :
-
-                                    <Link href={`/profile/${user.username}`}>
-                                        < Image src={user.avatar} alt="User icon" width={18}
-                                                height={18} className="hidden dark:block" />
-                                    </Link>
-                            }
-                        </div>
-                        <ThemeChanger />
-                        <Logo />
-                        <Logout action={() => handleLogout(queryClient, pathname, router)} />
-                    </div>
-                </div>
-            )}
-        </>
+            <div className="flex gap-6 items-center opacity-0 animate-opacity">
+                {user && <ProfileButton user={user} />}
+                <ThemeChanger />
+                <Logo />
+                {user && (
+                    <Logout
+                        action={() => handleLogout(queryClient, pathname, router)}
+                    />
+                )}
+            </div>
+        </div>
     );
 };
-
-export default Menu;

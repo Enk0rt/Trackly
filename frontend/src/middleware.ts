@@ -3,17 +3,27 @@ import type { NextRequest } from "next/server";
 
 export function middleware(req: NextRequest) {
     const refreshToken = req.cookies.get("refreshToken")?.value;
+    const { pathname } = req.nextUrl;
+
+    const publicPaths = ["/", "/sign-in", "/sign-up"];
+
+    if (publicPaths.includes(pathname)) {
+        return NextResponse.next();
+    }
 
     if (!refreshToken) {
-        const signInUrl = new URL("/sign-in", req.url);
-        signInUrl.searchParams.set("from", req.nextUrl.pathname);
-        return NextResponse.redirect(signInUrl);
+        return NextResponse.redirect(new URL("/sign-in", req.url));
     }
 
     return NextResponse.next();
 }
 
-// middleware запускається ТІЛЬКИ на приватних секціях
 export const config = {
-    matcher: ["/app/:path*", "/dashboard/:path*", "/profile/:username/:path*", "/habits/:path*","/goals/:path*","/planner/:path*"],
+    matcher: [
+        "/dashboard/:path*",
+        "/profile/:username/:path*",
+        "/habits/:path*",
+        "/goals/:path*",
+        "/planner/:path*",
+    ],
 };

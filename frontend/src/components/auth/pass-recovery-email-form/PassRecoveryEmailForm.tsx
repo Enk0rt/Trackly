@@ -7,10 +7,10 @@ import { useMutation } from "@tanstack/react-query";
 import { changePasswordFromEmail } from "@/services/api/auth";
 import { AxiosError } from "axios";
 import { IApiErrorResponse } from "@/interfaces/errors/IError";
-import { MainBtn } from "@/components/ui/main-btn/MainBtn";
 import { TypeBtnEnum } from "@/enums/typeBtnEnum";
 import Link from "next/link";
 import { Dispatch, SetStateAction } from "react";
+import { MainBtn } from "@/components/ui/buttons/main-btn/MainBtn";
 
 type Props = {
     token: string;

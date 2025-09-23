@@ -3,7 +3,6 @@ import { FormInput } from "@/components/ui/input/formInput";
 import { useForm } from "react-hook-form";
 import { EmailPasswordRecoveryForm, emailValidation } from "@/validators/authValidator";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { MainBtn } from "@/components/ui/main-btn/MainBtn";
 import { TypeBtnEnum } from "@/enums/typeBtnEnum";
 import { useMutation } from "@tanstack/react-query";
 import { sendRecoveryRequest } from "@/services/api/auth";
@@ -11,6 +10,7 @@ import { AxiosError } from "axios";
 import { IApiErrorResponse } from "@/interfaces/errors/IError";
 import Link from "next/link";
 import { Dispatch, SetStateAction } from "react";
+import { MainBtn } from "@/components/ui/buttons/main-btn/MainBtn";
 
 type Props = {
     setIsSuccess: Dispatch<SetStateAction<boolean>>,
