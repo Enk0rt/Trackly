@@ -1,7 +1,7 @@
 import Logo from "@/components/ui/logo/Logo";
 import { ThemeChanger } from "@/components/theme-changer/ThemeChanger";
-import LoginForm from "@/components/auth/login-form/LoginForm";
 import { BackBtn } from "@/components/ui/buttons/back-btn/BackBtn";
+import { RegisterForm } from "@/components/auth/register-form/RegisterForm";
 
 
 const SignUpPage = async () => {
@@ -18,7 +18,7 @@ const SignUpPage = async () => {
                 </div>
             </nav>
             <div className="flex">
-                <LoginForm />
+                <RegisterForm/>
             </div>
         </div>
     );

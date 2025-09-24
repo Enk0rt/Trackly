@@ -28,7 +28,7 @@ export const EmailPassRequest = () => {
                         </h3>
                         <p className='my-3'>Confirmation link will be unavailable in 3 minutes, chop-chop!</p>
                         <Link href='/'
-                              className='w-fit mt-2 block text-[#33674E] dark:text-white underline underline-offset-2 transition duration-300 ease-in-out will-change-transform origin-center hover:scale-110'>To
+                              className='w-fit mt-2 block text-[#34684F] dark:text-white underline underline-offset-2 transition duration-300 ease-in-out opacity-50 hover:opacity-100'>To
                             home page</Link>
                     </div>
             }

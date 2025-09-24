@@ -205,7 +205,10 @@ class AuthService {
         const user = await userService.getByEmail(email);
 
         if (!user) {
-            throw new ApiError(StatusCodeEnum.NOT_FOUND, "User is not found");
+            throw new ApiError(
+                StatusCodeEnum.NOT_FOUND,
+                "User with this email is not signed up",
+            );
         }
 
         const recoveryToken = tokenService.generateActionToken(

@@ -69,8 +69,16 @@ const LoginForm = () => {
                     type={TypeBtnEnum.BTN}
                     disabledValue={isPending}
                     path={"/sign-in"}
-                    className="bg-[#34684F] text-[#FFFFFF] text-[16px] mt-8 hover:shadow-[0_2px_16px_rgba(12,49,44,40)] hover:dark:shadow-[0px_2px_16px_rgba(255,255,255,40)]">
+                    className={`bg-[#34684F] text-[#FFFFFF] sm:text-[18px] mt-8 hover:shadow-[0_2px_4px_rgba(12,49,44,40)] transform hover:translate-y-[-4px] hover:dark:shadow-[0px_2px_4px_rgba(255,255,255,40)] ${isPending && 'opacity-80 !cursor-default hover:shadow-[unset] hover:translate-y-[none]'} `}>
                     Sign in
+                    {
+                        isPending &&
+                        <>
+                            <span className="opacity-0  delay-[0] animate-pulse">.</span>
+                            <span className="opacity-0  delay-[1s] animate-pulse">.</span>
+                            <span className="opacity-0  delay-[3s] animate-pulse">.</span>
+                        </>
+                    }
                 </MainBtn>
 
                 <Link href={'/recovery'}

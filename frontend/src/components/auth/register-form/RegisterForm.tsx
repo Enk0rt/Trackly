@@ -24,9 +24,10 @@ export const RegisterForm = () => {
     } = useForm<SignUpForm>({ resolver: zodResolver(signUpValidation), mode: "onBlur", criteriaMode: "all" });
 
     const router = useRouter();
-    const { mutate } = useMutation({
+    const { mutate,isPending } = useMutation({
         mutationFn: signUp<SignUpForm>,
         onSuccess: () => {
+            reset();
             router.push("/verify");
         },
         onError: (error => {
@@ -47,11 +48,7 @@ export const RegisterForm = () => {
         if (!confirmPassword) {
             throw new Error("Passwords don`t match");
         }
-        mutate(payload, {
-            onSuccess: () => {
-                reset();
-            },
-        });
+        mutate(payload)
     };
 
     return (
@@ -59,10 +56,18 @@ export const RegisterForm = () => {
             <div className="mx-auto gradient transform-[translateY(20%)]  shadow-xl rounded-[18px]">
                 <form onSubmit={handleSubmit(onSubmit)} className="px-[34px] py-[24px] flex flex-col  items-center
             ">
+
                     <Image src="/svg/app-logo.svg" alt="App logo icon" width={40} height={40} />
 
                     <h3 className="mt-2 text-[#34684F] dark:text-[#FFFFFF] text-[20px] font-medium">Sign up to
                         TrackLy</h3>
+
+                    {
+                        errors.root?.message &&
+                        <p className="text-red-500 text-[12px] mt-1 space-y-1">
+                            {errors.root.message}
+                        </p>
+                    }
 
                     <div className="w-full mt-6 grid grid-cols-2 gap-4">
                         <FormInput type={"text"} id={"username"} register={register} value={"username"}
@@ -84,12 +89,20 @@ export const RegisterForm = () => {
 
                     <MainBtn
                         type={TypeBtnEnum.SUBMIT}
-                        className="bg-[#34684F] text-[#FFFFFF] text-[16px] mt-8 hover:shadow-[0_2px_16px_rgba(12,49,44,40)] hover:dark:shadow-[0px_2px_16px_rgba(255,255,255,40)] mb-2">
+                        className={`bg-[#34684F] text-[#FFFFFF] sm:text-[18px] mt-8 hover:shadow-[0_2px_4px_rgba(12,49,44,40)] transform hover:translate-y-[-4px] hover:dark:shadow-[0px_2px_4px_rgba(255,255,255,40)] ${isPending && 'opacity-80 !cursor-default hover:shadow-[unset] hover:translate-y-[none]'} `}>
                         Sign up
+                        {
+                            isPending &&
+                            <>
+                                <span className="opacity-0  delay-[0] animate-pulse">.</span>
+                                <span className="opacity-0  delay-[1s] animate-pulse">.</span>
+                                <span className="opacity-0  delay-[3s] animate-pulse">.</span>
+                            </>
+                        }
                     </MainBtn>
 
 
-                    <FormChangerLink text={"Already have an account?"} link={"/sign-in"} linkText={"Sign in"} />
+                    <FormChangerLink text={"Already have an account?"} link={"/sign-in"} linkText={"Sign in"} className={'mt-3'} />
 
                 </form>
             </div>

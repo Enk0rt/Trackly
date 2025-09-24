@@ -1,7 +1,7 @@
-import { BackBtn } from "@/components/ui/back-btn/BackBtn";
 import Logo from "@/components/ui/logo/Logo";
 import { ThemeChanger } from "@/components/theme-changer/ThemeChanger";
 import Link from "next/link";
+import { BackBtn } from "@/components/ui/buttons/back-btn/BackBtn";
 
 
 
@@ -26,7 +26,7 @@ const Verify = async () => {
                     </h3>
                     <p className='my-3'>Confirmation link will be unavailable for 5 minutes, chop-chop!</p>
                     <Link href='/'
-                          className='w-fit mt-2 block text-[#33674E] dark:text-white underline underline-offset-2 transition duration-300 ease-in-out will-change-transform origin-center hover:scale-110'>To home page</Link>
+                          className='w-fit mt-2 block text-[#33674E] dark:text-white underline underline-offset-2 transition duration-300 ease-in-out opacity-50 hover:opacity-100'>To home page</Link>
                 </div>
             </main>
         </div>

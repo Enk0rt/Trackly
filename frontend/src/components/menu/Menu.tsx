@@ -46,7 +46,7 @@ export const Menu = () => {
                                 path={"/sign-in"}
                                 className={`${
                                     active === "signIn"
-                                        ? "bg-[#34684F] text-white dark:bg-[#FFFFFF] dark:text-[#34684F] shadow-[0_2px_16px_rgba(12,49,44,10)] dark:shadow-[0px_2px_6px_rgba(255,255,255,40)]"
+                                        ? "bg-[#34684F] text-white dark:bg-[#FFFFFF] dark:text-[#34684F] shadow-[0_2px_6px_rgba(12,49,44,10)] dark:shadow-[0px_2px_6px_rgba(255,255,255,40)]"
                                         : "hover:bg-[#34684F] text-[#34684F] dark:text-white hover:text-white dark:hover:bg-[#FFFFFF] dark:hover:text-[#34684F]"
                                 }`}
                             >
@@ -62,7 +62,7 @@ export const Menu = () => {
                                 path={"/sign-up"}
                                 className={`${
                                     active === "signUp"
-                                        ? "bg-[#34684F] text-white dark:bg-[#FFFFFF] dark:text-[#34684F] shadow-[0_2px_16px_rgba(12,49,44,10)] dark:shadow-[0px_2px_6px_rgba(255,255,255,40)]"
+                                        ? "bg-[#34684F] text-white dark:bg-[#FFFFFF] dark:text-[#34684F] shadow-[0_2px_6px_rgba(12,49,44,10)] dark:shadow-[0px_2px_6px_rgba(255,255,255,40)]"
                                         : "hover:bg-[#34684F] text-[#34684F] dark:text-white hover:text-white dark:hover:bg-[#FFFFFF] dark:hover:text-[#34684F]"
                                 }`}
                             >
