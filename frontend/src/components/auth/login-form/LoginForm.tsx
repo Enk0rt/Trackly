@@ -44,7 +44,7 @@ const LoginForm = () => {
 
 
     return (
-        <div className=" max-w-[300px]  mx-auto gradient transform-[translateY(30%)]  shadow-xl rounded-[18px]">
+        <div className=" max-w-[300px]  mx-auto gradient transform-[translateY(30%)]  shadow-xl rounded-[18px] backdrop-blur-[10px]">
             <form onSubmit={handleSubmit(data => mutate(data))} className="px-[34px] py-[24px] flex flex-col  items-center
             ">
                 <Image src="/svg/app-logo.svg" alt="App logo icon" width={40} height={40} />
@@ -53,7 +53,7 @@ const LoginForm = () => {
 
                 {
                     errors.root?.message &&
-                    <p className="text-red-500 text-[12px] mt-1 space-y-1">
+                    <p className="text-red-500/80 text-[12px] mt-1 space-y-1">
                         {errors.root.message}
                     </p>
                 }

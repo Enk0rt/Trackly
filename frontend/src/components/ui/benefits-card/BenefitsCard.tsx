@@ -18,30 +18,32 @@ export const BenefitsCard = () => {
     if(!mounted) return null
 
     return (
-        <div
-            ref={wrapRef}
-            onMouseMove={isMobile ? undefined : handleMouseMove}
-            onMouseLeave={isMobile ? undefined : handleMouseLeave}
-            className="right-0 lg:bottom-[20%] xl:bottom-[50%]
-                      lg:absolute
+        <div className='right-0 lg:bottom-[20%] xl:bottom-[50%]
+                      opacity-0  animate-opacity
+                      lg:absolute'>
+            <div
+                ref={wrapRef}
+                onMouseMove={isMobile ? undefined : handleMouseMove}
+                onMouseLeave={isMobile ? undefined : handleMouseLeave}
+                className="
                       [perspective:1000px]
                       animate-float
                       will-change-transform
                       select-none
-                      opacity-0  animate-opacity
                     "
-        >
-            <div
-                ref={cardRef}
-                className="px-[30px] py-[24px] m-3 max-w-[381px] lg:max-w-[441px] rounded-[18px]  shadow-xl
+            >
+                <div
+                    ref={cardRef}
+                    className="px-[30px] py-[24px] m-3 max-w-[381px] lg:max-w-[441px] rounded-[18px]  shadow-xl
                           lg:skew-x-[-25deg]
                           transition-transform duration-250 ease-out
                           will-change-transform transform-gpu
                           bg-white dark:bg-[#34684F]
                           dark:text-[#FFFFFF]
                         "
-            >
-                <BenefitCardList/>
+                >
+                    <BenefitCardList />
+                </div>
             </div>
         </div>
     );

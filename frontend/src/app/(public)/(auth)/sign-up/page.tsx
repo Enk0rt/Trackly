@@ -7,7 +7,7 @@ import { RegisterForm } from "@/components/auth/register-form/RegisterForm";
 const SignUpPage = async () => {
 
     return (
-        <div className="mt-[34px] h-[100vh] pb-40 bg-[url(/cubes.png)] bg-no-repeat  bg-top relative">
+        <div className="mt-[34px] h-[1080px] pb-40 bg-[url(/cubes.png)] bg-no-repeat  bg-top relative">
             <nav className=" w-[84%] max-w-[1249px] mx-auto">
                 <div className="flex justify-between items-center">
                     <BackBtn />

@@ -16,6 +16,9 @@ img {
     max-width: none;
 }
 
+input{
+    outline: 1px solid #34684F;
+}
 
 @keyframes floatY {
     0%, 100% {
@@ -75,25 +78,53 @@ img {
 
 
 @keyframes appear {
-    0%{
+    0% {
         opacity: 0;
         transform: translateY(-50px);
     }
-    100%{
+    100% {
         opacity: 100;
         transform: translateY(0);
     }
 }
 
 
-.animate-opacity{
+.animate-opacity {
     animation: opacity 1s ease-in-out forwards;
 }
+
 @keyframes opacity {
-    0%{
+    0% {
         opacity: 0;
     }
-    100%{
+    100% {
         opacity: 100;
     }
+}
+
+
+@keyframes pulsation {
+    0% {
+        opacity: 0;
+    }
+    25%{
+        opacity: 25;
+    }
+    50% {
+        opacity: 100;
+    }
+    75%{
+        opacity: 75;
+    }
+    100%{
+        opacity: 0;
+    }
+}
+
+.animate-pulsation1 {
+    animation: pulsation 4s .2s linear infinite;
+}.animate-pulsation2 {
+    animation: pulsation 5s .4s linear infinite;
+}.animate-pulsation3 {
+    animation: pulsation 6s .6s linear infinite;
 }

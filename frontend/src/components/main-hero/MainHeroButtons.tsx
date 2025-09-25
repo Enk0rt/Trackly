@@ -11,11 +11,11 @@ export const MainHeroButtons = () => {
     return (
         <>
             {!user && !isLoading &&
-                <div className="mt-4 sm:mt-8 flex gap-5 items-center">
+                <div className="relative mt-4 sm:mt-8 flex gap-5 items-center opacity-0 animate-opacity">
                     <MainBtn
                         type={TypeBtnEnum.LINK}
                         path={"/sign-up"}
-                        className="block w-fit bg-[#34684F] text-[#FFFFFF]  hover:shadow-[0px_2px_4px_rgba(12,49,44,40)] hover:translate-y-[-4px] transform hover:dark:shadow-[0px_2px_4px_rgba(255,255,255,40)]"
+                        className="block w-fit bg-[#FFFFFF] text-[#34684F]  hover:shadow-[0px_2px_4px_rgba(12,49,44,40)] hover:translate-y-[-4px] transform"
                     >
                         Get started for Free
                     </MainBtn>

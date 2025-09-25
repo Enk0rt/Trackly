@@ -53,7 +53,7 @@ export const RegisterForm = () => {
 
     return (
         <>
-            <div className="mx-auto gradient transform-[translateY(20%)]  shadow-xl rounded-[18px]">
+            <div className="mx-auto gradient transform-[translateY(20%)]  shadow-xl rounded-[18px] backdrop-blur-[10px]">
                 <form onSubmit={handleSubmit(onSubmit)} className="px-[34px] py-[24px] flex flex-col  items-center
             ">
 

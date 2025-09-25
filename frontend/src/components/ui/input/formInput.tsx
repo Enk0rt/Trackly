@@ -34,8 +34,8 @@ export const FormInput = <T extends SignUpForm | SignInForm | ChangePasswordForm
                 className={`pl-3 py-1 border rounded-md font-light text-[#33674E] dark:text-[#FFFFFF]/90 space tracking-[2px]
           ${
                     error
-                        ? "border-red-500 outline-red-500"
-                        : "border-[#34684F]/10 dark:border-[#FFFFFF]/10 outline-[#34684F]/80"
+                        ? "border-red-500 focus-visible:border-[#34684F]/50 dark:focus-visible:border-[#FFFFFF]/50"
+                        : " dark:border-[#FFFFFF]/50 focus-visible:border-[#34684F]/60 dark:focus-visible:border-[#FFFFFF]"
                 }`}
             />
             {error && (

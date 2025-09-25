@@ -54,7 +54,7 @@ export const ProfileHeader = ({ user }: Props) => {
                         </div>
 
                         <button
-                            className="underline underline-offset-2 text-[#33674E]/50 dark:text-white/50 cursor-pointer">
+                            className="underline underline-offset-2 text-[#33674E] opacity-50 dark:text-white cursor-pointer transition-opacity duration-300 ease-in-out hover:opacity-100">
                             change badge
                         </button>
                     </div>
