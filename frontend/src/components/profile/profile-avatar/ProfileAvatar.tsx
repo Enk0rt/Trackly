@@ -4,17 +4,18 @@ import React from "react";
 
 type Props = {
     avatar: string
+    className?: string
 }
-export const ProfileAvatar = ({avatar}:Props) => {
+export const ProfileAvatar = ({avatar,className}:Props) => {
     return (
         <>
             {
                 !avatar ?
                     <UserAvatarIcon name="User avatar" aria-label="User avatar icon"
-                                    className="w-[200px] h-[200px] text-[#33674E] dark:text-white rounded-[100%] p-10 border border-[#33674E] dark:border-white" /> :
+                                    className={`rounded-[100%] border ${className}`} /> :
                     <Image src={avatar}
                            alt={"User avatar"} width={200} height={200}
-                           className="rounded-[100%] p-10 border border-[#33674E] dark:border-white" />
+                           className={`rounded-[100%] border ${className}`} />
             }
         </>
     );

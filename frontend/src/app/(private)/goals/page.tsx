@@ -8,7 +8,9 @@ const Page = () => {
             <div className="w-[84%] max-w-[1249px]">
                 <div className="flex justify-between items-center">
                     <h3 className="text-[24px] md:text-[30px] xl:text-[44px] 2xl:text-[50px] text-[#33674E] dark:text-white">Goals</h3>
-                    <ActionButton Icon={AddIcon} iconLabel={"Add button icon"} text={"Add Habit"} />
+                    <ActionButton icon={AddIcon} iconLabel={"Add button icon"} iconPosition={"left"} variant={"secondary"} size={'lg'}>
+                        Add goal
+                    </ActionButton>
                 </div>
             </div>
         </div>

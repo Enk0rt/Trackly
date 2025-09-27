@@ -17,6 +17,19 @@ class AuthMiddleware {
                 req.cookies?.accessToken ||
                 req.headers.authorization?.split(" ")[1];
 
+            if (req.cookies?.accessToken) {
+                accessToken = req.cookies.accessToken;
+            }
+
+            if (!accessToken && req.headers.authorization) {
+                accessToken = req.headers.authorization.split(" ")[1];
+                if (!accessToken) {
+                    throw new ApiError(
+                        StatusCodeEnum.UNAUTHORIZED,
+                        "No token provided",
+                    );
+                }
+            }
             if (!accessToken) {
                 throw new ApiError(
                     StatusCodeEnum.UNAUTHORIZED,
@@ -24,20 +37,11 @@ class AuthMiddleware {
                 );
             }
 
-            const tokenPayload = tokenService.verifyToken(
+            res.locals.tokenPayload = tokenService.verifyToken(
                 accessToken,
                 TokenTypeEnum.ACCESS,
             );
 
-            const isTokenExists = await tokenService.isExists(
-                accessToken,
-                TokenTypeEnum.ACCESS,
-            );
-            if (!isTokenExists) {
-                throw new ApiError(StatusCodeEnum.FORBIDDEN, "Invalid token");
-            }
-
-            res.locals.tokenPayload = tokenPayload;
             next();
         } catch (e) {
             next(e);
@@ -78,7 +82,6 @@ class AuthMiddleware {
     public async isAdmin(req: Request, res: Response, next: NextFunction) {
         try {
             const { role } = res.locals.tokenPayload;
-
             if (role !== RoleEnum.ADMIN) {
                 throw new ApiError(
                     StatusCodeEnum.FORBIDDEN,

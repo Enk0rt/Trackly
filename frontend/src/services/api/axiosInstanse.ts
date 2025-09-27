@@ -3,11 +3,10 @@ import { QueryClient } from "@tanstack/react-query";
 import { refresh } from "@/services/api/auth";
 
 export const api = axios.create({
-    baseURL: "/api",
+    baseURL: "/api" ,
     withCredentials: true,
 });
 
-// розширюємо конфіг щоб axios знав про `_retry`
 declare module "axios" {
     export interface AxiosRequestConfig {
         _retry?: boolean;
