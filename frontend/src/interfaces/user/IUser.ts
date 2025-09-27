@@ -24,6 +24,7 @@ export interface IUser {
     habits: IHabit[];
     plans: IPlan[];
     achievements: IAchievement[];
+    role: string;
     isDeleted: boolean;
     isVerified: boolean;
     isBlocked: boolean;
