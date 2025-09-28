@@ -12,12 +12,13 @@ import { ProfileButton } from "@/components/ui/buttons/profile-button/ProfileBut
 import { MainBtn } from "../ui/buttons/main-btn/MainBtn";
 import { useAuth } from "@/hooks/useAuth";
 
+
 export const Menu = () => {
     const [active, setActive] = useState<string>("signUp");
     const pathname = usePathname();
     const router = useRouter();
     const queryClient = useQueryClient();
-    const { data: user, isLoading } = useAuth()
+    const { data: user, isLoading } = useAuth();
 
 
     const hideMenu =
@@ -71,7 +72,7 @@ export const Menu = () => {
                         </li>
                     </>
                 ) : (
-                    <MenuList pathname={pathname} />
+                    <MenuList user={user} pathname={pathname} />
                 )}
             </ul>
 

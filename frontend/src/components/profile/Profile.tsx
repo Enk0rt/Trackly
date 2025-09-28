@@ -17,7 +17,7 @@ export const Profile = async ({user }: Props) => {
                     </div>
                     :
                     <div className="w-[84%] max-w-[1249px]">
-                        <ProfileHeader user={user} />
+                        <ProfileHeader user={user}/>
                     </div>
             }
         </>

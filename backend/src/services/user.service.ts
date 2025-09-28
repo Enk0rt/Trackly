@@ -1,3 +1,5 @@
+import { DeleteResult, UpdateResult } from "mongoose";
+
 import { StatusCodeEnum } from "../enums/status-code.enum";
 import { ApiError } from "../errors/api.error";
 import { IUser } from "../interfaces/user.interface";
@@ -29,7 +31,7 @@ class UserService {
         return await userRepository.create(createData);
     }
 
-    public async update(
+    public async updateOne(
         id: string,
         updateData: Partial<IUser>,
     ): Promise<IUser> {
@@ -41,12 +43,35 @@ class UserService {
         return await userRepository.update(id, updateData);
     }
 
+    public async updateMany(
+        ids: string[],
+        updateData: Partial<IUser>,
+    ): Promise<UpdateResult> {
+        const user = await userRepository.getAll({ _id: { $in: ids } });
+
+        if (!user) {
+            throw new ApiError(StatusCodeEnum.NOT_FOUND, "User is not found");
+        }
+        return await userRepository.updateMany(ids, updateData);
+    }
+
     public async delete(id: string): Promise<IUser> {
         const user = await userRepository.delete(id);
         if (!user) {
             throw new ApiError(StatusCodeEnum.NOT_FOUND, "User is not found");
         }
         return user;
+    }
+
+    public async deleteMany(ids: string[]): Promise<DeleteResult> {
+        const res = await userRepository.deleteMany(ids);
+        if (!res) {
+            throw new ApiError(
+                StatusCodeEnum.BAD_REQUEST,
+                "Can not delete users",
+            );
+        }
+        return res;
     }
 
     public async isUserUnique(

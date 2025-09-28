@@ -16,7 +16,7 @@ img {
     max-width: none;
 }
 
-input{
+input {
     outline: 1px solid #34684F;
 }
 
@@ -107,24 +107,62 @@ input{
     0% {
         opacity: 0;
     }
-    25%{
+    25% {
         opacity: 25;
     }
     50% {
         opacity: 100;
     }
-    75%{
+    75% {
         opacity: 75;
     }
-    100%{
+    100% {
         opacity: 0;
     }
 }
 
 .animate-pulsation1 {
     animation: pulsation 4s .2s linear infinite;
-}.animate-pulsation2 {
+}
+
+.animate-pulsation2 {
     animation: pulsation 5s .4s linear infinite;
-}.animate-pulsation3 {
+}
+
+.animate-pulsation3 {
     animation: pulsation 6s .6s linear infinite;
+}
+
+
+.animate-checkIn {
+    animation: checkIn 0.4s ease-in-out forwards;
+}
+.animate-checkOut {
+    animation: checkOut 0.4s ease-in-out forwards;
+}
+
+@keyframes checkIn {
+    0% {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    100% {
+        opacity: 100;
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@keyframes checkOut {
+    0% {
+        opacity: 100;
+        width: 40px;
+        height: 40px;
+    }
+    100% {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
 }

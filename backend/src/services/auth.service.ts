@@ -140,7 +140,7 @@ class AuthService {
             );
         }
 
-        return await userService.update(id, updateData);
+        return await userService.updateOne(id, updateData);
     }
 
     public async sendVerifyEmailRequest(
@@ -186,7 +186,7 @@ class AuthService {
             token,
             TokenTypeEnum.VERIFY,
         );
-        const user = await userService.update(String(_userId), {
+        const user = await userService.updateOne(String(_userId), {
             isVerified: true,
         });
 
@@ -262,7 +262,7 @@ class AuthService {
             );
         }
 
-        const updatedUser = await userService.update(String(_userId), {
+        const updatedUser = await userService.updateOne(String(_userId), {
             password,
         });
 
@@ -301,7 +301,7 @@ class AuthService {
 
         const newHashedPassword = await passwordService.hashPass(newPass);
 
-        const user = await userService.update(String(_userId), {
+        const user = await userService.updateOne(String(_userId), {
             password: newHashedPassword,
         });
 

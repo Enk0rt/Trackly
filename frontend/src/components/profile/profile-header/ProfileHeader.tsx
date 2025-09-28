@@ -13,6 +13,7 @@ import { ProfileAvatar } from "@/components/profile/profile-avatar/ProfileAvatar
 
 type Props = {
     user: IUser
+
 }
 
 export const ProfileHeader = ({ user }: Props) => {
@@ -25,14 +26,17 @@ export const ProfileHeader = ({ user }: Props) => {
 
                 {
                     user.username === currentUser?.username &&
-                    <ActionButton Icon={EditIcon} iconLabel={"Edit button icon"} text={"Edit profile"} />
+                    <ActionButton icon={EditIcon} iconLabel={"Edit button icon"} iconPosition={"left"} variant={"secondary"} size={"lg"}>
+                        Edit profile
+                    </ActionButton>
                 }
 
             </div>
             {
                 <div className="mt-5 flex justify-start gap-7">
                     <div className="flex flex-col items-center gap-[12px] grow-0">
-                        <ProfileAvatar avatar={user?.avatar} />
+                        <ProfileAvatar avatar={user?.avatar}
+                                       className={"p-10 w-[200px] h-[200px] text-[#33674E] dark:text-white border-[#33674E] dark:border-white"} />
 
                         <p className="text-[#33674E] dark:text-white text-[14px] md:text-[18px] xl:text-[22px]">@{user?.username}</p>
 
