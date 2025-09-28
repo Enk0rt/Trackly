@@ -1,8 +1,14 @@
 import { DeleteResult, UpdateResult } from "mongoose";
 
+import { config } from "../configs/config";
+import { emailConstants } from "../constants/email.constants";
+import { ActionTokenTypeEnum } from "../enums/action-token-type.enum";
+import { EmailEnum } from "../enums/email.enum";
 import { StatusCodeEnum } from "../enums/status-code.enum";
 import { ApiError } from "../errors/api.error";
 import { IUser } from "../interfaces/user.interface";
+import { emailService } from "./email.service";
+import { tokenService } from "./token.service";
 import { userService } from "./user.service";
 
 export class AdminService {
@@ -58,6 +64,60 @@ export class AdminService {
         }
 
         return [users, result];
+    }
+
+    public async verifyOneUser(id: string): Promise<IUser> {
+        const user = await userService.updateOne(id, { isVerified: true });
+
+        if (!user) {
+            throw new ApiError(StatusCodeEnum.NOT_FOUND, "User is not found");
+        }
+
+        return user;
+    }
+
+    public async verifyManyUsers(
+        ids: string[],
+    ): Promise<[IUser[], UpdateResult]> {
+        const result = await userService.updateMany(ids, { isVerified: true });
+        const users = await userService.getAll({ _id: { $in: ids } });
+        if (!result) {
+            throw new ApiError(
+                StatusCodeEnum.NOT_FOUND,
+                "Can not update users",
+            );
+        }
+
+        return [users, result];
+    }
+
+    public async sendVerifyRequest(id: string): Promise<void> {
+        const user = await userService.getById(id);
+
+        if (!user) {
+            throw new ApiError(StatusCodeEnum.NOT_FOUND, "User is not found");
+        }
+
+        const verifyToken = tokenService.generateActionToken(
+            {
+                _userId: user._id,
+                username: user.username,
+                role: user.role,
+            },
+            ActionTokenTypeEnum.VERIFY,
+        );
+
+        await emailService.sendMail(
+            user.email,
+            emailConstants[EmailEnum.VERIFY],
+            {
+                name: user.name,
+                username: user.username,
+                url: `${config.FRONTEND_URL}/verify/${verifyToken}`,
+            },
+        );
+
+        return;
     }
 
     public async deleteOneUser(id: string): Promise<IUser> {

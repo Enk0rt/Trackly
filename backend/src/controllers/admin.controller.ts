@@ -92,6 +92,59 @@ export class AdminController {
         }
     }
 
+    public async verifyOneUser(
+        req: Request,
+        res: Response<IApiSuccessResponse<IUser>>,
+        next: NextFunction,
+    ) {
+        try {
+            const { id } = req.params;
+            const user = await adminService.verifyOneUser(id);
+            res.status(StatusCodeEnum.OK).json({
+                data: user,
+                details: "User is blocked successfully",
+            });
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async verifyManyUsers(
+        req: Request,
+        res: Response<
+            IApiSuccessResponse<{ users: IUser[]; updateResult: UpdateResult }>
+        >,
+        next: NextFunction,
+    ) {
+        try {
+            const { ids } = req.body;
+            const [users, result] = await adminService.verifyManyUsers(ids);
+            res.status(StatusCodeEnum.OK).json({
+                data: { users, updateResult: result },
+                details: "Users are unblocked successfully",
+            });
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async sendVerifyRequest(
+        req: Request,
+        res: Response<IApiSuccessResponse<void>>,
+        next: NextFunction,
+    ) {
+        try {
+            const { id } = req.body;
+            await adminService.sendVerifyRequest(id);
+            res.status(StatusCodeEnum.OK).json({
+                data: null,
+                details: "Verification request was send to a user email",
+            });
+        } catch (e) {
+            next(e);
+        }
+    }
+
     public async deleteOneUser(
         req: Request,
         res: Response<IApiSuccessResponse<void>>,

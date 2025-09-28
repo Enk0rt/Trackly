@@ -38,4 +38,18 @@ export const adminService = {
         });
         return res.data;
     },
+
+    async verifyOneUser(id: string): Promise<void> {
+        await api.patch(`/admin/verify/${id}`);
+    },
+    async verifyManyUsers(ids: string[]): Promise<{ users: IUser[], updateResult: UpdateResult }> {
+        const res = await api.patch(`/admin/verify`, {
+            ids,
+        });
+        return res.data;
+    },
+
+    async sendVerification(id: string): Promise<void> {
+        await api.post(`/admin/email/send-verification`,{id});
+    },
 };

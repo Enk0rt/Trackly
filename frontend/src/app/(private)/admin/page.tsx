@@ -15,7 +15,7 @@ const AdminPage = async () => {
     }
     return (
         <div className="mt-10 flex justify-center">
-            <div className="w-[84%] max-w-[1249px]">
+            <div className="relative w-[84%] max-w-[1249px]">
 
                 {
                     users ? <AdminUserList currentUsers={users} /> : <h3> Users not found</h3>

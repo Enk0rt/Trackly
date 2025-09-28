@@ -29,7 +29,7 @@ router.patch(
     adminController.blockManyUsers,
 );
 
-// UNBLOCK USER
+// UNBLOCK ONE USER
 router.patch(
     "/unblock/:id",
     authMiddleware.checkAccessToken,
@@ -37,12 +37,36 @@ router.patch(
     adminController.unblockOneUser,
 );
 
-// UNBLOCK USER
+// UNBLOCK MANY USERS
 router.patch(
     "/unblock",
     authMiddleware.checkAccessToken,
     authMiddleware.isAdmin,
     adminController.unblockManyUsers,
+);
+
+// VERIFY ONE USER
+router.patch(
+    "/verify/:id",
+    authMiddleware.checkAccessToken,
+    authMiddleware.isAdmin,
+    adminController.verifyOneUser,
+);
+
+// VERIFY MANY USERS
+router.patch(
+    "/verify",
+    authMiddleware.checkAccessToken,
+    authMiddleware.isAdmin,
+    adminController.verifyManyUsers,
+);
+
+// SEND VERIFICATION REQUEST
+router.post(
+    "/email/send-verification",
+    authMiddleware.checkAccessToken,
+    authMiddleware.isAdmin,
+    adminController.sendVerifyRequest,
 );
 
 // CHANGE ROLE
