@@ -1,4 +1,4 @@
-import { DeleteResult } from "mongoose";
+import { DeleteResult, UpdateResult } from "mongoose";
 
 import { IUser } from "../interfaces/user.interface";
 import { User } from "../models/user.model";
@@ -32,6 +32,13 @@ class UserRepository {
 
     public update(id: string, updateData: Partial<IUser>): Promise<IUser> {
         return User.findByIdAndUpdate(id, updateData, { new: true });
+    }
+
+    public updateMany(
+        ids: string[],
+        updateData: Partial<IUser>,
+    ): Promise<UpdateResult> {
+        return User.updateMany({ _id: { $in: ids } }, updateData);
     }
 
     public delete(id: string): Promise<IUser> {

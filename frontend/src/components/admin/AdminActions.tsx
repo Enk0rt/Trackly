@@ -8,9 +8,11 @@ type Props = {
     chooseMode: boolean;
     selectedCount: number;
     onDelete: () => void;
+    onBlock: () => void;
+    onUnblock: () => void;
 };
 
-export const AdminActions = ({ chooseMode, selectedCount, onDelete }: Props) => (
+export const AdminActions = ({ chooseMode, selectedCount, onDelete,onBlock,onUnblock }: Props) => (
     <div className="flex items-center justify-between">
         <AnimatePresence>
             {chooseMode ? (
@@ -30,7 +32,10 @@ export const AdminActions = ({ chooseMode, selectedCount, onDelete }: Props) => 
         </AnimatePresence>
 
         <div className="flex gap-2 justify-end">
-            <ActionButton icon={UserBlockIcon} iconLabel="Block user" iconSize="w-[26px] h-[26px]" variant="ghost" size="round" className="rounded-full hover:!bg-black/10" />
+            <ActionButton onClick={onBlock} icon={UserBlockIcon} iconLabel="Block user" iconSize="w-[26px] h-[26px]" variant="ghost" size="round" className="rounded-full hover:!bg-black/10" />
+            <ActionButton onClick={onUnblock} iconLabel="Block user" iconSize="w-[26px] h-[26px]" variant="ghost" size="round" className="rounded-full hover:!bg-black/10">
+                Unblock
+            </ActionButton>
             <ActionButton icon={UserVerifyIcon} iconLabel="Verify user" iconSize="w-[26px] h-[26px]" variant="ghost" size="round" className="rounded-full hover:!bg-black/10" />
             <ActionButton onClick={onDelete} icon={Delete} iconLabel="Delete user" iconSize="w-[26px] h-[26px]" variant="ghost" size="round" className="rounded-full hover:!bg-black/10" />
         </div>

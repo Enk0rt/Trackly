@@ -13,20 +13,36 @@ router.get(
     adminController.getUsers,
 );
 
-// BLOCK USER
+// BLOCK ONE USER
 router.patch(
     "/block/:id",
     authMiddleware.checkAccessToken,
     authMiddleware.isAdmin,
-    adminController.blockUser,
+    adminController.blockOneUser,
 );
 
-// BLOCK USER
+// BLOCK MANY USERs
+router.patch(
+    "/block",
+    authMiddleware.checkAccessToken,
+    authMiddleware.isAdmin,
+    adminController.blockManyUsers,
+);
+
+// UNBLOCK USER
 router.patch(
     "/unblock/:id",
     authMiddleware.checkAccessToken,
     authMiddleware.isAdmin,
-    adminController.unblockUser,
+    adminController.unblockOneUser,
+);
+
+// UNBLOCK USER
+router.patch(
+    "/unblock",
+    authMiddleware.checkAccessToken,
+    authMiddleware.isAdmin,
+    adminController.unblockManyUsers,
 );
 
 // CHANGE ROLE

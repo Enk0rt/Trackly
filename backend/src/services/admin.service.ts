@@ -1,4 +1,4 @@
-import { DeleteResult } from "mongoose";
+import { DeleteResult, UpdateResult } from "mongoose";
 
 import { StatusCodeEnum } from "../enums/status-code.enum";
 import { ApiError } from "../errors/api.error";
@@ -10,8 +10,8 @@ export class AdminService {
         return await userService.getAll({ role: "user" });
     }
 
-    public async blockUser(id: string): Promise<IUser> {
-        const user = await userService.update(id, { isBlocked: true });
+    public async blockOneUser(id: string): Promise<IUser> {
+        const user = await userService.updateOne(id, { isBlocked: true });
 
         if (!user) {
             throw new ApiError(StatusCodeEnum.NOT_FOUND, "User is not found");
@@ -20,14 +20,44 @@ export class AdminService {
         return user;
     }
 
-    public async unblockUser(id: string): Promise<IUser> {
-        const user = await userService.update(id, { isBlocked: false });
+    public async blockManyUsers(
+        ids: string[],
+    ): Promise<[IUser[], UpdateResult]> {
+        const result = await userService.updateMany(ids, { isBlocked: true });
+        const users = await userService.getAll({ _id: { $in: ids } });
+        if (!result) {
+            throw new ApiError(
+                StatusCodeEnum.BAD_REQUEST,
+                "Can not update users",
+            );
+        }
+
+        return [users, result];
+    }
+
+    public async unblockOneUser(id: string): Promise<IUser> {
+        const user = await userService.updateOne(id, { isBlocked: false });
 
         if (!user) {
             throw new ApiError(StatusCodeEnum.NOT_FOUND, "User is not found");
         }
 
         return user;
+    }
+
+    public async unblockManyUsers(
+        ids: string[],
+    ): Promise<[IUser[], UpdateResult]> {
+        const result = await userService.updateMany(ids, { isBlocked: false });
+        const users = await userService.getAll({ _id: { $in: ids } });
+        if (!result) {
+            throw new ApiError(
+                StatusCodeEnum.NOT_FOUND,
+                "Can not update users",
+            );
+        }
+
+        return [users, result];
     }
 
     public async deleteOneUser(id: string): Promise<IUser> {
@@ -54,7 +84,7 @@ export class AdminService {
     }
 
     public async changeRole(id: string, role: string): Promise<IUser> {
-        const user = await userService.update(id, { role });
+        const user = await userService.updateOne(id, { role });
 
         if (!user) {
             throw new ApiError(StatusCodeEnum.NOT_FOUND, "User is not found");

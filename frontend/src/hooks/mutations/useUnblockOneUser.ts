@@ -1,13 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { adminService } from "@/services/admin/adminService";
 
-export const useDeleteUsers = () => {
+
+export const useUnblockOneUser = () => {
     const client = useQueryClient();
 
     return useMutation({
-        mutationFn: (ids: string[]) => adminService.deleteManyUsers(ids),
+        mutationFn: (id: string) => adminService.unblockOneUser(id),
         onSuccess: () => {
             client.invalidateQueries({ queryKey: ["users"] });
         },
     });
-}
+};
