@@ -1,3 +1,5 @@
+import { DeleteResult } from "mongoose";
+
 import { IUser } from "../interfaces/user.interface";
 import { User } from "../models/user.model";
 
@@ -34,6 +36,10 @@ class UserRepository {
 
     public delete(id: string): Promise<IUser> {
         return User.findByIdAndDelete(id);
+    }
+
+    public deleteMany(ids: string[]): Promise<DeleteResult> {
+        return User.deleteMany({ _id: { $in: ids } });
     }
 }
 

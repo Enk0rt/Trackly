@@ -1,3 +1,5 @@
+import { DeleteResult } from "mongoose";
+
 import { StatusCodeEnum } from "../enums/status-code.enum";
 import { ApiError } from "../errors/api.error";
 import { IUser } from "../interfaces/user.interface";
@@ -47,6 +49,17 @@ class UserService {
             throw new ApiError(StatusCodeEnum.NOT_FOUND, "User is not found");
         }
         return user;
+    }
+
+    public async deleteMany(ids: string[]): Promise<DeleteResult> {
+        const res = await userRepository.deleteMany(ids);
+        if (!res) {
+            throw new ApiError(
+                StatusCodeEnum.BAD_REQUEST,
+                "Can not delete users",
+            );
+        }
+        return res;
     }
 
     public async isUserUnique(

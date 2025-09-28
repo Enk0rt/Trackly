@@ -9,35 +9,33 @@ import Link from "next/link";
 type Props = {
     user: IUser;
     isChooseMode: boolean;
-    isChosen: IUser[];
-    toggleUserSelection: (user: IUser) => void;
-    activateChooseModeWith: (u: IUser) => void;
+    isSelected: boolean;
+    toggleUserSelection: (userId: string) => void;
+    activateChooseMode: (userId: string) => void;
 };
 
-const AdminUsersItem: React.FC<Props> = ({
+export const AdminUsersItem: React.FC<Props> = ({
                                              user,
                                              isChooseMode,
-                                             isChosen,
+                                             isSelected,
                                              toggleUserSelection,
-                                             activateChooseModeWith,
+                                             activateChooseMode,
                                          }) => {
-    const isSelected = isChosen.some((u) => u._id === user._id);
 
     const handleCardClick = () => {
         if (!isChooseMode) {
-            activateChooseModeWith(user);
+            activateChooseMode(user._id);
         } else {
-            toggleUserSelection(user);
+            toggleUserSelection(user._id);
         }
     };
-
 
     return (
         <div
             onClick={handleCardClick}
             className={`relative px-[30px] py-[24px] dark:bg-white bg-[#33674E]
                 rounded-[10px] flex dark:text-[#33674E] text-white
-                items-center gap-4 cursor-pointer transition ${isSelected ? "opacity-80" : "opacity-100"}`}
+                items-center gap-4 cursor-pointer transition transform will-change-transform origin-center hover:scale-[1.05] ${isSelected ? "opacity-80" : "opacity-100"}`}
         >
             {isChooseMode && (
 
@@ -50,7 +48,7 @@ const AdminUsersItem: React.FC<Props> = ({
                     transition={{ duration: 0.4 }}
                     onClick={(e) => {
                         e.stopPropagation();
-                        toggleUserSelection(user);
+                        toggleUserSelection(user._id);
                     }}
                     role={"checkbox"}
                     aria-label={"User selection checkbox"}
@@ -77,7 +75,7 @@ const AdminUsersItem: React.FC<Props> = ({
                     <h3 className="text-[18px]">{user.username}</h3>
                     <Link onClick={(e) => {
                         e.stopPropagation();
-                    }} href={`/profile/${user.username}`} className="transition opacity-50 hover:opacity-100">
+                    }} href={`/profile/${user.username}`} className="transition ease-[unset] opacity-50 hover:opacity-100">
                         show profile
                     </Link>
                 </div>

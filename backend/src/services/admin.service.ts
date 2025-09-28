@@ -1,3 +1,5 @@
+import { DeleteResult } from "mongoose";
+
 import { StatusCodeEnum } from "../enums/status-code.enum";
 import { ApiError } from "../errors/api.error";
 import { IUser } from "../interfaces/user.interface";
@@ -28,7 +30,7 @@ export class AdminService {
         return user;
     }
 
-    public async deleteUser(id: string): Promise<IUser> {
+    public async deleteOneUser(id: string): Promise<IUser> {
         const user = await userService.delete(id);
 
         if (!user) {
@@ -36,6 +38,19 @@ export class AdminService {
         }
 
         return user;
+    }
+
+    public async deleteManyUsers(ids: string[]): Promise<DeleteResult> {
+        const res = await userService.deleteMany(ids);
+
+        if (!res) {
+            throw new ApiError(
+                StatusCodeEnum.BAD_REQUEST,
+                "Can not delete users",
+            );
+        }
+
+        return res;
     }
 
     public async changeRole(id: string, role: string): Promise<IUser> {

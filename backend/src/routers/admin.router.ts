@@ -37,12 +37,20 @@ router.patch(
     adminController.changeRole,
 );
 
-// DELETE USER
+// DELETE ONE USER
 router.delete(
     "/:id",
     authMiddleware.checkAccessToken,
     authMiddleware.isAdmin,
-    adminController.deleteUser,
+    adminController.deleteOneUser,
+);
+
+// DELETE MANY USERS
+router.post(
+    "/bulk-delete",
+    authMiddleware.checkAccessToken,
+    authMiddleware.isAdmin,
+    adminController.deleteManyUsers,
 );
 
 export const adminRouter = router;

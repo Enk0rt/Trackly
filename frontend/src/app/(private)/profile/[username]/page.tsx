@@ -1,6 +1,6 @@
 import React from "react";
 import { Profile } from "@/components/profile/Profile";
-import { getData } from "@/services/api/getData";
+import { getDataFromServer } from "@/services/api/getDataFromServer";
 
 type Props = {
     params: { username: string }
@@ -10,7 +10,7 @@ const ProfilePage = async ({ params }: Props) => {
 
     const { username } = await params;
 
-    const user = await getData.getUserByUsername(username);
+    const user = await getDataFromServer.getUserByUsername(username);
 
     return (
         <div className="mt-10 flex justify-center">

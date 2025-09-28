@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { DeleteResult } from "mongoose";
 
 import { StatusCodeEnum } from "../enums/status-code.enum";
 import { IApiSuccessResponse } from "../interfaces/api-success-responce.interface";
@@ -53,17 +54,34 @@ export class AdminController {
         }
     }
 
-    public async deleteUser(
+    public async deleteOneUser(
         req: Request,
         res: Response<IApiSuccessResponse<void>>,
         next: NextFunction,
     ) {
         try {
             const { id } = req.params;
-            await adminService.deleteUser(id);
+            await adminService.deleteOneUser(id);
             res.status(StatusCodeEnum.OK).json({
                 data: null,
                 details: "User is deleted successfully",
+            });
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async deleteManyUsers(
+        req: Request,
+        res: Response<IApiSuccessResponse<DeleteResult>>,
+        next: NextFunction,
+    ) {
+        try {
+            const { ids } = req.body;
+            const result = await adminService.deleteManyUsers(ids);
+            res.status(StatusCodeEnum.OK).json({
+                data: result,
+                details: "Users are deleted successfully",
             });
         } catch (e) {
             next(e);
