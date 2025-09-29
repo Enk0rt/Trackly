@@ -6,7 +6,7 @@ import { ActionTokenTypeEnum } from "../enums/action-token-type.enum";
 import { EmailEnum } from "../enums/email.enum";
 import { StatusCodeEnum } from "../enums/status-code.enum";
 import { ApiError } from "../errors/api.error";
-import { IUser } from "../interfaces/user.interface";
+import { IUser, IUserQuery, IUserResponse } from "../interfaces/user.interface";
 import { emailService } from "./email.service";
 import { tokenService } from "./token.service";
 import { userService } from "./user.service";
@@ -14,6 +14,10 @@ import { userService } from "./user.service";
 export class AdminService {
     public async getUsers(): Promise<IUser[]> {
         return await userService.getAll({ role: "user" });
+    }
+
+    public async getUsersWithQuery(query: IUserQuery): Promise<IUserResponse> {
+        return await userService.getAllWithQuery(query);
     }
 
     public async blockOneUser(id: string): Promise<IUser> {

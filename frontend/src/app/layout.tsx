@@ -36,6 +36,8 @@ export default async function RootLayout({
         queryFn: getMe,
     });
 
+
+
     return (
         <html lang="en" suppressHydrationWarning>
         <body

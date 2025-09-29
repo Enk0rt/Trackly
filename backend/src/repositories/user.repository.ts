@@ -1,6 +1,6 @@
-import { DeleteResult, UpdateResult } from "mongoose";
+import { DeleteResult, FilterQuery, SortOrder, UpdateResult } from "mongoose";
 
-import { IUser } from "../interfaces/user.interface";
+import { IUser, IUserQuery, IUserResponse } from "../interfaces/user.interface";
 import { User } from "../models/user.model";
 
 class UserRepository {
@@ -9,6 +9,49 @@ class UserRepository {
             path: "userActivity",
             populate: { path: "plans" },
         });
+    }
+
+    public async getAllWithQuery(query: IUserQuery): Promise<IUserResponse> {
+        const page = Number(query.page) > 0 ? Number(query.page) : 1;
+        const pageSize =
+            Number(query.pageSize) > 0 ? Number(query.pageSize) : 10;
+        const skip = (page - 1) * pageSize;
+
+        const filteredObject: FilterQuery<IUser> = { isDeleted: false };
+        if (query.search) {
+            const regex = new RegExp(`.*${query.search}.*`, "i");
+            filteredObject.$or = [
+                { name: { $regex: regex } },
+                { surname: { $regex: regex } },
+                { email: { $regex: regex } },
+                { username: { $regex: regex } },
+                { city: { $regex: regex } },
+                { phoneNumber: { $regex: regex } },
+            ];
+        }
+
+        const sortDirection: SortOrder =
+            Number(query.sortDirection) === -1 || query.sortDirection === "desc"
+                ? -1
+                : 1;
+
+        const [data, total] = await Promise.all([
+            User.find(filteredObject)
+                .skip(skip)
+                .limit(pageSize)
+                .sort(query.sort ? { [query.sort]: sortDirection } : {}),
+            User.countDocuments(filteredObject),
+        ]);
+
+        const totalPages = Math.ceil(total / pageSize);
+
+        return {
+            data,
+            total,
+            page,
+            pageSize,
+            totalPages,
+        };
     }
 
     public getById(id: string): Promise<IUser> {

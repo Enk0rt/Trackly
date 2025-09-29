@@ -5,8 +5,8 @@ import { RoleEnum } from "@/enums/roleEnum";
 import { redirect } from "next/navigation";
 
 const AdminPage = async () => {
-    const [users, currentUser] = await Promise.all([
-        await getDataFromServer.getUsers(),
+    const [data, currentUser] = await Promise.all([
+        await getDataFromServer.getUsersWithParams(1,10),
         await getDataFromServer.getMe(),
     ]);
 
@@ -18,7 +18,7 @@ const AdminPage = async () => {
             <div className="relative w-[84%] max-w-[1249px]">
 
                 {
-                    users ? <AdminUserList currentUsers={users} /> : <h3> Users not found</h3>
+                    data?.data ? <AdminUserList currentUsers={data} /> : <h3> Users not found</h3>
                 }
             </div>
         </div>

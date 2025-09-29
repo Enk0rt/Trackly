@@ -1,10 +1,8 @@
 "use client";
-import { IUser } from "@/interfaces/user/IUser";
 import AdminUserItem from "@/components/admin/AdminUserItem";
 import { useDeleteUser } from "@/hooks/mutations/useDeleteOneUser";
 import { useDeleteUsers } from "@/hooks/mutations/useDeleteManyUsers";
 import { AdminActions } from "@/components/admin/AdminActions";
-import { useFetchUsers } from "@/hooks/admin/useFetchUsers";
 import { useUserSelection } from "@/hooks/admin/useUserSelection";
 import { useBlockOneUser } from "@/hooks/mutations/useBlockOneUser";
 import { useBlockManyUsers } from "@/hooks/mutations/useBlockManyUsers";
@@ -14,18 +12,31 @@ import { useVerifyOneUser } from "@/hooks/mutations/useVerifyOneUser";
 import { useVerifyManyUsers } from "@/hooks/mutations/useVerifyManyUsers";
 import { useSendVerification } from "@/hooks/mutations/useSendVerification";
 import { useEffect, useState } from "react";
-import { motion,AnimatePresence } from "framer-motion";
-
+import { motion, AnimatePresence } from "framer-motion";
+import { IUsersResponseWithParams } from "@/interfaces/user/IUserResponse";
+import { useFetchUsers } from "@/hooks/admin/useFetchUsers";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 type Props = {
-    currentUsers: IUser[];
+    currentUsers: IUsersResponseWithParams;
 };
 
 export const AdminUserList = ({ currentUsers }: Props) => {
+    const [page,setPage] = useState(1);
+    const [pageSize] = useState(10);
+    const [searchValue, setSearchValue] = useState("");
     const [error, setError] = useState<string | null>(null);
+    const client = useQueryClient();
+    const { data: response } = useFetchUsers(
+        page,
+        pageSize,
+        searchValue,
+        undefined,
+        undefined,
+        currentUsers,
+    );
 
-    const { users } = useFetchUsers(currentUsers);
     const { chooseMode, selectedIds, toggleUserSelection, activateChooseMode, setSelectedIds } = useUserSelection();
 
     const { mutate: deleteUser } = useDeleteUser();
@@ -42,13 +53,10 @@ export const AdminUserList = ({ currentUsers }: Props) => {
 
     const { mutate: sendVerification } = useSendVerification();
 
-
-
     const handleDelete = () => {
-        if(selectedIds.size===0){
-            return
-        }
-        else if (selectedIds.size === 1) {
+        if (selectedIds.size === 0) {
+            return;
+        } else if (selectedIds.size === 1) {
             deleteUser(Array.from(selectedIds)[0]);
         } else {
             deleteManyUsers(Array.from(selectedIds));
@@ -57,10 +65,9 @@ export const AdminUserList = ({ currentUsers }: Props) => {
     };
 
     const handleBlock = () => {
-        if(selectedIds.size===0){
-            return
-        }
-        else if (selectedIds.size === 1) {
+        if (selectedIds.size === 0) {
+            return;
+        } else if (selectedIds.size === 1) {
             blockUser(Array.from(selectedIds)[0]);
         } else {
             blockManyUsers(Array.from(selectedIds));
@@ -69,10 +76,9 @@ export const AdminUserList = ({ currentUsers }: Props) => {
     };
 
     const handleUnblock = () => {
-        if(selectedIds.size===0){
-            return
-        }
-        else if (selectedIds.size === 1) {
+        if (selectedIds.size === 0) {
+            return;
+        } else if (selectedIds.size === 1) {
             unblockUser(Array.from(selectedIds)[0]);
         } else {
             unblockManyUsers(Array.from(selectedIds));
@@ -81,10 +87,9 @@ export const AdminUserList = ({ currentUsers }: Props) => {
     };
 
     const handleVerify = () => {
-        if(selectedIds.size===0){
-            return
-        }
-        else if (selectedIds.size === 1) {
+        if (selectedIds.size === 0) {
+            return;
+        } else if (selectedIds.size === 1) {
             verifyUser(Array.from(selectedIds)[0]);
         } else {
             verifyManyUsers(Array.from(selectedIds));
@@ -93,16 +98,22 @@ export const AdminUserList = ({ currentUsers }: Props) => {
     };
 
     const handleSendVerification = () => {
-        if(selectedIds.size===0){
-            return
-        }
-        else if (selectedIds.size === 1) {
+        if (selectedIds.size === 0) {
+            return;
+        } else if (selectedIds.size === 1) {
             sendVerification(Array.from(selectedIds)[0]);
         } else {
-            setError('Verification letter was not sent, choose only one user')
+            setError("Verification letter was not sent, choose only one user");
         }
 
         setSelectedIds(new Set());
+    };
+
+    const handleSearch = async () => {
+        setPage(1)
+        client.invalidateQueries({
+            queryKey: ["users"],
+        });
     };
 
     useEffect(() => {
@@ -117,23 +128,23 @@ export const AdminUserList = ({ currentUsers }: Props) => {
 
     return (
         <>
-                <AnimatePresence>
-            {
-                error&&
+            <AnimatePresence>
+                {
+                    error &&
                     <motion.div
                         key={"overlay"}
-                        initial={{ translateX: -100, opacity:0 }}
-                        animate={{ translateX: 0, opacity:100 }}
-                        exit={{ translateX: -100,opacity:0 }}
+                        initial={{ translateX: -100, opacity: 0 }}
+                        animate={{ translateX: 0, opacity: 100 }}
+                        exit={{ translateX: -100, opacity: 0 }}
                         transition={{ duration: .4, ease: "easeInOut" }}
                         className={`absolute z-[1] top-[-20px] px-7 py-4 w-fit bg-white  rounded-[14px] text-[#33674E]`}>
                         <p>{error}</p>
-                        <div onClick={()=>setError(null)} className='absolute right-[10px] top-0 cursor-pointer'>
+                        <div onClick={() => setError(null)} className="absolute right-[10px] top-0 cursor-pointer">
                             x
                         </div>
                     </motion.div>
-            }
-                </AnimatePresence>
+                }
+            </AnimatePresence>
             <AdminActions
                 chooseMode={chooseMode}
                 selectedCount={selectedIds.size}
@@ -142,9 +153,12 @@ export const AdminUserList = ({ currentUsers }: Props) => {
                 onUnblock={handleUnblock}
                 onVerify={handleVerify}
                 onSendVerification={handleSendVerification}
+                setSearchValue={setSearchValue}
+                searchValue={searchValue}
+                onSearch={handleSearch}
             />
             <div className="mt-3 flex flex-col gap-5">
-                {users?.map((user) => (
+                {response?.data.map((user) => (
                     <AdminUserItem
                         key={user._id}
                         user={user}

@@ -50,6 +50,8 @@ export const adminService = {
     },
 
     async sendVerification(id: string): Promise<void> {
-        await api.post(`/admin/email/send-verification`,{id});
+        await api.post(`/admin/email/send-verification`, { id });
     },
+
+
 };

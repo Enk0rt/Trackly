@@ -2,12 +2,33 @@ import { DeleteResult, UpdateResult } from "mongoose";
 
 import { StatusCodeEnum } from "../enums/status-code.enum";
 import { ApiError } from "../errors/api.error";
-import { IUser } from "../interfaces/user.interface";
+import { IUser, IUserQuery, IUserResponse } from "../interfaces/user.interface";
 import { userRepository } from "../repositories/user.repository";
 
 class UserService {
     public async getAll(filter?: object): Promise<IUser[]> {
         return await userRepository.getAll(filter);
+    }
+
+    public async getAllWithQuery(query: IUserQuery): Promise<IUserResponse> {
+        const allowedSortFields = [
+            "name",
+            "surname",
+            "age",
+            "email",
+            "username",
+            "phoneNumber",
+            "city",
+        ];
+
+        if (query.sort && !allowedSortFields.includes(query.sort)) {
+            throw new ApiError(
+                StatusCodeEnum.BAD_REQUEST,
+                "Invalid sort value",
+            );
+        }
+
+        return await userRepository.getAllWithQuery(query);
     }
 
     public async getById(id: string): Promise<IUser> {
@@ -47,12 +68,15 @@ class UserService {
         ids: string[],
         updateData: Partial<IUser>,
     ): Promise<UpdateResult> {
-        const user = await userRepository.getAll({ _id: { $in: ids } });
+        const result = userRepository.updateMany(ids, updateData);
 
-        if (!user) {
-            throw new ApiError(StatusCodeEnum.NOT_FOUND, "User is not found");
+        if (!result) {
+            throw new ApiError(
+                StatusCodeEnum.NOT_FOUND,
+                "Can not update users",
+            );
         }
-        return await userRepository.updateMany(ids, updateData);
+        return await result;
     }
 
     public async delete(id: string): Promise<IUser> {

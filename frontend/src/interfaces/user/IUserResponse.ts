@@ -7,3 +7,11 @@ export interface IUserResponse{
 export interface IUsersResponse{
     data:IUser[]
 }
+
+export interface IUsersResponseWithParams{
+    data: IUser[];
+    page: number;
+    pageSize: number;
+    total: number;
+    totalPages: number;
+}
