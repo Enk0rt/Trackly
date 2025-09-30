@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 
 const AdminPage = async () => {
     const [data, currentUser] = await Promise.all([
-        await getDataFromServer.getUsersWithParams(1,10),
+        await getDataFromServer.getUsersWithParams(1,3),
         await getDataFromServer.getMe(),
     ]);
 

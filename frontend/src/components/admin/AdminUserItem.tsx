@@ -1,10 +1,11 @@
 "use client";
 import { IUser } from "@/interfaces/user/IUser";
 import { ProfileAvatar } from "@/components/profile/profile-avatar/ProfileAvatar";
-import CheckboxIcon from "@/components/ui/svg/checkbox/CheckboxIcon";
-import { motion } from "framer-motion";
 import React from "react";
 import Link from "next/link";
+import CustomCheckbox from "@/components/ui/checkboxes/CustomCheckbox";
+import { AnimatePresence } from "framer-motion";
+import AdminUserInfoField from "@/components/admin/AdminUserInfoField";
 
 type Props = {
     user: IUser;
@@ -15,12 +16,21 @@ type Props = {
 };
 
 export const AdminUsersItem: React.FC<Props> = ({
-                                             user,
-                                             isChooseMode,
-                                             isSelected,
-                                             toggleUserSelection,
-                                             activateChooseMode,
-                                         }) => {
+                                                    user,
+                                                    isChooseMode,
+                                                    isSelected,
+                                                    toggleUserSelection,
+                                                    activateChooseMode,
+                                                }) => {
+
+    const userInfo = [
+        { label: "Habits", value: user.habits.length },
+        { label: "Goals", value: user.habits.length },
+        { label: "Planner efficiency", value: "Temporary unavailable" },
+        { label: "Email", value: user.isVerified ? "Verified" : "Not verified" },
+        { label: "Status", value: user.isBlocked ? "Restricted" : "Active" },
+        { label: "In use", value: user.isDeleted ? "Deleted" : "Active" },
+    ];
 
     const handleCardClick = () => {
         if (!isChooseMode) {
@@ -35,36 +45,12 @@ export const AdminUsersItem: React.FC<Props> = ({
             onClick={handleCardClick}
             className={`relative px-[30px] py-[24px] dark:bg-white bg-[#33674E]
                 rounded-[10px] flex dark:text-[#33674E] text-white
-                items-center gap-4 cursor-pointer transition transform will-change-transform origin-center hover:scale-[1.05] ${isSelected ? "opacity-80" : "opacity-100"}`}
-        >
-            {isChooseMode && (
+                items-center gap-4 cursor-pointer transition transform will-change-transform origin-center hover:scale-[1.05] ${isSelected ? "opacity-80" : "opacity-100"}`}>
 
-                <motion.div
-                    key={user._id}
-                    initial={{ opacity: 0 }}
-                    animate={{
-                        opacity: !isChooseMode ? 0 : 1,
-                    }}
-                    transition={{ duration: 0.4 }}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        toggleUserSelection(user._id);
-                    }}
-                    role={"checkbox"}
-                    aria-label={"User selection checkbox"}
-                    className="absolute left-[-40px] w-[24px] h-[24px] flex justify-center items-center overflow-hidden rounded-[4px]"
-                >
-                    <CheckboxIcon className="w-full h-full text-[#33674E] dark:text-white" />
-
-                    <motion.div
-                        animate={{
-                            scale: isSelected ? 0 : 1,
-                        }}
-                        transition={{ duration: 0.4 }}
-                        className="absolute w-[40px] h-[40px] dark:bg-white bg-[#33674E] rounded-full"
-                    />
-                </motion.div>
-            )}
+            <AnimatePresence>
+                <CustomCheckbox user={user} isChooseMode={isChooseMode} isSelected={isSelected}
+                                toggleUserSelection={toggleUserSelection} />
+            </AnimatePresence>
 
             <div className="flex gap-4 min-w-[300px] items-center">
                 <ProfileAvatar
@@ -75,39 +61,19 @@ export const AdminUsersItem: React.FC<Props> = ({
                     <h3 className="text-[18px]">{user.username}</h3>
                     <Link onClick={(e) => {
                         e.stopPropagation();
-                    }} href={`/profile/${user.username}`} className="transition ease-[unset] opacity-50 hover:opacity-100">
+                    }} href={`/profile/${user.username}`}
+                          className="transition ease-[unset] opacity-50 hover:opacity-100">
                         show profile
                     </Link>
                 </div>
             </div>
 
             <div className="flex justify-between self-start grow-1">
-                <div>
-                    <h3 className="text-[18px]">Habits</h3>
-                    <p className="opacity-50">{user.habits.length}</p>
-                </div>
-
-                <div>
-                    <h3 className="text-[18px]">Goals</h3>
-                    <p className="opacity-50">{user.habits.length}</p>
-                </div>
-
-                <div>
-                    <h3 className="text-[18px]">Planner efficiency</h3>
-                    <p className="opacity-50">Temporary unavailable</p>
-                </div>
-                <div>
-                    <h3 className="text-[18px]">Email</h3>
-                    <p className="opacity-50">{user.isVerified ? "Verified" : "Not verified"}</p>
-                </div>
-                <div>
-                    <h3 className="text-[18px]">Status</h3>
-                    <p className="opacity-50">{user.isBlocked ? "Restricted" : "Active"}</p>
-                </div>
-                <div>
-                    <h3 className="text-[18px]">In use</h3>
-                    <p className="opacity-50">{user.isDeleted ? "Deleted" : "Active"}</p>
-                </div>
+                {
+                    userInfo.map((item)=>
+                        <AdminUserInfoField key={item.label} label={item.label} value={item.value}/>
+                    )
+                }
             </div>
 
         </div>

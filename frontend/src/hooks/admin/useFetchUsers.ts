@@ -13,15 +13,15 @@ export const useFetchUsers = (
     return useQuery<IUsersResponseWithParams>({
         queryKey: ["users", page, pageSize, search, sort, sortDirection],
         queryFn: () =>
-            getDataFromClient.getUsersWithParams(page, pageSize, search, sort, sortDirection),
+            getDataFromClient.getUsersWithParams(page, pageSize, search?.trim() || undefined, sort, sortDirection),
 
-        initialData:initialData,
-
+        initialData: page === 1 && !search?.trim() ? initialData : undefined,
         initialDataUpdatedAt: initialData ? Date.now() : undefined,
+
         placeholderData: keepPreviousData,
         refetchOnWindowFocus: false,
         refetchOnReconnect: false,
         refetchOnMount: false,
-        staleTime: 30_000,
+        staleTime: 0,
     });
 };

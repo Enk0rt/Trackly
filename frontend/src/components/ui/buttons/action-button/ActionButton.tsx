@@ -1,7 +1,7 @@
 import React, { ButtonHTMLAttributes } from "react";
 
 type Variant = "primary" | "secondary" | "ghost";
-type Size = "sm" | "md" | "lg" | "round";
+type Size = "sm" | "md" | "lg" | "round" | "noPadding";
 
 interface ActionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     icon?: React.FC<React.SVGProps<SVGSVGElement>>;
@@ -29,6 +29,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
         md: "px-5 py-1 text-[18px] gap-2",
         lg: "px-7 py-1 text-[20px] gap-3",
         round: "px-3 py-3",
+        noPadding: "",
     };
 
     const variantClasses: Record<Variant, string> = {
