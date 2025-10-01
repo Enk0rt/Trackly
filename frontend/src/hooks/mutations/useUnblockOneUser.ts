@@ -7,8 +7,8 @@ export const useUnblockOneUser = () => {
 
     return useMutation({
         mutationFn: (id: string) => adminService.unblockOneUser(id),
-        onSuccess: () => {
-            client.invalidateQueries({ queryKey: ["users"] });
+        onSuccess:async () => {
+          await  client.invalidateQueries({ queryKey: ["users"]});
         },
     });
 };

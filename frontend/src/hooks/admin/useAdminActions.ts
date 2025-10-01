@@ -7,6 +7,7 @@ import { useUnblockManyUsers } from "@/hooks/mutations/useUnblockManyUsers";
 import { useVerifyOneUser } from "@/hooks/mutations/useVerifyOneUser";
 import { useVerifyManyUsers } from "@/hooks/mutations/useVerifyManyUsers";
 import { useSendVerification } from "@/hooks/mutations/useSendVerification";
+import { useMemo } from "react";
 
 export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: Set<string>) => void, setError: (err: string | null) => void) => {
     const { mutate: deleteUser } = useDeleteUser();
@@ -25,61 +26,51 @@ export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: 
 
     const clearSelection = () => setSelectedIds(new Set());
 
-    return {
+    return useMemo(() => ({
         handleDelete: () => {
             if (selectedIds.size === 0) return;
-
             if (selectedIds.size === 1) {
                 deleteUser(Array.from(selectedIds)[0]);
             } else {
                 deleteManyUsers(Array.from(selectedIds));
             }
-
             clearSelection();
         },
         handleBlock: () => {
             if (selectedIds.size === 0) return;
-
             if (selectedIds.size === 1) {
                 blockUser(Array.from(selectedIds)[0]);
             } else {
                 blockManyUsers(Array.from(selectedIds));
             }
-
             clearSelection();
         },
         handleUnblock: () => {
             if (selectedIds.size === 0) return;
-
             if (selectedIds.size === 1) {
                 unblockUser(Array.from(selectedIds)[0]);
             } else {
                 unblockManyUsers(Array.from(selectedIds));
             }
-
             clearSelection();
         },
         handleVerify: () => {
             if (selectedIds.size === 0) return;
-
             if (selectedIds.size === 1) {
                 verifyUser(Array.from(selectedIds)[0]);
             } else {
                 verifyManyUsers(Array.from(selectedIds));
             }
-
             clearSelection();
         },
         handleSendVerification: () => {
             if (selectedIds.size === 0) return;
-
             if (selectedIds.size === 1) {
                 sendVerification(Array.from(selectedIds)[0]);
             } else {
                 setError("Verification letter was not sent, choose only one user");
             }
-
             clearSelection();
-        },
-    };
+        }
+    }), [selectedIds, deleteUser, deleteManyUsers, blockUser, blockManyUsers, unblockUser, unblockManyUsers, verifyUser, verifyManyUsers, sendVerification, setError]);
 };

@@ -1,8 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 
 export const useUserSelection = () => {
+    const [page, setPage] = useState<number>(1);
+    const [pageSize, setPageSize] = useState<number>(3);
+
     const [chooseMode, setChooseMode] = useState(false);
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+    const [showOnlySelected, setShowOnlySelected] = useState<boolean>(false);
 
     const toggleUserSelection = useCallback((userId: string) => {
         setSelectedIds((prev) => {
@@ -23,10 +27,28 @@ export const useUserSelection = () => {
 
     useEffect(() => {
         if (selectedIds.size === 0) {
-            const timeout = setTimeout(() => setChooseMode(false), 300);
+            const timeout = setTimeout(() => {
+                    setChooseMode(false);
+                    setShowOnlySelected(false);
+                    setPage(1);
+                    setPageSize(3);
+                }
+                , 300);
             return () => clearTimeout(timeout);
         }
     }, [selectedIds.size]);
 
-    return { chooseMode, selectedIds, toggleUserSelection, activateChooseMode, setSelectedIds };
+    return {
+        chooseMode,
+        selectedIds,
+        toggleUserSelection,
+        activateChooseMode,
+        setSelectedIds,
+        showOnlySelected,
+        setShowOnlySelected,
+        page,
+        setPage,
+        pageSize,
+        setPageSize,
+    };
 };

@@ -7,8 +7,8 @@ export const useVerifyOneUser = () => {
 
     return useMutation({
         mutationFn: (id: string) => adminService.verifyOneUser(id),
-        onSuccess: () => {
-            client.invalidateQueries({ queryKey: ["users"] });
+        onSuccess: async () => {
+          await client.invalidateQueries({ queryKey: ["users"]});
         },
     });
 };

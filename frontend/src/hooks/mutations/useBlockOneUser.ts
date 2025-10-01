@@ -7,8 +7,8 @@ export const useBlockOneUser = () => {
 
     return useMutation({
         mutationFn: (id: string) => adminService.blockOneUser(id),
-        onSuccess: () => {
-            client.invalidateQueries({ queryKey: ["users"] });
+        onSuccess: async () => {
+           await client.invalidateQueries({ queryKey: ["users"]});
         },
     });
 };

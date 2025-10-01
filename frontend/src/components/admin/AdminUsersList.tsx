@@ -8,7 +8,7 @@ import { IUsersResponseWithParams } from "@/interfaces/user/IUserResponse";
 import { useFetchUsers } from "@/hooks/admin/useFetchUsers";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAdminActions } from "@/hooks/admin/useAdminActions";
-import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/16/solid";
+import { ArrowLongLeftIcon, ArrowLongRightIcon } from "@heroicons/react/24/outline";
 
 
 type Props = {
@@ -16,22 +16,34 @@ type Props = {
 };
 
 export const AdminUserList = ({ currentUsers }: Props) => {
-    const [page, setPage] = useState(1);
-    const [pageSize] = useState(3);
     const [searchValue, setSearchValue] = useState("");
     const [error, setError] = useState<string | null>(null);
+
+    const [sortValue, setSortValue] = useState<string | undefined>(undefined);
+
     const client = useQueryClient();
+
+    const {
+        page, setPage, pageSize, setPageSize,
+        chooseMode,
+        selectedIds,
+        showOnlySelected,
+        setShowOnlySelected,
+        toggleUserSelection,
+        activateChooseMode,
+        setSelectedIds,
+    } = useUserSelection();
 
     const { data: response, refetch } = useFetchUsers(
         page,
         pageSize,
         searchValue,
-        undefined,
+        sortValue,
         undefined,
         currentUsers,
     );
 
-    const { chooseMode, selectedIds, toggleUserSelection, activateChooseMode, setSelectedIds } = useUserSelection();
+    const selectedUsers = response?.data?.filter(item => selectedIds.has(item._id));
 
     const {
         handleDelete,
@@ -59,6 +71,12 @@ export const AdminUserList = ({ currentUsers }: Props) => {
 
             return () => clearTimeout(timer);
         }
+
+        if (selectedIds.size === 0 && showOnlySelected) {
+            setShowOnlySelected(false);
+            setPageSize(3);
+            setPage(1);
+        }
     }, [error]);
 
     return (
@@ -82,6 +100,8 @@ export const AdminUserList = ({ currentUsers }: Props) => {
             </AnimatePresence>
 
             <AdminActions
+                setPage={setPage}
+                setPageSize={setPageSize}
                 chooseMode={chooseMode}
                 selectedCount={selectedIds.size}
                 onDelete={handleDelete}
@@ -91,39 +111,44 @@ export const AdminUserList = ({ currentUsers }: Props) => {
                 onSendVerification={handleSendVerification}
                 setSearchValue={setSearchValue}
                 onSearch={handleSearch}
+                sortValue={sortValue}
+                setSortValue={setSortValue}
+                showOnlySelected={showOnlySelected}
+                setShowOnlySelected={setShowOnlySelected}
             />
 
             <div className="mt-3 flex flex-col gap-5">
-
-                {
-                    response?.data.length === 0 ?
-                        <div className="flex justify-center items-center h-[50vh]">
-                            <p className='text-[20px] text-[#33674E] dark:text-white'>Users are not found</p>
-                        </div>
-
-                        :
-                        response?.data.map((user) => (
-                            <AdminUserItem
-                                key={user._id}
-                                user={user}
-                                isChooseMode={chooseMode}
-                                toggleUserSelection={toggleUserSelection}
-                                isSelected={selectedIds.has(user._id)}
-                                activateChooseMode={activateChooseMode}
-                            />))
-                }
-
+                {response?.data.length === 0 ? (
+                    <div className="flex justify-center items-center h-[50vh]">
+                        <p className="text-[20px] text-[#33674E] dark:text-white">
+                            Users are not found
+                        </p>
+                    </div>
+                ) : (
+                    (showOnlySelected && selectedUsers
+                            ? selectedUsers
+                            : response?.data || []
+                    ).map(user => (
+                        <AdminUserItem
+                            key={user._id}
+                            user={user}
+                            isChooseMode={chooseMode}
+                            toggleUserSelection={toggleUserSelection}
+                            isSelected={selectedIds.has(user._id)}
+                            activateChooseMode={activateChooseMode}
+                        />
+                    ))
+                )}
             </div>
-
-
             {
-                response?.data.length !== 0 &&
+                response?.data.length !== 0 && !showOnlySelected &&
                 <div className=" mt-5 flex justify-center ">
                     <div className="flex items-center w-fit gap-10">
                         <button disabled={page === 1} onClick={() => {
                             setPage(page - 1);
                         }} className="cursor-pointer">
-                            <ArrowLeftIcon className={"w-[26px] h-[26px] dark:text-white text-[#33674E]"} />
+                            <ArrowLongLeftIcon
+                                className={"w-[26px] h-[26px] dark:text-white text-[#33674E] transform transition hover:-translate-x-1"} />
                         </button>
                         <div
                             className="flex justify-center items-center w-[30px] h-[30px] rounded-[4px] dark:bg-white bg-[#33674E] dark:text-[#33674E] text-white">
@@ -131,13 +156,15 @@ export const AdminUserList = ({ currentUsers }: Props) => {
                                 {page}
                             </p>
                         </div>
-                        <button disabled={page === currentUsers.totalPages} onClick={() => {
+                        <button disabled={page === currentUsers.totalPages || showOnlySelected} onClick={() => {
                             setPage(page + 1);
                         }} className="cursor-pointer">
-                            <ArrowRightIcon className={"w-[26px] h-[26px] dark:text-white text-[#33674E]"} />
+                            <ArrowLongRightIcon
+                                className={`w-[26px] h-[26px] dark:text-white text-[#33674E] transform transition hover:translate-x-1 `} />
                         </button>
                     </div>
-                </div>}
+                </div>
+            }
         </>
     );
 };

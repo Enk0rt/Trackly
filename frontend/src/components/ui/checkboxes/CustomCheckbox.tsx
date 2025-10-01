@@ -16,7 +16,7 @@ const CustomCheckbox: FC<Props> = ({ isChooseMode, toggleUserSelection, user, is
             {isChooseMode && (
                 <motion.div
                     key={user._id}
-                    initial={{ opacity: 0 }}
+                    initial={!isChooseMode ? { opacity: 0 } : false}
                     animate={{
                         opacity: !isChooseMode ? 0 : 1,
                     }}
@@ -32,6 +32,7 @@ const CustomCheckbox: FC<Props> = ({ isChooseMode, toggleUserSelection, user, is
                     <CheckboxIcon className="w-full h-full text-[#33674E] dark:text-white" />
 
                     <motion.div
+                        initial={false}
                         animate={{
                             scale: isSelected ? 0 : 1,
                         }}
