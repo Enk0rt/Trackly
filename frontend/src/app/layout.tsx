@@ -8,6 +8,7 @@ import { Menu } from "@/components/menu/Menu";
 import { QueryClient } from "@tanstack/react-query";
 import { getMe } from "@/services/api/auth";
 import Image from "next/image";
+import { getDataFromServer } from "@/services/api/getDataFromServer";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -36,7 +37,7 @@ export default async function RootLayout({
         queryFn: getMe,
     });
 
-
+    const currentUser = await getDataFromServer.getMe();
 
     return (
         <html lang="en" suppressHydrationWarning>
@@ -64,7 +65,7 @@ export default async function RootLayout({
 
                 <header className="flex items-center justify-center  opacity-0 animate-opacity">
                     <div className="w-[84%] max-w-[1249px]">
-                        <Menu />
+                        <Menu currentUser={currentUser} />
                     </div>
                 </header>
                 <main>
