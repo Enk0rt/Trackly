@@ -1,5 +1,6 @@
 import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useMemo, useState } from "react";
+import { debounce } from "lodash";
 
 type Props = {
     pageSize: number,
@@ -7,6 +8,21 @@ type Props = {
 }
 
 export const AdminPanelSettings = ({ pageSize, setPageSize }: Props) => {
+    const [inputVal, setInputVal] = useState<number>(pageSize);
+
+    const debouncedChanger = useMemo(
+        () => debounce((val: number) => {
+            setPageSize(val);
+        }, 500),
+        [setPageSize],
+    );
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const val = Number(e.target.value);
+        setInputVal(val);
+        debouncedChanger(val);
+    };
+
     return (
         <div className="flex flex-col items-center justify-center gap-4">
             <h3 className="text-2xl text-[#33674E] dark:text-white">Settings</h3>
@@ -15,7 +31,10 @@ export const AdminPanelSettings = ({ pageSize, setPageSize }: Props) => {
                 <div className="flex items-center gap-2">
                     <button
                         disabled={pageSize <= 1}
-                        onClick={() => setPageSize((prev) => Math.max(1, prev - 1))}
+                        onClick={() => {
+                            setInputVal((prev) => Math.max(1, prev - 1))
+                            setPageSize((prev) => Math.max(1, prev - 1));
+                        }}
                     >
                         <MinusCircleIcon className="w-[24px] h-[24px] cursor-pointer text-[#33674E] dark:text-white" />
                     </button>
@@ -24,13 +43,8 @@ export const AdminPanelSettings = ({ pageSize, setPageSize }: Props) => {
                         type="number"
                         name="user-count"
                         min={1}
-                        value={pageSize}
-                        onChange={(e) => {
-                            const val = Number(e.target.value);
-                            if (!isNaN(val) && val > 0) {
-                                setPageSize(val);
-                            }
-                        }}
+                        value={inputVal}
+                        onChange={(e) => handleChange(e)}
                         className=" border border-[#33674E] w-[36px] text-center dark:border-white [outline:none!important] p-1 bg-transparent rounded-[4px] text-[#33674E] dark:text-white
                                     [appearance:textfield]
                                     [&::-webkit-outer-spin-button]:appearance-none
@@ -38,7 +52,10 @@ export const AdminPanelSettings = ({ pageSize, setPageSize }: Props) => {
                                     [&::-moz-appearance]:textfield"
                     />
 
-                    <button onClick={() => setPageSize((prev) => prev + 1)}>
+                    <button onClick={() => {
+                        setInputVal((prev) => Math.max(1, prev + 1))
+                        setPageSize((prev) => Math.max(1, prev + 1));
+                    }}>
                         <PlusCircleIcon className="w-[24px] h-[24px] cursor-pointer text-[#33674E] dark:text-white" />
                     </button>
                 </div>

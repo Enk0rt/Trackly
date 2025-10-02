@@ -17,7 +17,7 @@ type Props = {
 }
 
 export const ProfileHeader = ({ user }: Props) => {
-    const { data: currentUser } = useAuth();
+    const { data: currentUser } = useAuth(user);
 
     return (
         <div>
