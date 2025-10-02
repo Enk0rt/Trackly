@@ -5,7 +5,8 @@ export const links = {
         { label: "Goals", path: "/goals" },
         { label: "Dashboard", path: "/dashboard" },
     ],
-    admin: [{
-        label: "Admin", path: "/admin",
-    }],
+    admin: [
+        { label: "Home", path: "/" },
+        { label: "Admin panel", path: "/admin" }
+    ],
 };

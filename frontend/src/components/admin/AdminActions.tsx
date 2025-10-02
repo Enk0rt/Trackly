@@ -9,9 +9,11 @@ import { AdminUserSearch } from "@/components/admin/AdminUserSearch";
 import React, { Dispatch, SetStateAction } from "react";
 import AdminSort from "@/components/admin/AdminSort";
 import { DefaultCheckbox } from "@/components/ui/checkboxes/DefaultCheckbox";
+import SettingsIcon from "@/components/ui/svg/buttons/SettingsIcon";
 
 type Props = {
     setPage: Dispatch<SetStateAction<number>>
+    pageSize: number,
     setPageSize: Dispatch<SetStateAction<number>>
     chooseMode: boolean;
     selectedCount: number;
@@ -25,7 +27,8 @@ type Props = {
     sortValue: string | undefined;
     onSearch: () => void;
     showOnlySelected: boolean,
-    setShowOnlySelected: Dispatch<SetStateAction<boolean>>
+    setShowOnlySelected: Dispatch<SetStateAction<boolean>>,
+    setShowModal: Dispatch<SetStateAction<boolean>>
 };
 
 
@@ -45,6 +48,7 @@ export const AdminActions = ({
                                  setPage,
                                  showOnlySelected,
                                  setShowOnlySelected,
+                                 setShowModal,
                              }: Props) => {
 
 
@@ -54,6 +58,7 @@ export const AdminActions = ({
         { onClick: onVerify, icon: UserVerifyIcon, label: "Verify user" },
         { onClick: onSendVerification, icon: UserSendVerificationIcon, label: "Send verification" },
         { onClick: onDelete, icon: Delete, label: "Delete user" },
+        { onClick: () => setShowModal(true), icon: SettingsIcon, label: "Open settings" },
     ];
 
     return (
@@ -75,7 +80,9 @@ export const AdminActions = ({
                                 Total selected items : {selectedCount}
                             </motion.p>
                             <div className="flex items-center gap-2 ">
-                                <p>Only selected</p>
+                                <p className="text-[#33674E] dark:text-white">
+                                    Only selected
+                                </p>
                                 <DefaultCheckbox
                                     action={async () => {
                                         if (selectedCount === 0) {

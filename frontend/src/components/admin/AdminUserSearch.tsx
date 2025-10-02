@@ -71,7 +71,7 @@ export const AdminUserSearch = ({ setSearchValue, onSearch }: Props) => {
 
             <div className="pl-4 absolute w-full flex justify-end items-center pointer-events-none">
                 <h3
-                    className={`transition-opacity text-[#33674E] grow-1 dark:text-white tracking-[2px] ${
+                    className={`transition-opacity text-[#33674E] grow-1 dark:text-white tracking-[1px] ${
                         active || inputVal ? "opacity-0" : "opacity-50"}`}>
                     Search...
                 </h3>

@@ -15,12 +15,9 @@ const AdminPage = async () => {
     }
     return (
         <div className="mt-10 flex justify-center">
-            <div className="relative w-[84%] max-w-[1249px]">
-
                 {
                     data?.data ? <AdminUserList currentUsers={data} /> : <h3> Users not found</h3>
                 }
-            </div>
         </div>
     );
 };
