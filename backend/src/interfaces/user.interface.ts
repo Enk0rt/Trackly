@@ -32,3 +32,19 @@ export interface IUserWithTokens {
     user: IUser;
     tokens?: ITokenPair;
 }
+
+export interface IUserResponse {
+    data: IUser[];
+    page: number;
+    pageSize: number;
+    total: number;
+    totalPages: number;
+}
+
+export interface IUserQuery {
+    pageSize?: number;
+    page?: number;
+    search?: string;
+    sort?: string;
+    sortDirection?: "asc" | "desc" | 1 | -1;
+}

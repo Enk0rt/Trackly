@@ -6,8 +6,8 @@ export const useDeleteUsers = () => {
 
     return useMutation({
         mutationFn: (ids: string[]) => adminService.deleteManyUsers(ids),
-        onSuccess: () => {
-            client.invalidateQueries({ queryKey: ["users"] });
+        onSuccess: async () => {
+           await client.invalidateQueries({ queryKey: ["users"]});
         },
     });
 }

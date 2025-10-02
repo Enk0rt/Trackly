@@ -13,6 +13,14 @@ router.get(
     adminController.getUsers,
 );
 
+// GET ALL USERS WITH QUERY
+router.get(
+    "/users/params",
+    authMiddleware.checkAccessToken,
+    authMiddleware.isAdmin,
+    adminController.getUsersWithQuery,
+);
+
 // BLOCK ONE USER
 router.patch(
     "/block/:id",

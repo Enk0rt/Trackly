@@ -10,6 +10,7 @@ type Props ={
 
 export const Providers = ({children}:Props) => {
     const [client] = useState(()=> new QueryClient());
+
     setupInterceptors(client);
     return (
         <QueryClientProvider client={client}>

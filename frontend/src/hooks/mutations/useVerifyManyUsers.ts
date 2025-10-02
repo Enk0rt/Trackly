@@ -7,8 +7,8 @@ export const useVerifyManyUsers = () => {
 
     return useMutation({
         mutationFn: (ids: string[]) => adminService.verifyManyUsers(ids),
-        onSuccess: () => {
-            client.invalidateQueries({ queryKey: ["users"] });
+        onSuccess: async () => {
+          await  client.invalidateQueries({ queryKey: ["users"]});
         },
     });
 };

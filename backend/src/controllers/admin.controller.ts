@@ -20,6 +20,20 @@ export class AdminController {
         }
     }
 
+    public async getUsersWithQuery(
+        req: Request,
+        res: Response<IApiSuccessResponse<IUser[]>>,
+        next: NextFunction,
+    ) {
+        try {
+            const query = req.query;
+            const data = await adminService.getUsersWithQuery(query);
+            res.status(StatusCodeEnum.OK).json(data);
+        } catch (e) {
+            next(e);
+        }
+    }
+
     public async blockOneUser(
         req: Request,
         res: Response<IApiSuccessResponse<IUser>>,
