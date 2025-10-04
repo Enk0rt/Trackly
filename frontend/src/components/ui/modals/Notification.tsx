@@ -10,6 +10,12 @@ type Props = {
 };
 
 export const Notification = ({ notifications, onClose }: Props) => {
+    const iconMap = {
+        [NotificationEnum.WARNING]: <ExclamationTriangleIcon className="w-[26px] h-[26px] text-amber-300" />,
+        [NotificationEnum.ERROR]: <ExclamationCircleIcon className="w-[26px] h-[26px] text-red-300" />,
+        [NotificationEnum.SUCCESS]: <CheckCircleIcon className="w-[26px] h-[26px] text-[#33674E]" />,
+    };
+
     return (
         <div className="absolute z-[11] left-1/2 -translate-x-1/2 top-[90px] flex flex-col gap-3">
             <AnimatePresence>
@@ -23,15 +29,7 @@ export const Notification = ({ notifications, onClose }: Props) => {
                         className="relative px-7 py-4 w-fit bg-white rounded-[14px] text-[#33674E] shadow-md order-1 flex gap-4"
                     >
                         <div className="pr-4 border-r border-r-[#33674E]">
-                            {
-                                type === NotificationEnum.WARNING && <ExclamationTriangleIcon className="w-[26px] h-[26px] text-amber-300" />
-                            }
-                            {
-                                type === NotificationEnum.ERROR && <ExclamationCircleIcon className="w-[26px] h-[26px] text-red-300" />
-                            }
-                            {
-                                type === NotificationEnum.SUCCESS && <CheckCircleIcon className="w-[26px] h-[26px] text-[#33674E]" />
-                            }
+                            {iconMap[type as NotificationEnum]}
                         </div>
                         <p>{message}</p>
                         <div
