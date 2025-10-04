@@ -43,9 +43,3 @@ Open [http://localhost](http://localhost) with your browser to see the result.
 
 Once backend container is up, open [http://localhost/api/docs](http://localhost/api/docs) to read available docs
 
-![img.png](img.png)
-![img_1.png](img_1.png)
-
-![img_2.png](img_2.png)
-![img_3.png](img_3.png)
-![img_4.png](img_4.png)
