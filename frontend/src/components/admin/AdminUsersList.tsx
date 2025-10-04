@@ -2,7 +2,7 @@
 import AdminUserItem from "@/components/admin/AdminUserItem";
 import { AdminActions } from "@/components/admin/AdminActions";
 import { useUserSelection } from "@/hooks/admin/useUserSelection";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IUsersResponseWithParams } from "@/interfaces/user/IUserResponse";
 import { useFetchUsers } from "@/hooks/admin/useFetchUsers";
 import { useAdminActions } from "@/hooks/admin/useAdminActions";
@@ -11,9 +11,7 @@ import DefaultModal from "@/components/ui/modals/DefaultModal";
 import { AdminPanelSettings } from "@/components/admin/AdminPanelSettings";
 import { Notification } from "@/components/ui/modals/Notification";
 import { AnimatePresence } from "framer-motion";
-import { INotification } from "@/interfaces/notifications/INotification";
-import { v4 as uuidv4 } from "uuid";
-import { NotificationEnum } from "@/enums/notificationEnum";
+import { useNotification } from "@/hooks/useNotification";
 
 type Props = {
     currentUsers: IUsersResponseWithParams;
@@ -21,11 +19,8 @@ type Props = {
 
 export const AdminUserList = ({ currentUsers }: Props) => {
     const [searchValue, setSearchValue] = useState("");
-    const [notifications, setNotifications] = useState<INotification[]>([]);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [sortValue, setSortValue] = useState<string | undefined>(undefined);
-
-    const timeouts = useRef<Map<string, NodeJS.Timeout>>(new Map());
 
     const {
         page, setPage, pageSize, setPageSize,
@@ -48,23 +43,8 @@ export const AdminUserList = ({ currentUsers }: Props) => {
     );
 
     const selectedUsers = response?.data?.filter(item => selectedIds.has(item._id));
-    const handleAddToSet = useCallback((message: string, type: NotificationEnum) => {
-        setNotifications((prev) => {
-            const filtered = prev.filter(n => n.message !== message);
-            const newNotification = { id: uuidv4(), message, type };
-            return [newNotification, ...filtered];
-        });
 
-        if (timeouts.current.has(message)) {
-            clearTimeout(timeouts.current.get(message));
-        }
-
-        setTimeout(() => {
-            setNotifications((prev) => prev.filter(n => n.message !== message));
-            timeouts.current.delete(message);
-        }, 4000);
-
-    }, []);
+    const { addNotification, closeNotification, notifications } = useNotification();
 
     const {
         handleDelete,
@@ -72,20 +52,14 @@ export const AdminUserList = ({ currentUsers }: Props) => {
         handleUnblock,
         handleVerify,
         handleSendVerification,
-    } = useAdminActions(selectedIds, setSelectedIds, handleAddToSet);
+    } = useAdminActions(selectedIds, setSelectedIds, addNotification);
 
     const handleSearch = async () => {
         setPage(1);
         await refetch();
     };
 
-    const handleClose = useCallback((id: string) => {
-        setNotifications((prev) => prev.filter(notification => notification.id !== id));
-    }, []);
-
     useEffect(() => {
-
-
         if (selectedIds.size === 0 && showOnlySelected) {
             setShowOnlySelected(false);
             setPageSize(3);
@@ -102,7 +76,7 @@ export const AdminUserList = ({ currentUsers }: Props) => {
                 <AnimatePresence>
                     {
                         notifications &&
-                        <Notification notifications={notifications} onClose={handleClose} />
+                        <Notification notifications={notifications} onClose={closeNotification} />
                     }
                 </AnimatePresence>
                 <AdminActions
