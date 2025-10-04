@@ -8,8 +8,9 @@ import { useVerifyOneUser } from "@/hooks/mutations/useVerifyOneUser";
 import { useVerifyManyUsers } from "@/hooks/mutations/useVerifyManyUsers";
 import { useSendVerification } from "@/hooks/mutations/useSendVerification";
 import { useMemo } from "react";
+import { NotificationEnum } from "@/enums/notificationEnum";
 
-export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: Set<string>) => void, setError: (err: string | null) => void) => {
+export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: Set<string>) => void, setNotification: (message: string, type: NotificationEnum) => void) => {
     const { mutate: deleteUser } = useDeleteUser();
     const { mutate: deleteManyUsers } = useDeleteUsers();
 
@@ -28,49 +29,75 @@ export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: 
 
     return useMemo(() => ({
         handleDelete: () => {
-            if (selectedIds.size === 0) return;
+            if (selectedIds.size === 0) {
+                setNotification("No users were chosen, action is not taken", NotificationEnum.WARNING);
+                return;
+            }
             if (selectedIds.size === 1) {
                 deleteUser(Array.from(selectedIds)[0]);
+                setNotification(`Success, user is deleted`,NotificationEnum.SUCCESS);
             } else {
                 deleteManyUsers(Array.from(selectedIds));
+                setNotification(`Success, users are deleted`, NotificationEnum.SUCCESS);
             }
             clearSelection();
         },
         handleBlock: () => {
-            if (selectedIds.size === 0) return;
+            if (selectedIds.size === 0) {
+                setNotification("No users were chosen, action is not taken",NotificationEnum.WARNING);
+                return;
+            }
+
             if (selectedIds.size === 1) {
                 blockUser(Array.from(selectedIds)[0]);
+                setNotification(`Success, user is restricted`, NotificationEnum.SUCCESS);
             } else {
+                setNotification(`Success, users are restricted`, NotificationEnum.SUCCESS);
                 blockManyUsers(Array.from(selectedIds));
             }
             clearSelection();
         },
         handleUnblock: () => {
-            if (selectedIds.size === 0) return;
+            if (selectedIds.size === 0) {
+                setNotification("No users were chosen, action is not taken",NotificationEnum.WARNING);
+                return;
+            }
+
             if (selectedIds.size === 1) {
+                setNotification(`Success, user is unblocked`, NotificationEnum.SUCCESS);
                 unblockUser(Array.from(selectedIds)[0]);
             } else {
+                setNotification(`Success, users are unblocked`, NotificationEnum.SUCCESS);
                 unblockManyUsers(Array.from(selectedIds));
             }
             clearSelection();
         },
         handleVerify: () => {
-            if (selectedIds.size === 0) return;
+            if (selectedIds.size === 0) {
+                setNotification("No users were chosen, action is not taken",NotificationEnum.WARNING);
+                return;
+            }
             if (selectedIds.size === 1) {
                 verifyUser(Array.from(selectedIds)[0]);
+                setNotification(`Success, user email is verified`, NotificationEnum.SUCCESS);
             } else {
                 verifyManyUsers(Array.from(selectedIds));
+                setNotification(`Success, users are verified, ${selectedIds.size} users updated`, NotificationEnum.SUCCESS);
             }
             clearSelection();
         },
         handleSendVerification: () => {
-            if (selectedIds.size === 0) return;
+            if (selectedIds.size === 0) {
+                setNotification("User was not chosen, action is not taken",NotificationEnum.WARNING);
+                return;
+            }
             if (selectedIds.size === 1) {
                 sendVerification(Array.from(selectedIds)[0]);
+                setNotification("Verification letter was sent to a user", NotificationEnum.SUCCESS);
             } else {
-                setError("Verification letter was not sent, choose only one user");
+                setNotification("Verification letter was not sent, choose only one user",NotificationEnum.ERROR);
             }
             clearSelection();
-        }
-    }), [selectedIds, deleteUser, deleteManyUsers, blockUser, blockManyUsers, unblockUser, unblockManyUsers, verifyUser, verifyManyUsers, sendVerification, setError]);
+        },
+    }), [selectedIds, deleteUser, deleteManyUsers, blockUser, blockManyUsers, unblockUser, unblockManyUsers, verifyUser, verifyManyUsers, sendVerification, setNotification]);
 };
