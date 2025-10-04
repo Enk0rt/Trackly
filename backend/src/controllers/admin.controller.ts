@@ -7,19 +7,6 @@ import { IUser } from "../interfaces/user.interface";
 import { adminService } from "../services/admin.service";
 
 export class AdminController {
-    public async getUsers(
-        req: Request,
-        res: Response<IApiSuccessResponse<IUser[]>>,
-        next: NextFunction,
-    ) {
-        try {
-            const users = await adminService.getUsers();
-            res.status(StatusCodeEnum.OK).json({ data: users });
-        } catch (e) {
-            next(e);
-        }
-    }
-
     public async getUsersWithQuery(
         req: Request,
         res: Response<IApiSuccessResponse<IUser[]>>,

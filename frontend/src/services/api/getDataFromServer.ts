@@ -1,4 +1,4 @@
-import { IUserResponse, IUsersResponse, IUsersResponseWithParams } from "@/interfaces/user/IUserResponse";
+import { IUserResponse, IUsersResponseWithParams } from "@/interfaces/user/IUserResponse";
 import { IUser } from "@/interfaces/user/IUser";
 import { apiFetch } from "@/services/api/lib/apiFetch";
 
@@ -41,22 +41,6 @@ export const getDataFromServer = {
         }
     },
 
-    async getUsers(): Promise<IUser[] | null> {
-        try {
-
-            const res = await apiFetch(`/admin`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-            const data: IUsersResponse = await res.json();
-            return data.data;
-        } catch (e) {
-            console.error("Failed to fetch users:", e);
-            return null;
-        }
-    },
     async getUsersWithParams(page?: number, pageSize?: number, search?: string, sort?: string, sortDirection?: "desc" | "asc" | 1 | -1): Promise<IUsersResponseWithParams | null> {
         const params = new URLSearchParams();
 

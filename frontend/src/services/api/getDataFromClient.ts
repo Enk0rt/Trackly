@@ -1,12 +1,8 @@
-import { IUser } from "@/interfaces/user/IUser";
+
 import { api } from "@/services/api/axiosInstanse";
 import { IUsersResponseWithParams } from "@/interfaces/user/IUserResponse";
 
 export const getDataFromClient ={
-    async getUsers():Promise<IUser[]>{
-        const {data} = await api.get('/admin')
-        return data.data
-    },
     async getUsersWithParams(page?: number, pageSize?: number, search?: string, sort?: string, sortDirection?: "desc" | "asc" | 1 | -1): Promise<IUsersResponseWithParams> {
         const params = new URLSearchParams();
 
