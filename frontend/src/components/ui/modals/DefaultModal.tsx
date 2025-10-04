@@ -1,4 +1,4 @@
-import { Dispatch, FC, ReactNode, SetStateAction, useRef } from "react";
+import { Dispatch, FC, ReactNode, SetStateAction, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useClickOutside } from "@/hooks/useClickOutside";
 
@@ -24,7 +24,19 @@ export const DefaultModal: FC<Props> = ({
     };
     const containerRef = useRef<HTMLDivElement>(null);
 
-    useClickOutside(containerRef,()=> setShowModal(false),showModal)
+    useClickOutside(containerRef, () => setShowModal(false), showModal);
+
+    useEffect(() => {
+        if (showModal) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [showModal]);
 
     return (
         <>
@@ -40,9 +52,9 @@ export const DefaultModal: FC<Props> = ({
                         <motion.div
                             ref={containerRef}
                             key={"overlay"}
-                            initial={{ translateY: -20,  }}
-                            animate={{ translateY: 0,  }}
-                            exit={{ translateY: 10,  }}
+                            initial={{ translateY: -20 }}
+                            animate={{ translateY: 0 }}
+                            exit={{ translateY: 10 }}
                             transition={{ duration: .5 }}
                             className={`relative w-full ${sizeClasses[size]} max-h-[90vh] overflow-y-auto rounded-lg bg-white dark:bg-[#33674E]/40 shadow-lg p-6 backdrop-blur-[5px]`}
                         >

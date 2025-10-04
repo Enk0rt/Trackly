@@ -12,10 +12,6 @@ import { tokenService } from "./token.service";
 import { userService } from "./user.service";
 
 export class AdminService {
-    public async getUsers(): Promise<IUser[]> {
-        return await userService.getAll({ role: "user" });
-    }
-
     public async getUsersWithQuery(query: IUserQuery): Promise<IUserResponse> {
         return await userService.getAllWithQuery(query);
     }

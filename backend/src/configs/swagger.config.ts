@@ -22,6 +22,11 @@ const swaggerDocument: OpenAPIV3.Document = {
             name: "Auth",
             description: "Authentication endpoints",
         },
+        {
+            name: "Admin",
+            description:
+                "Admin endpoints for admin panel, created for administration users by admin",
+        },
     ],
     paths: {
         "/api/auth/sign-up": {
@@ -203,6 +208,653 @@ const swaggerDocument: OpenAPIV3.Document = {
                                         details: {
                                             type: "string",
                                         },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/api/auth/verify/email": {
+            post: {
+                tags: ["Auth"],
+                summary: "Send email verification request to the user",
+                security: [{ bearerAuth: [] }],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    email: {
+                                        type: "string",
+                                        example: "user@example.com",
+                                    },
+                                    name: { type: "string", example: "John" },
+                                    username: {
+                                        type: "string",
+                                        example: "john_doe",
+                                    },
+                                },
+                                required: ["email", "name", "username"],
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "200": {
+                        description:
+                            "Email verification request is successfully sent, check your email",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        data: { type: null },
+                                        details: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/api/auth/verify/confirm/{token}": {
+            get: {
+                tags: ["Auth"],
+                summary: "Verify user email by confirmation token",
+                parameters: [
+                    {
+                        name: "token",
+                        in: "path",
+                        required: true,
+                        schema: { type: "string" },
+                        description: "Verification token sent to user email",
+                    },
+                ],
+                responses: {
+                    "200": {
+                        description: "Email is successfully verified",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        data: {
+                                            $ref: "#/components/schemas/User",
+                                        },
+                                        details: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/api/auth/recovery/password": {
+            post: {
+                tags: ["Auth"],
+                summary: "Send password recovery request",
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    email: {
+                                        type: "string",
+                                        example: "user@example.com",
+                                    },
+                                },
+                                required: ["email"],
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "200": {
+                        description:
+                            "Password recovery request is successfully sent, check your email",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        data: { type: null },
+                                        details: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/api/auth/recovery/confirm/{token}": {
+            get: {
+                tags: ["Auth"],
+                summary: "Validate password recovery token",
+                parameters: [
+                    {
+                        name: "token",
+                        in: "path",
+                        required: true,
+                        schema: { type: "string" },
+                    },
+                ],
+                responses: {
+                    "200": {
+                        description: "Token is valid for password recovery",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        data: {
+                                            type: "object",
+                                            properties: {
+                                                _userId: { type: "string" },
+                                                username: { type: "string" },
+                                                role: { type: "string" },
+                                            },
+                                        },
+                                        details: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+            patch: {
+                tags: ["Auth"],
+                summary: "Recover password using token from email",
+                parameters: [
+                    {
+                        name: "token",
+                        in: "path",
+                        required: true,
+                        schema: { type: "string" },
+                    },
+                ],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    newPass: {
+                                        type: "string",
+                                        example: "newSecurePassword123",
+                                    },
+                                },
+                                required: ["newPass"],
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "200": {
+                        description: "Password is changed successfully",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        data: {
+                                            $ref: "#/components/schemas/User",
+                                        },
+                                        details: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/api/admin/users/params": {
+            get: {
+                tags: ["Admin"],
+                summary: "Get all users with query parameters",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "page",
+                        in: "query",
+                        schema: { type: "integer", example: 1 },
+                    },
+                    {
+                        name: "pageSize",
+                        in: "query",
+                        schema: { type: "integer", example: 10 },
+                    },
+                    {
+                        name: "search",
+                        in: "query",
+                        schema: { type: "string", example: "john" },
+                    },
+                    {
+                        name: "sort",
+                        in: "query",
+                        schema: { type: "string", example: "username" },
+                    },
+                    {
+                        name: "sortDirection",
+                        in: "query",
+                        schema: {
+                            type: "string",
+                            enum: ["asc", "desc", 1, -1],
+                            example: "asc",
+                        },
+                    },
+                ],
+                responses: {
+                    "200": {
+                        description: "Users fetched successfully",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        data: {
+                                            type: "array",
+                                            items: {
+                                                $ref: "#/components/schemas/User",
+                                            },
+                                        },
+                                        page: { type: "integer" },
+                                        pageSize: { type: "integer" },
+                                        total: { type: "integer" },
+                                        totalPages: { type: "integer" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+
+        "/api/admin/block/{id}": {
+            patch: {
+                tags: ["Admin"],
+                summary: "Block one user by ID",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "id",
+                        in: "path",
+                        required: true,
+                        schema: { type: "string" },
+                    },
+                ],
+                responses: {
+                    "200": {
+                        description: "User is blocked successfully",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        data: {
+                                            $ref: "#/components/schemas/User",
+                                        },
+                                        details: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+
+        "/api/admin/block": {
+            patch: {
+                tags: ["Admin"],
+                summary: "Block multiple users",
+                security: [{ bearerAuth: [] }],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    ids: {
+                                        type: "array",
+                                        items: { type: "string" },
+                                        example: [
+                                            "65f4a8b3c2e...",
+                                            "65f4a8b3c2e...",
+                                        ],
+                                    },
+                                },
+                                required: ["ids"],
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "200": {
+                        description: "Users are blocked successfully",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        data: {
+                                            type: "object",
+                                            properties: {
+                                                users: {
+                                                    type: "array",
+                                                    items: {
+                                                        $ref: "#/components/schemas/User",
+                                                    },
+                                                },
+                                                updateResult: {
+                                                    type: "object",
+                                                },
+                                            },
+                                        },
+                                        details: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+
+        "/api/admin/unblock/{id}": {
+            patch: {
+                tags: ["Admin"],
+                summary: "Unblock one user by ID",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "id",
+                        in: "path",
+                        required: true,
+                        schema: { type: "string" },
+                    },
+                ],
+                responses: {
+                    "200": {
+                        description: "User is unblocked successfully",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        data: {
+                                            $ref: "#/components/schemas/User",
+                                        },
+                                        details: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+
+        "/api/admin/unblock": {
+            patch: {
+                tags: ["Admin"],
+                summary: "Unblock multiple users",
+                security: [{ bearerAuth: [] }],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    ids: {
+                                        type: "array",
+                                        items: { type: "string" },
+                                    },
+                                },
+                                required: ["ids"],
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "200": {
+                        description: "Users are unblocked successfully",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        data: {
+                                            type: "object",
+                                            properties: {
+                                                users: {
+                                                    type: "array",
+                                                    items: {
+                                                        $ref: "#/components/schemas/User",
+                                                    },
+                                                },
+                                                updateResult: {
+                                                    type: "object",
+                                                },
+                                            },
+                                        },
+                                        details: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+
+        "/api/admin/verify/{id}": {
+            patch: {
+                tags: ["Admin"],
+                summary: "Verify one user by ID",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "id",
+                        in: "path",
+                        required: true,
+                        schema: { type: "string" },
+                    },
+                ],
+                responses: {
+                    "200": {
+                        description: "User is verified successfully",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        data: {
+                                            $ref: "#/components/schemas/User",
+                                        },
+                                        details: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+
+        "/api/admin/verify": {
+            patch: {
+                tags: ["Admin"],
+                summary: "Verify multiple users",
+                security: [{ bearerAuth: [] }],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    ids: {
+                                        type: "array",
+                                        items: { type: "string" },
+                                    },
+                                },
+                                required: ["ids"],
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "200": {
+                        description: "Users are verified successfully",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        data: {
+                                            type: "object",
+                                            properties: {
+                                                users: {
+                                                    type: "array",
+                                                    items: {
+                                                        $ref: "#/components/schemas/User",
+                                                    },
+                                                },
+                                                updateResult: {
+                                                    type: "object",
+                                                },
+                                            },
+                                        },
+                                        details: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+
+        "/api/admin/email/send-verification": {
+            post: {
+                tags: ["Admin"],
+                summary: "Send verification email to user by ID",
+                security: [{ bearerAuth: [] }],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    id: {
+                                        type: "string",
+                                        example: "65f4a8b3c2e...",
+                                    },
+                                },
+                                required: ["id"],
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "200": {
+                        description: "Verification request sent successfully",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        data: { type: null },
+                                        details: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+
+        "/api/admin/{id}": {
+            delete: {
+                tags: ["Admin"],
+                summary: "Delete one user by ID",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "id",
+                        in: "path",
+                        required: true,
+                        schema: { type: "string" },
+                    },
+                ],
+                responses: {
+                    "200": {
+                        description: "User is deleted successfully",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        data: { type: null },
+                                        details: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+
+        "/api/admin/bulk-delete": {
+            post: {
+                tags: ["Admin"],
+                summary: "Delete multiple users",
+                security: [{ bearerAuth: [] }],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    ids: {
+                                        type: "array",
+                                        items: { type: "string" },
+                                    },
+                                },
+                                required: ["ids"],
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "200": {
+                        description: "Users are deleted successfully",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        data: { type: "object" },
+                                        details: { type: "string" },
                                     },
                                 },
                             },

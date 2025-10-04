@@ -5,15 +5,7 @@ import { authMiddleware } from "../middleware/auth.middleware";
 
 const router = Router();
 
-// GET ALL USERS
-router.get(
-    "/",
-    authMiddleware.checkAccessToken,
-    authMiddleware.isAdmin,
-    adminController.getUsers,
-);
-
-// GET ALL USERS WITH QUERY
+// GET ALL USERS WITH QUERY PARAMS
 router.get(
     "/users/params",
     authMiddleware.checkAccessToken,
