@@ -3,14 +3,15 @@ import AdminUserItem from "@/components/admin/AdminUserItem";
 import { AdminActions } from "@/components/admin/AdminActions";
 import { useUserSelection } from "@/hooks/admin/useUserSelection";
 import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { IUsersResponseWithParams } from "@/interfaces/user/IUserResponse";
 import { useFetchUsers } from "@/hooks/admin/useFetchUsers";
-import { useQueryClient } from "@tanstack/react-query";
 import { useAdminActions } from "@/hooks/admin/useAdminActions";
-import { ArrowLongLeftIcon, ArrowLongRightIcon} from "@heroicons/react/24/outline";
+import { ArrowLongLeftIcon, ArrowLongRightIcon } from "@heroicons/react/24/outline";
 import DefaultModal from "@/components/ui/modals/DefaultModal";
 import { AdminPanelSettings } from "@/components/admin/AdminPanelSettings";
+import { Notification } from "@/components/ui/modals/Notification";
+import { AnimatePresence } from "framer-motion";
+import { useNotification } from "@/hooks/useNotification";
 
 type Props = {
     currentUsers: IUsersResponseWithParams;
@@ -18,11 +19,8 @@ type Props = {
 
 export const AdminUserList = ({ currentUsers }: Props) => {
     const [searchValue, setSearchValue] = useState("");
-    const [error, setError] = useState<string | null>(null);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [sortValue, setSortValue] = useState<string | undefined>(undefined);
-
-    const client = useQueryClient();
 
     const {
         page, setPage, pageSize, setPageSize,
@@ -46,13 +44,15 @@ export const AdminUserList = ({ currentUsers }: Props) => {
 
     const selectedUsers = response?.data?.filter(item => selectedIds.has(item._id));
 
+    const { addNotification, closeNotification, notifications } = useNotification();
+
     const {
         handleDelete,
         handleBlock,
         handleUnblock,
         handleVerify,
         handleSendVerification,
-    } = useAdminActions(selectedIds, setSelectedIds, setError);
+    } = useAdminActions(selectedIds, setSelectedIds, addNotification);
 
     const handleSearch = async () => {
         setPage(1);
@@ -60,25 +60,12 @@ export const AdminUserList = ({ currentUsers }: Props) => {
     };
 
     useEffect(() => {
-        if (searchValue.trim() === "") {
-            client.removeQueries({
-                queryKey: ["users", page, pageSize, "", undefined, undefined],
-            });
-        }
-        if (error) {
-            const timer = setTimeout(() => {
-                setError(null);
-            }, 10000);
-
-            return () => clearTimeout(timer);
-        }
-
         if (selectedIds.size === 0 && showOnlySelected) {
             setShowOnlySelected(false);
             setPageSize(3);
             setPage(1);
         }
-    }, [error]);
+    }, [selectedIds, showOnlySelected, setShowOnlySelected, setPageSize, setPage]);
 
     return (
         <>
@@ -88,22 +75,10 @@ export const AdminUserList = ({ currentUsers }: Props) => {
             <div className="w-[84%] max-w-[1249px]">
                 <AnimatePresence>
                     {
-                        error &&
-                        <motion.div
-                            key={"overlay"}
-                            initial={{ translateX: -100, opacity: 0 }}
-                            animate={{ translateX: 0, opacity: 100 }}
-                            exit={{ translateX: -100, opacity: 0 }}
-                            transition={{ duration: .4, ease: "easeInOut" }}
-                            className={`absolute z-[1] top-[-20px] px-7 py-4 w-fit bg-white  rounded-[14px] text-[#33674E]`}>
-                            <p>{error}</p>
-                            <div onClick={() => setError(null)} className="absolute right-[10px] top-0 cursor-pointer">
-                                x
-                            </div>
-                        </motion.div>
+                        notifications &&
+                        <Notification notifications={notifications} onClose={closeNotification} />
                     }
                 </AnimatePresence>
-
                 <AdminActions
                     setPage={setPage}
                     pageSize={pageSize}
