@@ -143,11 +143,7 @@ class AuthService {
         return await userService.updateOne(id, updateData);
     }
 
-    public async sendVerifyEmailRequest(
-        email: string,
-        name: string,
-        username: string,
-    ): Promise<void> {
+    public async sendVerifyEmailRequest(email: string): Promise<void> {
         if (!email) {
             throw new ApiError(
                 StatusCodeEnum.BAD_REQUEST,
@@ -169,8 +165,8 @@ class AuthService {
             ActionTokenTypeEnum.VERIFY,
         );
         await emailService.sendMail(email, emailConstants[EmailEnum.VERIFY], {
-            name,
-            username,
+            name: user.name,
+            username: user.username,
             url: `${config.FRONTEND_URL}/verify/${verifyToken}`,
         });
     }

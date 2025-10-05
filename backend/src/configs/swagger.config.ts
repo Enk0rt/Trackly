@@ -238,7 +238,7 @@ const swaggerDocument: OpenAPIV3.Document = {
                                         example: "john_doe",
                                     },
                                 },
-                                required: ["email", "name", "username"],
+                                required: ["email"],
                             },
                         },
                     },

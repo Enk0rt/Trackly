@@ -179,8 +179,8 @@ class AuthController {
         next: NextFunction,
     ) {
         try {
-            const { email, name, username } = req.body;
-            await authService.sendVerifyEmailRequest(email, name, username);
+            const { email } = req.body;
+            await authService.sendVerifyEmailRequest(email);
             res.status(StatusCodeEnum.OK).json({
                 data: null,
                 details:
