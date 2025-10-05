@@ -44,24 +44,25 @@
 					"response": []
 				},
 				{
-					"name": "delete",
+					"name": "getByUsername",
 					"request": {
-						"method": "DELETE",
+						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/users/:id",
+							"raw": "{{baseUrl}}/api/users/username/:username",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"api",
 								"users",
-								":id"
+								"username",
+								":username"
 							],
 							"variable": [
 								{
-									"key": "id",
-									"value": "68c6be1253e289032c489107"
+									"key": "username",
+									"value": "enk0rt"
 								}
 							]
 						}
@@ -83,12 +84,12 @@
 							"urlencoded": [
 								{
 									"key": "username",
-									"value": "enk0rt",
+									"value": "aue123",
 									"type": "text"
 								},
 								{
 									"key": "email",
-									"value": "forwork.apv@gmail.com",
+									"value": "forwork.apv12@gmail.com",
 									"type": "text"
 								},
 								{
@@ -99,12 +100,14 @@
 								{
 									"key": "name",
 									"value": "Artem",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								},
 								{
 									"key": "age",
 									"value": "23",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								},
 								{
 									"key": "surname",
@@ -148,7 +151,8 @@
 									"pm.environment.set(\"refreshToken\", res.data.tokens.refreshToken)"
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						}
 					],
@@ -160,7 +164,7 @@
 							"urlencoded": [
 								{
 									"key": "login",
-									"value": "forwork.apv@gmail.com",
+									"value": "enk0rt",
 									"type": "text"
 								},
 								{
@@ -243,6 +247,138 @@
 							]
 						},
 						"url": "{{baseUrl}}/api/auth/refresh"
+					},
+					"response": []
+				},
+				{
+					"name": "sendVerifyEmailRequest (for later verification)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "forwork.apv@gmail.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{baseUrl}}/api/auth/verify/email"
+					},
+					"response": []
+				},
+				{
+					"name": "verifyEmail (confirm)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/verify/confirm/:token",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"verify",
+								"confirm",
+								":token"
+							],
+							"variable": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfdXNlcklkIjoiNjhjYzRmOGViMGI5OGU1M2VhZDA1ZGRjIiwidXNlcm5hbWUiOiJlbWlseXMiLCJpYXQiOjE3NTgyMjAxNzQsImV4cCI6MTc1ODIyMDQ3NH0.YaHFO_BL0-TQEKh5o9D9wKX-JANKgGtOx0wlvVn7yCk"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "changePasswordFromProfile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "oldPass",
+									"value": "Pass1234",
+									"type": "text"
+								},
+								{
+									"key": "newPass",
+									"value": "Pass123",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{baseUrl}}/api/auth/password"
+					},
+					"response": []
+				},
+				{
+					"name": "sendRecoveryRequest",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "palienko.crypto@gmail.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{baseUrl}}/api/auth/recovery/password"
+					},
+					"response": []
+				},
+				{
+					"name": "changePasswordFromEmail",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "newPass",
+									"value": "Pass123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/recovery/confirm/:token",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"recovery",
+								"confirm",
+								":token"
+							],
+							"variable": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfdXNlcklkIjoiNjhjYzYxMWQzZDZiOGUwZGNkM2QzMzQ0IiwidXNlcm5hbWUiOiJlbWlseXMiLCJpYXQiOjE3NTg0NDc0ODcsImV4cCI6MTc1ODQ0NzY2N30.3OxX1zoaJ-upctIZU-QkAK7m04uRbOJonDcpgz8NBzM&source=gmail&ust=1758533893180000&usg=AOvVaw27Wl3jzQl3FDlo4P3OG1gA"
+								}
+							]
+						}
 					},
 					"response": []
 				}
@@ -608,6 +744,362 @@
 								}
 							]
 						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "getAllUsers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/admin"
+					},
+					"response": []
+				},
+				{
+					"name": "getUsersWithParams",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/users/params/?page=1&pageSize=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"users",
+								"params",
+								""
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "search",
+									"value": "us",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "username",
+									"disabled": true
+								},
+								{
+									"key": "sortDirection",
+									"value": "-1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "blockUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/block/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"block",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "68d057d5565d686106d698e5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "blockManyUsers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ids\":[\"\",\"\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/admin/block"
+					},
+					"response": []
+				},
+				{
+					"name": "unblockUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/unblock/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"unblock",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "68d057d5565d686106d698e5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "unblockManyUsers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ids\":[\"\",\"\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/admin/unblock"
+					},
+					"response": []
+				},
+				{
+					"name": "changeRole",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "role",
+									"value": "user",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/promote/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"promote",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "68d055a14eec24f6f1aa4464"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "verifyOneUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/verify/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"verify",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "verifyManyUsers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ids\":[\"\",\"\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/admin/verify"
+					},
+					"response": []
+				},
+				{
+					"name": "deleteUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "68d3d18e63222046f20cf3b2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteManyUsers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ids\":[\"\",\"\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/admin"
+					},
+					"response": []
+				},
+				{
+					"name": "sendVerificationEmail",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "id",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{baseUrl}}/api/admin/email/send-verification"
 					},
 					"response": []
 				}
