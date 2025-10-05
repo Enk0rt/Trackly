@@ -1,10 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { use3DTilt } from "@/components/ui/benefits-card/hooks/use3DTilt";
-import { BenefitCardList } from "@/components/ui/benefits-card/BenefutCardList";
+import React, { memo, useEffect, useState } from "react";
+import BenefitCardList from "@/components/ui/benefits-card/BenefutCardList";
+import { use3DTilt } from "@/hooks/use3DTilt";
 
 
-export const BenefitsCard = () => {
+const BenefitsCard = () => {
     const { wrapRef, cardRef, handleMouseLeave, handleMouseMove } = use3DTilt("skewX(-25deg) translateZ(0) ");
     const [mounted, setMounted] = useState<boolean>(false);
 
@@ -49,4 +49,4 @@ export const BenefitsCard = () => {
     );
 };
 
-export default BenefitsCard;
+export default memo(BenefitsCard);

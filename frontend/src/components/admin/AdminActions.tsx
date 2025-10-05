@@ -1,14 +1,14 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { ActionButton } from "@/components/ui/buttons/action-button/ActionButton";
+import ActionButton from "@/components/ui/buttons/action-button/ActionButton";
 import UserBlockIcon from "@/components/ui/svg/user/UserBlockIcon";
 import Delete from "@/components/ui/svg/buttons/Delete";
 import UserUnblockIcon from "@/components/ui/svg/user/UserUnblockIcon";
 import UserVerifyIcon from "@/components/ui/svg/user/UserVerifyIcon";
 import UserSendVerificationIcon from "@/components/ui/svg/user/UserSendVerificationIcon";
-import { AdminUserSearch } from "@/components/admin/AdminUserSearch";
-import React, { Dispatch, SetStateAction } from "react";
+import AdminUserSearch from "@/components/admin/AdminUserSearch";
+import React, { Dispatch, FC, memo, SetStateAction } from "react";
 import AdminSort from "@/components/admin/AdminSort";
-import { DefaultCheckbox } from "@/components/ui/checkboxes/DefaultCheckbox";
+import DefaultCheckbox from "@/components/ui/checkboxes/DefaultCheckbox";
 import SettingsIcon from "@/components/ui/svg/buttons/SettingsIcon";
 
 type Props = {
@@ -32,7 +32,7 @@ type Props = {
 };
 
 
-export const AdminActions = ({
+const AdminActions:FC<Props> = ({
                                  setPageSize,
                                  chooseMode,
                                  selectedCount,
@@ -49,7 +49,7 @@ export const AdminActions = ({
                                  showOnlySelected,
                                  setShowOnlySelected,
                                  setShowModal,
-                             }: Props) => {
+                             }) => {
 
 
     const actions = [
@@ -118,4 +118,4 @@ export const AdminActions = ({
         </div>
     );
 };
-export default AdminActions;
+export default memo(AdminActions);

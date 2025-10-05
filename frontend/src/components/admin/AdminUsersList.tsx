@@ -1,23 +1,23 @@
 "use client";
 import AdminUserItem from "@/components/admin/AdminUserItem";
-import { AdminActions } from "@/components/admin/AdminActions";
+import AdminActions from "@/components/admin/AdminActions";
 import { useUserSelection } from "@/hooks/admin/useUserSelection";
-import React, { useEffect, useState } from "react";
+import React, { FC, memo, useEffect, useState } from "react";
 import { IUsersResponseWithParams } from "@/interfaces/user/IUserResponse";
 import { useFetchUsers } from "@/hooks/admin/useFetchUsers";
 import { useAdminActions } from "@/hooks/admin/useAdminActions";
-import { ArrowLongLeftIcon, ArrowLongRightIcon } from "@heroicons/react/24/outline";
 import DefaultModal from "@/components/ui/modals/DefaultModal";
-import { AdminPanelSettings } from "@/components/admin/AdminPanelSettings";
-import { Notification } from "@/components/ui/modals/Notification";
+import AdminPanelSettings from "@/components/admin/AdminPanelSettings";
+import Notification from "@/components/ui/modals/Notification";
 import { AnimatePresence } from "framer-motion";
 import { useNotification } from "@/hooks/useNotification";
+import Pagination from "@/components/ui/pagination/Pagination";
 
 type Props = {
     currentUsers: IUsersResponseWithParams;
 };
 
-export const AdminUserList = ({ currentUsers }: Props) => {
+const AdminUserList: FC<Props> = ({ currentUsers }) => {
     const [searchValue, setSearchValue] = useState("");
     const [showModal, setShowModal] = useState<boolean>(false);
     const [sortValue, setSortValue] = useState<string | undefined>(undefined);
@@ -62,10 +62,10 @@ export const AdminUserList = ({ currentUsers }: Props) => {
     useEffect(() => {
         if (selectedIds.size === 0 && showOnlySelected) {
             setShowOnlySelected(false);
-            setPageSize(3);
-            setPage(1);
+
         }
-    }, [selectedIds, showOnlySelected, setShowOnlySelected, setPageSize, setPage]);
+    }, [selectedIds, showOnlySelected, setShowOnlySelected]);
+
 
     return (
         <>
@@ -122,32 +122,16 @@ export const AdminUserList = ({ currentUsers }: Props) => {
                         ))
                     )}
                 </div>
+
                 {
                     response?.data.length !== 0 && !showOnlySelected &&
-                    <div className=" mt-5 flex justify-center ">
-                        <div className="flex items-center w-fit gap-10">
-                            <button disabled={page === 1} onClick={() => {
-                                setPage(page - 1);
-                            }} className="cursor-pointer">
-                                <ArrowLongLeftIcon
-                                    className={"w-[26px] h-[26px] dark:text-white text-[#33674E] transform transition hover:-translate-x-1"} />
-                            </button>
-                            <div
-                                className="flex justify-center items-center w-[30px] h-[30px] rounded-[4px] dark:bg-white bg-[#33674E] dark:text-[#33674E] text-white">
-                                <p>
-                                    {page}
-                                </p>
-                            </div>
-                            <button disabled={page === currentUsers.totalPages || showOnlySelected} onClick={() => {
-                                setPage(page + 1);
-                            }} className="cursor-pointer">
-                                <ArrowLongRightIcon
-                                    className={`w-[26px] h-[26px] dark:text-white text-[#33674E] transform transition hover:translate-x-1 `} />
-                            </button>
-                        </div>
-                    </div>
+                    <Pagination actionPrev={() => setPage(page - 1)} actionNext={() => setPage(page + 1)} page={page}
+                                disabledPrev={page === 1}
+                                disabledNext={page === currentUsers.totalPages || showOnlySelected || pageSize >= currentUsers.total} />
                 }
             </div>
         </>
     );
 };
+
+export default memo(AdminUserList);

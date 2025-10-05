@@ -1,7 +1,7 @@
 import Logo from "@/components/ui/logo/Logo";
 import { ThemeChanger } from "@/components/theme-changer/ThemeChanger";
 import { BackBtn } from "@/components/ui/buttons/back-btn/BackBtn";
-import { RegisterForm } from "@/components/auth/register-form/RegisterForm";
+import RegisterForm from "@/components/auth/register-form/RegisterForm";
 
 
 const SignUpPage = async () => {

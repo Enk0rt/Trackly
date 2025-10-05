@@ -7,7 +7,7 @@ import { useUnblockManyUsers } from "@/hooks/mutations/useUnblockManyUsers";
 import { useVerifyOneUser } from "@/hooks/mutations/useVerifyOneUser";
 import { useVerifyManyUsers } from "@/hooks/mutations/useVerifyManyUsers";
 import { useSendVerification } from "@/hooks/mutations/useSendVerification";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { NotificationEnum } from "@/enums/notificationEnum";
 
 export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: Set<string>) => void, setNotification: (message: string, type: NotificationEnum) => void) => {
@@ -25,7 +25,7 @@ export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: 
 
     const { mutate: sendVerification } = useSendVerification();
 
-    const clearSelection = () => setSelectedIds(new Set());
+    const clearSelection = useCallback(() => setSelectedIds(new Set()), [setSelectedIds]);
 
     return useMemo(() => ({
         handleDelete: () => {
@@ -35,7 +35,7 @@ export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: 
             }
             if (selectedIds.size === 1) {
                 deleteUser(Array.from(selectedIds)[0]);
-                setNotification(`Success, user is deleted`,NotificationEnum.SUCCESS);
+                setNotification(`Success, user is deleted`, NotificationEnum.SUCCESS);
             } else {
                 deleteManyUsers(Array.from(selectedIds));
                 setNotification(`Success, users are deleted`, NotificationEnum.SUCCESS);
@@ -44,7 +44,7 @@ export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: 
         },
         handleBlock: () => {
             if (selectedIds.size === 0) {
-                setNotification("No users were chosen, action is not taken",NotificationEnum.WARNING);
+                setNotification("No users were chosen, action is not taken", NotificationEnum.WARNING);
                 return;
             }
 
@@ -59,7 +59,7 @@ export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: 
         },
         handleUnblock: () => {
             if (selectedIds.size === 0) {
-                setNotification("No users were chosen, action is not taken",NotificationEnum.WARNING);
+                setNotification("No users were chosen, action is not taken", NotificationEnum.WARNING);
                 return;
             }
 
@@ -74,7 +74,7 @@ export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: 
         },
         handleVerify: () => {
             if (selectedIds.size === 0) {
-                setNotification("No users were chosen, action is not taken",NotificationEnum.WARNING);
+                setNotification("No users were chosen, action is not taken", NotificationEnum.WARNING);
                 return;
             }
             if (selectedIds.size === 1) {
@@ -88,16 +88,16 @@ export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: 
         },
         handleSendVerification: () => {
             if (selectedIds.size === 0) {
-                setNotification("User was not chosen, action is not taken",NotificationEnum.WARNING);
+                setNotification("User was not chosen, action is not taken", NotificationEnum.WARNING);
                 return;
             }
             if (selectedIds.size === 1) {
                 sendVerification(Array.from(selectedIds)[0]);
                 setNotification("Verification letter was sent to a user", NotificationEnum.SUCCESS);
             } else {
-                setNotification("Verification letter was not sent, choose only one user",NotificationEnum.ERROR);
+                setNotification("Verification letter was not sent, choose only one user", NotificationEnum.ERROR);
             }
             clearSelection();
         },
-    }), [selectedIds, deleteUser, deleteManyUsers, blockUser, blockManyUsers, unblockUser, unblockManyUsers, verifyUser, verifyManyUsers, sendVerification, setNotification]);
+    }), [selectedIds, clearSelection, setNotification, deleteUser, deleteManyUsers, blockUser, blockManyUsers, unblockUser, unblockManyUsers, verifyUser, verifyManyUsers, sendVerification]);
 };

@@ -2,7 +2,7 @@
 import { PassRecoveryEmailForm } from "@/components/auth/pass-recovery-email-form/PassRecoveryEmailForm";
 import Link from "next/link";
 import { useState } from "react";
-import { Timer } from "@/components/timer/Timer";
+import Timer from "@/components/timer/Timer";
 
 type Props = {
     token: string,

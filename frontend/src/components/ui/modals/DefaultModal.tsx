@@ -1,4 +1,4 @@
-import { Dispatch, FC, ReactNode, SetStateAction, useEffect, useRef } from "react";
+import { Dispatch, FC, memo, ReactNode, SetStateAction, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useClickOutside } from "@/hooks/useClickOutside";
 
@@ -74,4 +74,4 @@ export const DefaultModal: FC<Props> = ({
     );
 };
 
-export default DefaultModal;
+export default memo(DefaultModal)

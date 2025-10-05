@@ -13,6 +13,7 @@ import { AxiosError } from "axios";
 import { IApiErrorResponse } from "@/interfaces/errors/IError";
 import Link from "next/link";
 import { MainBtn } from "@/components/ui/buttons/main-btn/MainBtn";
+import { memo } from "react";
 
 const LoginForm = () => {
 
@@ -92,4 +93,4 @@ const LoginForm = () => {
     );
 };
 
-export default LoginForm;
+export default memo(LoginForm);

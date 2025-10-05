@@ -1,6 +1,6 @@
 import React from "react";
 import { getDataFromServer } from "@/services/api/getDataFromServer";
-import { AdminUserList } from "@/components/admin/AdminUsersList";
+import AdminUserList from "@/components/admin/AdminUsersList";
 import { RoleEnum } from "@/enums/roleEnum";
 import { redirect } from "next/navigation";
 

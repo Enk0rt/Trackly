@@ -1,8 +1,8 @@
-import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { Dispatch, FC, memo, SetStateAction, useRef, useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { motion, AnimatePresence } from "framer-motion";
 import ClearIcon from "@/components/ui/svg/other/ClearIcon";
-import { ActionButton } from "@/components/ui/buttons/action-button/ActionButton";
+import ActionButton from "@/components/ui/buttons/action-button/ActionButton";
 import { useClickOutside } from "@/hooks/useClickOutside";
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
     setPage: Dispatch<SetStateAction<number>>;
 };
 
-export const AdminSort = ({ setSortValue, sortValue, setPage }: Props) => {
+const AdminSort:FC<Props> = ({ setSortValue, sortValue, setPage }) => {
     const [isActive, setIsActive] = useState<boolean>(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -100,4 +100,4 @@ export const AdminSort = ({ setSortValue, sortValue, setPage }: Props) => {
     );
 };
 
-export default AdminSort;
+export default memo(AdminSort);

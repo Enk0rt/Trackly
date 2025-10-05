@@ -8,8 +8,8 @@ import {
 import { IUser } from "@/interfaces/user/IUser";
 import EditIcon from "@/components/ui/svg/buttons/EditIcon";
 import React from "react";
-import { ActionButton } from "@/components/ui/buttons/action-button/ActionButton";
-import { ProfileAvatar } from "@/components/profile/profile-avatar/ProfileAvatar";
+import ActionButton from "@/components/ui/buttons/action-button/ActionButton";
+import ProfileAvatar from "@/components/profile/profile-avatar/ProfileAvatar";
 
 type Props = {
     user: IUser

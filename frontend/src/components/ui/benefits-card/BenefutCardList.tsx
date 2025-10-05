@@ -1,7 +1,7 @@
 import { benefits } from "@/data/benefitsCardData";
-import React from "react";
+import React, { memo } from "react";
 
-export const BenefitCardList = () => {
+const BenefitCardList = () => {
     return (
         <ul className="flex flex-col justify-center  gap-7">
             {
@@ -25,3 +25,4 @@ export const BenefitCardList = () => {
     );
 };
 
+export default memo(BenefitCardList)

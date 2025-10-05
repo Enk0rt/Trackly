@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes } from "react";
+import React, { ButtonHTMLAttributes, FC, memo } from "react";
 
 type Variant = "primary" | "secondary" | "ghost";
 type Size = "sm" | "md" | "lg" | "round" | "noPadding";
@@ -12,7 +12,7 @@ interface ActionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     size?: Size;
 }
 
-export const ActionButton: React.FC<ActionButtonProps> = ({
+const ActionButton: FC<ActionButtonProps> = ({
                                                               icon: Icon,
                                                               iconPosition = "left",
                                                               iconLabel,
@@ -59,3 +59,4 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
     );
 };
 
+export default memo(ActionButton)

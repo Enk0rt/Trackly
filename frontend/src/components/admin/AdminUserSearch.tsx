@@ -1,5 +1,5 @@
-import { ActionButton } from "@/components/ui/buttons/action-button/ActionButton";
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+import ActionButton from "@/components/ui/buttons/action-button/ActionButton";
+import { Dispatch, FC, memo, SetStateAction, useEffect, useMemo, useState } from "react";
 import SearchIcon from "@/components/ui/svg/other/SearchIcon";
 import { motion, AnimatePresence } from "framer-motion";
 import { debounce } from "lodash";
@@ -10,7 +10,7 @@ type Props = {
     onSearch: () => void
 }
 
-export const AdminUserSearch = ({ setSearchValue, onSearch }: Props) => {
+const AdminUserSearch:FC<Props> = ({ setSearchValue, onSearch }) => {
     const [active, setActive] = useState<boolean>(false);
     const [inputVal, setInputVal] = useState<string>("");
 
@@ -97,3 +97,5 @@ export const AdminUserSearch = ({ setSearchValue, onSearch }: Props) => {
         </form>
     );
 };
+
+export default memo(AdminUserSearch)

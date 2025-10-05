@@ -1,6 +1,6 @@
 import React from "react";
 import AddIcon from "@/components/ui/svg/buttons/AddIcon";
-import { ActionButton } from "@/components/ui/buttons/action-button/ActionButton";
+import ActionButton from "@/components/ui/buttons/action-button/ActionButton";
 
 const Page = async () => {
     return (

@@ -1,13 +1,11 @@
-import React from "react";
 import { Profile } from "@/components/profile/Profile";
 import { getDataFromServer } from "@/services/api/getDataFromServer";
 
 type Props = {
-    params: { username: string }
+    params: Promise<{ username: string }>;
 }
 
 const ProfilePage = async ({ params }: Props) => {
-
     const { username } = await params;
 
     const user = await getDataFromServer.getUserByUsername(username);
@@ -16,7 +14,6 @@ const ProfilePage = async ({ params }: Props) => {
         <div className="mt-10 flex justify-center">
             <Profile user={user} />
         </div>
-
     );
 };
 

@@ -1,5 +1,5 @@
 "use client";
-import { Dispatch, memo, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, FC, memo, SetStateAction, useEffect, useState } from "react";
 
 type Props = {
     initialMinutesValue: number,
@@ -7,7 +7,7 @@ type Props = {
     setIsTimeRunOut: Dispatch<SetStateAction<boolean>>
 }
 
-export const Timer = memo(function Timer ({ initialMinutesValue, initialSecondsValue, setIsTimeRunOut }: Props){
+const Timer: FC<Props> = ({ initialMinutesValue, initialSecondsValue, setIsTimeRunOut }) => {
 
     const [minutes, setMinutes] = useState<number>(initialMinutesValue);
     const [seconds, setSeconds] = useState<number>(initialSecondsValue);
@@ -43,16 +43,17 @@ export const Timer = memo(function Timer ({ initialMinutesValue, initialSecondsV
 
 
     return (
-       <>
-           {
-               isTimerReady&&
-               <div className="text-[#33674E] dark:text-white text-[14px] sm:text-[18] font-light tracking-[2px]">
-                   {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
-               </div>
-           }
-       </>
+        <>
+            {
+                isTimerReady &&
+                <div className="text-[#33674E] dark:text-white text-[14px] sm:text-[18] font-light tracking-[2px]">
+                    {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+                </div>
+            }
+        </>
 
 
     );
-});
+};
 
+export default memo(Timer);

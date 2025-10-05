@@ -1,12 +1,12 @@
 import UserAvatarIcon from "@/components/ui/svg/user/UserAvatarIcon";
 import Image from "next/image";
-import React from "react";
+import React, { FC, memo } from "react";
 
 type Props = {
     avatar: string
     className?: string
 }
-export const ProfileAvatar = ({avatar,className}:Props) => {
+const ProfileAvatar:FC<Props> = ({avatar,className}) => {
     return (
         <>
             {
@@ -21,3 +21,4 @@ export const ProfileAvatar = ({avatar,className}:Props) => {
     );
 };
 
+export default memo(ProfileAvatar)

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { EmailPassChange } from "@/components/email-pass-change/EmailPassChange";
 
 type Props = {
-    params: { token: string }
+    params: Promise<{ token: string }>
 }
 
 const PassConfirmPage = async ({ params }: Props) => {
@@ -36,16 +36,16 @@ const PassConfirmPage = async ({ params }: Props) => {
                                     <h3 className="mt-3">
                                         Looks like password recovery link expired. Try again or come back home
                                     </h3>
-                                   <div className='mt-2 flex gap-5 items-center'>
-                                       <Link href={'/recovery'}
-                                             className="w-fit block text-[#33674E] dark:text-white opacity-60 hover:opacity-100 underline underline-offset-2 transition duration-300 ease-in-out ">
-                                           Try again
-                                       </Link>
-                                       <Link href="/"
-                                             className="w-fit block text-[#33674E] dark:text-white opacity-60 hover:opacity-100 underline underline-offset-2 transition duration-300 ease-in-out ">
-                                           To home page
-                                       </Link>
-                                   </div>
+                                    <div className="mt-2 flex gap-5 items-center">
+                                        <Link href={"/recovery"}
+                                              className="w-fit block text-[#33674E] dark:text-white opacity-60 hover:opacity-100 underline underline-offset-2 transition duration-300 ease-in-out ">
+                                            Try again
+                                        </Link>
+                                        <Link href="/"
+                                              className="w-fit block text-[#33674E] dark:text-white opacity-60 hover:opacity-100 underline underline-offset-2 transition duration-300 ease-in-out ">
+                                            To home page
+                                        </Link>
+                                    </div>
                                 </div>
                         }
                     </div>

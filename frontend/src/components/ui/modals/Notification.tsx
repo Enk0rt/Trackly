@@ -3,13 +3,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { INotification } from "@/interfaces/notifications/INotification";
 import { CheckCircleIcon, ExclamationCircleIcon, ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { NotificationEnum } from "@/enums/notificationEnum";
+import { FC, memo } from "react";
 
 type Props = {
     notifications: INotification[];
     onClose: (id: string) => void;
 };
 
-export const Notification = ({ notifications, onClose }: Props) => {
+const Notification:FC<Props> = ({ notifications, onClose }) => {
     const iconMap = {
         [NotificationEnum.WARNING]: <ExclamationTriangleIcon className="w-[26px] h-[26px] text-amber-300" />,
         [NotificationEnum.ERROR]: <ExclamationCircleIcon className="w-[26px] h-[26px] text-red-300" />,
@@ -44,3 +45,4 @@ export const Notification = ({ notifications, onClose }: Props) => {
         </div>
     );
 };
+export default memo(Notification)

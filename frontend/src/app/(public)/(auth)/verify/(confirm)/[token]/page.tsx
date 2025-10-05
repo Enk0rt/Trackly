@@ -4,7 +4,7 @@ import { verifyEmail } from "@/services/api/auth";
 import Link from "next/link";
 
 type Props = {
-    params: { token: string }
+    params: Promise<{ token: string }>
 }
 
 const EmailConfirm = async ({ params }: Props) => {

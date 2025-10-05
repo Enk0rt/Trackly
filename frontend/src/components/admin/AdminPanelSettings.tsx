@@ -1,5 +1,5 @@
 import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
-import React, { Dispatch, SetStateAction, useMemo, useState } from "react";
+import React, { Dispatch, FC, memo, SetStateAction, useMemo, useState } from "react";
 import { debounce } from "lodash";
 
 type Props = {
@@ -7,7 +7,7 @@ type Props = {
     setPageSize: Dispatch<SetStateAction<number>>
 }
 
-export const AdminPanelSettings = ({ pageSize, setPageSize }: Props) => {
+const AdminPanelSettings:FC<Props> = ({ pageSize, setPageSize }) => {
     const [inputVal, setInputVal] = useState<number>(pageSize);
 
     const debouncedChanger = useMemo(
@@ -64,3 +64,4 @@ export const AdminPanelSettings = ({ pageSize, setPageSize }: Props) => {
     );
 };
 
+export default memo(AdminPanelSettings)

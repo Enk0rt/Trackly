@@ -66,7 +66,7 @@ export const PassRecoveryRequestEmailForm = ({ setIsSuccess, setEmail }: Props) 
             <div className="flex gap-5 items-center">
                 <MainBtn type={TypeBtnEnum.SUBMIT}
                          disabledValue={isPending}
-                         className={`bg-[#34684F] text-[#FFFFFF] sm:text-[18px] mt-3 hover:shadow-[0px_2px_3px_rgba(12,49,44,40)] hover:translate-y-[-4px] transform hover:dark:shadow-[0px_2px_4px_rgba(255,255,255,40)] ${isPending && 'opacity-80 !cursor-default hover:shadow-[unset] hover:translate-y-[none]'} `}>
+                         className={`bg-[#34684F] text-[#FFFFFF] sm:text-[18px] mt-3 hover:shadow-[0px_2px_3px_rgba(12,49,44,40)] hover:translate-y-[-4px] transform hover:dark:shadow-[0px_2px_4px_rgba(255,255,255,40)] ${isPending && "opacity-80 !cursor-default hover:shadow-[unset] hover:translate-y-[none]"} `}>
                     Send
                     {
                         isPending &&

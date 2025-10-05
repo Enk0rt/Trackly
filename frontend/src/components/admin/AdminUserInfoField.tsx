@@ -1,10 +1,12 @@
+import { FC, memo } from "react";
+
 type Props = {
     label: string,
     value: string | number
 
 }
 
-export const AdminUserInfoField = ({ label, value }: Props) => {
+const AdminUserInfoField:FC<Props> = ({ label, value }) => {
     return (
         <div>
             <h3 className="text-[18px]">{label}</h3>
@@ -13,4 +15,4 @@ export const AdminUserInfoField = ({ label, value }: Props) => {
     );
 };
 
-export default AdminUserInfoField;
+export default memo(AdminUserInfoField);

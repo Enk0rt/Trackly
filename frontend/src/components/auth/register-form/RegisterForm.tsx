@@ -12,9 +12,11 @@ import { AxiosError } from "axios";
 import { IApiErrorResponse } from "@/interfaces/errors/IError";
 import { useRouter } from "next/navigation";
 import { MainBtn } from "@/components/ui/buttons/main-btn/MainBtn";
+import { memo } from "react";
+import Error from "es-errors";
 
 
-export const RegisterForm = () => {
+const RegisterForm = () => {
     const {
         register,
         reset,
@@ -110,3 +112,4 @@ export const RegisterForm = () => {
     );
 };
 
+export default memo(RegisterForm)

@@ -1,4 +1,4 @@
-import { Mockup } from "@/components/ui/mockup/Mockup";
+import Mockup from "@/components/ui/mockup/Mockup";
 import BenefitsCard from "@/components/ui/benefits-card/BenefitsCard";
 import React from "react";
 import { MainHeroButtons } from "@/components/main-hero/MainHeroButtons";

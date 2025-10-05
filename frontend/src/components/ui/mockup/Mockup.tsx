@@ -1,10 +1,10 @@
 "use client";
 import Image from "next/image";
-import { use3DTilt } from "@/components/ui/benefits-card/hooks/use3DTilt";
 import { useTheme } from "next-themes";
-import { useEffect, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
+import { use3DTilt } from "@/hooks/use3DTilt";
 
-export const Mockup = () => {
+const Mockup = () => {
     const { wrapRef, cardRef, handleMouseLeave, handleMouseMove } = use3DTilt("skew(38deg,-8deg) scale(0.9)");
     const {resolvedTheme} = useTheme()
     const [mounted, setMounted] = useState<boolean>(false);
@@ -59,3 +59,5 @@ export const Mockup = () => {
         </div>
     );
 };
+
+export default memo(Mockup)

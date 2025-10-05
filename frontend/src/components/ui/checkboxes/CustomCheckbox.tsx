@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import CheckboxIcon from "@/components/ui/svg/checkbox/CheckboxIcon";
-import React, { FC } from "react";
+import React, { FC, memo } from "react";
 import { IUser } from "@/interfaces/user/IUser";
 
 type Props = {
@@ -45,4 +45,4 @@ const CustomCheckbox: FC<Props> = ({ isChooseMode, toggleUserSelection, user, is
     );
 };
 
-export default React.memo(CustomCheckbox);
+export default memo(CustomCheckbox);
