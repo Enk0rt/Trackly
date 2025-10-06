@@ -1,5 +1,6 @@
 import { api } from "@/services/api/axiosInstanse";
 import { IUser } from "@/interfaces/user/IUser";
+import { IUserResponse } from "@/interfaces/user/IUserResponse";
 
 type DeleteResult = {
     acknowledged: boolean,
@@ -53,5 +54,9 @@ export const adminService = {
         await api.post(`/admin/email/send-verification`, { id });
     },
 
-
+    async changeRole(id: string, role: string): Promise<void> {
+       await api.patch<IUserResponse>(`/admin/change-role/${id}`, {
+            role,
+        });
+    },
 };

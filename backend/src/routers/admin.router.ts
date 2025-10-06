@@ -71,7 +71,7 @@ router.post(
 
 // CHANGE ROLE
 router.patch(
-    "/promote/:id",
+    "/change-role/:id",
     authMiddleware.checkAccessToken,
     authMiddleware.isAdmin,
     adminController.changeRole,

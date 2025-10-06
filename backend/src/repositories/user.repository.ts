@@ -11,13 +11,19 @@ class UserRepository {
         });
     }
 
-    public async getAllWithQuery(query: IUserQuery): Promise<IUserResponse> {
+    public async getAllWithQuery(
+        query: IUserQuery,
+        currentUserId: string,
+    ): Promise<IUserResponse> {
         const page = Number(query.page) > 0 ? Number(query.page) : 1;
         const pageSize =
             Number(query.pageSize) > 0 ? Number(query.pageSize) : 10;
         const skip = (page - 1) * pageSize;
 
-        const filteredObject: FilterQuery<IUser> = { isDeleted: false };
+        const filteredObject: FilterQuery<IUser> = {
+            isDeleted: false,
+            _id: { $ne: currentUserId },
+        };
         if (query.search) {
             const regex = new RegExp(`.*${query.search}.*`, "i");
             filteredObject.$or = [

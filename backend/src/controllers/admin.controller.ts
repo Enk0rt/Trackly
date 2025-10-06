@@ -3,6 +3,7 @@ import { DeleteResult, UpdateResult } from "mongoose";
 
 import { StatusCodeEnum } from "../enums/status-code.enum";
 import { IApiSuccessResponse } from "../interfaces/api-success-responce.interface";
+import { ITokenPayload } from "../interfaces/tokens.interface";
 import { IUser } from "../interfaces/user.interface";
 import { adminService } from "../services/admin.service";
 
@@ -14,7 +15,12 @@ export class AdminController {
     ) {
         try {
             const query = req.query;
-            const data = await adminService.getUsersWithQuery(query);
+            const currentUserId = res.locals.tokenPayload
+                ._userId as ITokenPayload;
+            const data = await adminService.getUsersWithQuery(
+                query,
+                String(currentUserId),
+            );
             res.status(StatusCodeEnum.OK).json(data);
         } catch (e) {
             next(e);
@@ -191,7 +197,7 @@ export class AdminController {
             const user = await adminService.changeRole(id, role);
             res.status(StatusCodeEnum.OK).json({
                 data: user,
-                details: `User is successfully promoted to ${role}`,
+                details: `User role is successfully changed to ${role}`,
             });
         } catch (e) {
             next(e);

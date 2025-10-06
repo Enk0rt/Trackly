@@ -1,3 +1,4 @@
+"use client";
 import { Dispatch, FC, memo, ReactNode, SetStateAction, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useClickOutside } from "@/hooks/useClickOutside";
@@ -24,18 +25,15 @@ export const DefaultModal: FC<Props> = ({
     };
     const containerRef = useRef<HTMLDivElement>(null);
 
-    useClickOutside(containerRef, () => setShowModal(false), showModal);
+    useClickOutside(containerRef, () => {
+        setShowModal(false);
+        document.body.style.overflowY = ""
+    }, showModal);
 
     useEffect(() => {
         if (showModal) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "";
+            document.body.style.overflowY = "hidden";
         }
-
-        return () => {
-            document.body.style.overflow = "";
-        };
     }, [showModal]);
 
     return (
@@ -48,7 +46,7 @@ export const DefaultModal: FC<Props> = ({
                         animate={{ opacity: 100 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: .4 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4 overscroll-y-none">
+                        className="fixed inset-0 z-100 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4 overscroll-y-none overflow-y-hidden">
                         <motion.div
                             ref={containerRef}
                             key={"overlay"}
@@ -59,7 +57,10 @@ export const DefaultModal: FC<Props> = ({
                             className={`relative w-full ${sizeClasses[size]} max-h-[90vh] overflow-y-auto rounded-lg bg-white dark:bg-[#33674E]/40 shadow-lg p-6 backdrop-blur-[5px]`}
                         >
                             <button
-                                onClick={() => setShowModal(false)}
+                                onClick={() => {
+                                    setShowModal(false);
+                                    document.body.style.overflowY = ""
+                                }}
                                 className="absolute top-2 right-5 text-[#33674E] dark:text-white hover:opacity-50 cursor-pointer transition"
                             >
                                 ✕
@@ -74,4 +75,4 @@ export const DefaultModal: FC<Props> = ({
     );
 };
 
-export default memo(DefaultModal)
+export default memo(DefaultModal);

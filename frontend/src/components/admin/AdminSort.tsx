@@ -20,6 +20,7 @@ const AdminSort:FC<Props> = ({ setSortValue, sortValue, setPage }) => {
         { option: "Sort by username", value: "username" },
         { option: "Sort by email", value: "email" },
         { option: "Sort by age", value: "age" },
+        { option: "Sort by role", value: "role" },
     ];
 
     const handleSelect = (e: React.MouseEvent, value: string) => {
@@ -45,7 +46,8 @@ const AdminSort:FC<Props> = ({ setSortValue, sortValue, setPage }) => {
                         : (sortValue === "name" && "Sort by name") ||
                         (sortValue === "username" && "Sort by username") ||
                         (sortValue === "email" && "Sort by email") ||
-                        (sortValue === "age" && "Sort by age")}
+                        (sortValue === "age" && "Sort by age") ||
+                        (sortValue === "role" && "Sort by role")}
                 </h3>
                 <div className="flex gap-2">
                     <ActionButton
@@ -86,9 +88,9 @@ const AdminSort:FC<Props> = ({ setSortValue, sortValue, setPage }) => {
                             <p
                                 key={i}
                                 onClick={(e) => handleSelect(e, item.value)}
-                                className={`px-4 py-2 cursor-pointer hover:bg-[#33674E]/30 hover:dark:bg-white/10 ${
+                                className={`px-4 py-2 cursor-pointer hover:bg-[#33674E]/30 hover:dark:bg-white/10 border-b border-white/30 ${
                                     i === 0 ? "rounded-t-[8px]" : ""
-                                } ${i === selectOptions.length - 1 ? "rounded-b-[8px]" : ""}`}
+                                } ${i === selectOptions.length - 1 ? "rounded-b-[8px] border-b-0" : ""}`}
                             >
                                 {item.option}
                             </p>

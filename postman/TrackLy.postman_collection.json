@@ -14,7 +14,22 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "{{baseUrl}}/api/users"
+						"url": {
+							"raw": "{{baseUrl}}/api/users?role=user",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "user"
+								}
+							]
+						}
 					},
 					"response": []
 				},
@@ -753,21 +768,6 @@
 			"name": "Admin",
 			"item": [
 				{
-					"name": "getAllUsers",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": {
-								"token": "{{accessToken}}"
-							}
-						},
-						"method": "GET",
-						"header": [],
-						"url": "{{baseUrl}}/api/admin"
-					},
-					"response": []
-				},
-				{
 					"name": "getUsersWithParams",
 					"request": {
 						"method": "GET",
@@ -1100,6 +1100,48 @@
 							]
 						},
 						"url": "{{baseUrl}}/api/admin/email/send-verification"
+					},
+					"response": []
+				},
+				{
+					"name": "changeRole",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "role",
+									"value": "admin",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/change-role/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"change-role",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
 					},
 					"response": []
 				}
