@@ -35,8 +35,14 @@ export const ProfileHeader = ({ user }: Props) => {
             {
                 <div className="mt-5 flex justify-start gap-7">
                     <div className="flex flex-col items-center gap-[12px] grow-0">
-                        <ProfileAvatar avatar={user?.avatar}
-                                       className={"p-10 w-[200px] h-[200px] text-[#33674E] dark:text-white border-[#33674E] dark:border-white"} />
+                        <ProfileAvatar
+                            avatar={user.avatar}
+                            role={user.role}
+                            size={160}
+                            borderColor={"dark:border-white border-[#33674E] dark:text-white text-[#33674E]"}
+                            textColor={"dark:border-white border-[#33674E]"}
+                            className="p-10"
+                        />
 
                         <p className="text-[#33674E] dark:text-white text-[14px] md:text-[18px] xl:text-[22px]">@{user?.username}</p>
 

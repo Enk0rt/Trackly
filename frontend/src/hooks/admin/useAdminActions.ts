@@ -9,6 +9,7 @@ import { useVerifyManyUsers } from "@/hooks/mutations/useVerifyManyUsers";
 import { useSendVerification } from "@/hooks/mutations/useSendVerification";
 import { useCallback, useMemo } from "react";
 import { NotificationEnum } from "@/enums/notificationEnum";
+import { useChangeRole } from "@/hooks/mutations/useChangeRole";
 
 export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: Set<string>) => void, setNotification: (message: string, type: NotificationEnum) => void) => {
     const { mutate: deleteUser } = useDeleteUser();
@@ -24,6 +25,8 @@ export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: 
     const { mutate: verifyManyUsers } = useVerifyManyUsers();
 
     const { mutate: sendVerification } = useSendVerification();
+
+    const { mutate: changeRole } = useChangeRole();
 
     const clearSelection = useCallback(() => setSelectedIds(new Set()), [setSelectedIds]);
 
@@ -99,5 +102,9 @@ export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: 
             }
             clearSelection();
         },
-    }), [selectedIds, clearSelection, setNotification, deleteUser, deleteManyUsers, blockUser, blockManyUsers, unblockUser, unblockManyUsers, verifyUser, verifyManyUsers, sendVerification]);
+        handleChangeRole: (id: string, role: string) => {
+            changeRole({ id, role });
+            setNotification("Permissions were updated", NotificationEnum.SUCCESS);
+        },
+    }), [selectedIds, clearSelection, setNotification, deleteUser, deleteManyUsers, blockUser, blockManyUsers, unblockUser, unblockManyUsers, verifyUser, verifyManyUsers, sendVerification, changeRole]);
 };

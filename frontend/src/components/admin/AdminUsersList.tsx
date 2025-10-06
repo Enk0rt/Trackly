@@ -52,6 +52,7 @@ const AdminUserList: FC<Props> = ({ currentUsers }) => {
         handleUnblock,
         handleVerify,
         handleSendVerification,
+        handleChangeRole,
     } = useAdminActions(selectedIds, setSelectedIds, addNotification);
 
     const handleSearch = async () => {
@@ -118,6 +119,7 @@ const AdminUserList: FC<Props> = ({ currentUsers }) => {
                                 toggleUserSelection={toggleUserSelection}
                                 isSelected={selectedIds.has(user._id)}
                                 activateChooseMode={activateChooseMode}
+                                changeRole={handleChangeRole}
                             />
                         ))
                     )}

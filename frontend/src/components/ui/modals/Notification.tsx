@@ -18,7 +18,7 @@ const Notification:FC<Props> = ({ notifications, onClose }) => {
     };
 
     return (
-        <div className="absolute z-[11] left-1/2 -translate-x-1/2 top-[90px] flex flex-col gap-3">
+        <div className="absolute z-[51] left-1/2 -translate-x-1/2 top-[90px] flex flex-col gap-3">
             <AnimatePresence>
                 {Array.from(notifications).map(({ message, id ,type }) => (
                     <motion.div

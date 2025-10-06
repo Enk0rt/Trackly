@@ -863,6 +863,50 @@ const swaggerDocument: OpenAPIV3.Document = {
                 },
             },
         },
+        "/api/admin/change-role/{id}": {
+            post: {
+                tags: ["Admin"],
+                summary: "Change user role",
+                security: [{ bearerAuth: [] }],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    id: {
+                                        type: "string",
+                                    },
+                                    role: {
+                                        type: "string",
+                                    },
+                                },
+                                required: ["id,role"],
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "200": {
+                        description: "User role is changed",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        data: {
+                                            $ref: "#/components/schemas/User",
+                                        },
+                                        details: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
     },
     components: {
         schemas: {

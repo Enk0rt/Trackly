@@ -10,7 +10,10 @@ class UserService {
         return await userRepository.getAll(filter);
     }
 
-    public async getAllWithQuery(query: IUserQuery): Promise<IUserResponse> {
+    public async getAllWithQuery(
+        query: IUserQuery,
+        currentUserId: string,
+    ): Promise<IUserResponse> {
         const allowedSortFields = [
             "name",
             "surname",
@@ -19,6 +22,7 @@ class UserService {
             "username",
             "phoneNumber",
             "city",
+            "role",
         ];
 
         if (query.sort && !allowedSortFields.includes(query.sort)) {
@@ -28,7 +32,7 @@ class UserService {
             );
         }
 
-        return await userRepository.getAllWithQuery(query);
+        return await userRepository.getAllWithQuery(query, currentUserId);
     }
 
     public async getById(id: string): Promise<IUser> {
