@@ -1,5 +1,4 @@
 "use client";
-import AdminUserItem from "@/components/admin/AdminUserItem";
 import AdminActions from "@/components/admin/AdminActions";
 import { useUserSelection } from "@/hooks/admin/useUserSelection";
 import React, { FC, memo, useEffect, useState } from "react";
@@ -12,6 +11,7 @@ import Notification from "@/components/ui/modals/Notification";
 import { AnimatePresence } from "framer-motion";
 import { useNotification } from "@/hooks/useNotification";
 import Pagination from "@/components/ui/pagination/Pagination";
+import AdminUserItem from "@/components/admin/AdminUserItem/AdminUserItem";
 
 type Props = {
     currentUsers: IUsersResponseWithParams;

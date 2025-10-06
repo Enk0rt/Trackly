@@ -46,7 +46,7 @@ export const DefaultModal: FC<Props> = ({
                         animate={{ opacity: 100 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: .4 }}
-                        className="fixed inset-0 z-100 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4 overscroll-y-none overflow-y-hidden">
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4 overscroll-y-none overflow-y-hidden">
                         <motion.div
                             ref={containerRef}
                             key={"overlay"}

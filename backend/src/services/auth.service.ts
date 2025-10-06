@@ -67,7 +67,7 @@ class AuthService {
                 user = await userRepository.getByEmail(signInData.login);
                 if (!user) {
                     throw new ApiError(
-                        StatusCodeEnum.BAD_REQUEST,
+                        StatusCodeEnum.UNAUTHORIZED,
                         "Invalid login or password",
                     );
                 }
@@ -76,14 +76,14 @@ class AuthService {
                 user = await userRepository.getByUsername(signInData.login);
                 if (!user) {
                     throw new ApiError(
-                        StatusCodeEnum.BAD_REQUEST,
+                        StatusCodeEnum.UNAUTHORIZED,
                         "Invalid login or password",
                     );
                 }
                 break;
             default:
                 throw new ApiError(
-                    StatusCodeEnum.BAD_REQUEST,
+                    StatusCodeEnum.UNAUTHORIZED,
                     "Invalid login or password",
                 );
         }
@@ -95,7 +95,7 @@ class AuthService {
 
         if (!isValidPass) {
             throw new ApiError(
-                StatusCodeEnum.BAD_REQUEST,
+                StatusCodeEnum.UNAUTHORIZED,
                 "Invalid login or password",
             );
         }
