@@ -56,9 +56,12 @@ To change users amount on a page open settings and use either buttons (plus/minu
 <img width="1906" height="947" alt="image" src="https://github.com/user-attachments/assets/b11b98d9-48a1-45db-835e-facfaa6e6f2d" />
 <img width="1902" height="953" alt="image" src="https://github.com/user-attachments/assets/cd548247-7c7e-46b5-81c5-a1071fd4fd63" />
 <img width="1918" height="947" alt="image" src="https://github.com/user-attachments/assets/a1e82100-a2d6-4ad5-b655-d8a2422f1525" />
-<img width="1914" height="949" alt="image" src="https://github.com/user-attachments/assets/2b8b2afd-e7c2-4d1f-915f-34bcdf5d56ea" />
-<img width="1914" height="945" alt="image" src="https://github.com/user-attachments/assets/327639d9-f7fa-48ad-9e77-be7c68cf69e4" />
 <img width="1912" height="945" alt="image" src="https://github.com/user-attachments/assets/4a1157a5-9c96-45d1-8c30-83d5549f9879" />
+<img width="1916" height="946" alt="image" src="https://github.com/user-attachments/assets/841084a0-efc0-498b-8c46-4a3f79bb1bea" />
+<img width="1919" height="952" alt="image" src="https://github.com/user-attachments/assets/f0f36911-261a-4daa-9372-d0a6b68ff7fb" />
+<img width="1914" height="950" alt="image" src="https://github.com/user-attachments/assets/6e0188f6-4349-4169-b63a-3feddcd0b453" />
+<img width="1914" height="950" alt="image" src="https://github.com/user-attachments/assets/90c6777b-4380-462e-ac7d-a73962285277" />
+
 
 
 
