@@ -1,25 +1,16 @@
 import { useDeleteUser } from "@/hooks/mutations/useDeleteOneUser";
 import { useDeleteUsers } from "@/hooks/mutations/useDeleteManyUsers";
-import { useBlockOneUser } from "@/hooks/mutations/useBlockOneUser";
-import { useBlockManyUsers } from "@/hooks/mutations/useBlockManyUsers";
-import { useUnblockOneUser } from "@/hooks/mutations/useUnblockOneUser";
-import { useUnblockManyUsers } from "@/hooks/mutations/useUnblockManyUsers";
 import { useVerifyOneUser } from "@/hooks/mutations/useVerifyOneUser";
 import { useVerifyManyUsers } from "@/hooks/mutations/useVerifyManyUsers";
 import { useSendVerification } from "@/hooks/mutations/useSendVerification";
 import { useCallback, useMemo } from "react";
 import { NotificationEnum } from "@/enums/notificationEnum";
 import { useChangeRole } from "@/hooks/mutations/useChangeRole";
+import { adminService } from "@/services/admin/adminService";
 
 export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: Set<string>) => void, setNotification: (message: string, type: NotificationEnum) => void) => {
     const { mutate: deleteUser } = useDeleteUser();
     const { mutate: deleteManyUsers } = useDeleteUsers();
-
-    const { mutate: blockUser } = useBlockOneUser();
-    const { mutate: blockManyUsers } = useBlockManyUsers();
-
-    const { mutate: unblockUser } = useUnblockOneUser();
-    const { mutate: unblockManyUsers } = useUnblockManyUsers();
 
     const { mutate: verifyUser } = useVerifyOneUser();
     const { mutate: verifyManyUsers } = useVerifyManyUsers();
@@ -45,35 +36,45 @@ export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: 
             }
             clearSelection();
         },
-        handleBlock: () => {
-            if (selectedIds.size === 0) {
-                setNotification("No users were chosen, action is not taken", NotificationEnum.WARNING);
-                return;
+        handleBlock: async (ids: Set<string>, fetchUsers: () => void,
+        ) => {
+            try {
+                if (ids.size === 1) {
+                    await adminService.blockOneUser(Array.from(ids)[0]);
+                    setNotification("User is blocked", NotificationEnum.SUCCESS);
+                    return;
+                }
+                if (ids.size === 0) {
+                    setNotification("Select a user at first to take action", NotificationEnum.WARNING);
+                    return;
+                }
+                if (ids.size > 1) {
+                    await adminService.blockManyUsers(Array.from(ids));
+                    setNotification("Users are blocked", NotificationEnum.SUCCESS);
+                }
+                fetchUsers();
+                clearSelection();
+            } catch {
             }
-
-            if (selectedIds.size === 1) {
-                blockUser(Array.from(selectedIds)[0]);
-                setNotification(`Success, user is restricted`, NotificationEnum.SUCCESS);
-            } else {
-                setNotification(`Success, users are restricted`, NotificationEnum.SUCCESS);
-                blockManyUsers(Array.from(selectedIds));
-            }
-            clearSelection();
         },
-        handleUnblock: () => {
-            if (selectedIds.size === 0) {
-                setNotification("No users were chosen, action is not taken", NotificationEnum.WARNING);
-                return;
+        handleUnblock: async (ids: Set<string>, fetchUsers: () => void,
+        ) => {
+            try {
+                if (ids.size === 1) {
+                    await adminService.unblockOneUser(Array.from(ids)[0]);
+                    setNotification("User is unblocked", NotificationEnum.SUCCESS);
+                }
+                if (ids.size === 0) {
+                    setNotification("Select a user at first to take action", NotificationEnum.WARNING);
+                }
+                if (ids.size > 1) {
+                    await adminService.unblockManyUsers(Array.from(ids));
+                    setNotification("Users are unblocked", NotificationEnum.SUCCESS);
+                }
+                fetchUsers();
+                clearSelection();
+            } catch {
             }
-
-            if (selectedIds.size === 1) {
-                setNotification(`Success, user is unblocked`, NotificationEnum.SUCCESS);
-                unblockUser(Array.from(selectedIds)[0]);
-            } else {
-                setNotification(`Success, users are unblocked`, NotificationEnum.SUCCESS);
-                unblockManyUsers(Array.from(selectedIds));
-            }
-            clearSelection();
         },
         handleVerify: () => {
             if (selectedIds.size === 0) {
@@ -106,5 +107,5 @@ export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: 
             changeRole({ id, role });
             setNotification("Permissions were updated", NotificationEnum.SUCCESS);
         },
-    }), [selectedIds, clearSelection, setNotification, deleteUser, deleteManyUsers, blockUser, blockManyUsers, unblockUser, unblockManyUsers, verifyUser, verifyManyUsers, sendVerification, changeRole]);
+    }), [selectedIds, clearSelection, setNotification, deleteUser, deleteManyUsers, verifyUser, verifyManyUsers, sendVerification, changeRole]);
 };

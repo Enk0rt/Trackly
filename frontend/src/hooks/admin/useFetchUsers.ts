@@ -1,27 +1,26 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getDataFromClient } from "@/services/api/getDataFromClient";
 import { IUsersResponseWithParams } from "@/interfaces/user/IUserResponse";
+import { Dispatch, SetStateAction, useCallback } from "react";
+import { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
 
-export const useFetchUsers = (
-    page: number,
-    pageSize: number,
-    search: string,
-    sort?: string,
-    sortDirection?: "asc" | "desc" | 1 | -1,
-    initialData?: IUsersResponseWithParams
-) => {
-    return useQuery<IUsersResponseWithParams>({
-        queryKey: ["users", page, pageSize, search, sort, sortDirection],
-        queryFn: () =>
-            getDataFromClient.getUsersWithParams(page, pageSize, search?.trim() || undefined, sort, sortDirection),
+export const useFetchUsers = (page: number, pageSize: number, searchValue: string, sortValue: string | undefined, setUsers: Dispatch<SetStateAction<IUsersResponseWithParams>>) => {
 
-        initialData: page === 1 && !search?.trim() ? initialData : undefined,
-        initialDataUpdatedAt: initialData ? Date.now() : undefined,
+    const router = useRouter();
 
-        placeholderData: keepPreviousData,
-        refetchOnWindowFocus: false,
-        refetchOnReconnect: false,
-        refetchOnMount: false,
-        staleTime: 0,
-    });
-};
+    const fetchUsers = useCallback(async () => {
+        try {
+            const users = await getDataFromClient.getUsersWithParams(page, pageSize, searchValue, sortValue);
+            setUsers(users);
+        } catch (err) {
+            const error = err as AxiosError;
+            console.error("Failed to fetch users:", err);
+            if (error.status === 401) {
+                router.push("/");
+            }
+        }
+    }, [page, pageSize, router, searchValue, setUsers, sortValue]);
+
+    return { fetchUsers };
+}; 
+    
