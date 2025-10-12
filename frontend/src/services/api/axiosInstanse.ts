@@ -19,7 +19,16 @@ export const setupInterceptors = (queryClient: QueryClient) => {
         async (error: AxiosError) => {
             const originalRequest = error.config;
 
-            if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
+            const isAuthRoute =
+                originalRequest?.url?.includes("/auth/sign-in") ||
+                originalRequest?.url?.includes("/auth/sign-up");
+
+            if (
+                error.response?.status === 401 &&
+                originalRequest &&
+                !originalRequest._retry &&
+                !isAuthRoute
+            ) {
                 if (originalRequest.url?.includes("/auth/refresh")) {
                     queryClient.setQueryData(["user"], null);
                     return Promise.reject(error);

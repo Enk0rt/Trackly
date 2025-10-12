@@ -7,7 +7,8 @@ export const useAuth = (currentUser?: IUser | null) => {
         queryKey: ["user"],
         queryFn: getMe,
         gcTime: 0,
-        initialData: currentUser ? currentUser: undefined,
+        initialData: currentUser ? currentUser : undefined,
+        retry: false,
         refetchOnWindowFocus: true,
         refetchOnReconnect: true,
     });
