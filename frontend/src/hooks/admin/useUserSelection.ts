@@ -9,7 +9,6 @@ export const useUserSelection = () => {
     const [showOnlySelected, setShowOnlySelected] = useState<boolean>(false);
 
 
-
     const toggleUserSelection = useCallback((userId: string) => {
         setSelectedIds((prev) => {
             const copy = new Set(prev);
@@ -29,16 +28,16 @@ export const useUserSelection = () => {
 
     useEffect(() => {
         if (selectedIds.size === 0) {
+                    setPageSize(3);
+                    setPage(1);
             const timeout = setTimeout(() => {
                     setChooseMode(false);
                     setShowOnlySelected(false);
-                    setPage(1);
-                    setPageSize(3);
                 }
                 , 300);
             return () => clearTimeout(timeout);
         }
-    }, [selectedIds.size]);
+    }, [selectedIds.size], );
 
     return {
         chooseMode,

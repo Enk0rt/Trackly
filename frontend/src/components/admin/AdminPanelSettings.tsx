@@ -19,7 +19,9 @@ const AdminPanelSettings:FC<Props> = ({ pageSize, setPageSize }) => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const val = Number(e.target.value);
-        setInputVal(val);
+        if(val <=0){
+            setInputVal(1)
+        }else setInputVal(val);
         debouncedChanger(val);
     };
 

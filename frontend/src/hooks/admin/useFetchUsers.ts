@@ -1,26 +1,43 @@
-import { getDataFromClient } from "@/services/api/getDataFromClient";
+import { useCallback, useState } from "react";
 import { IUsersResponseWithParams } from "@/interfaces/user/IUserResponse";
-import { Dispatch, SetStateAction, useCallback } from "react";
+import { getDataFromClient } from "@/services/api/getDataFromClient";
 import { AxiosError } from "axios";
-import { useRouter } from "next/navigation";
 
-export const useFetchUsers = (page: number, pageSize: number, searchValue: string, sortValue: string | undefined, setUsers: Dispatch<SetStateAction<IUsersResponseWithParams>>) => {
+export const useFetchUsers = (
+    page: number,
+    pageSize: number,
+    search: string,
+    sort: string | undefined,
+    currentUsers: IUsersResponseWithParams,
+) => {
+    const [users, setUsers] = useState<IUsersResponseWithParams>(currentUsers);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<AxiosError | null>(null);
 
-    const router = useRouter();
-
-    const fetchUsers = useCallback(async () => {
+    const fetchUsers = useCallback(async() => {
+        setIsLoading(true);
+        setError(null);
         try {
-            const users = await getDataFromClient.getUsersWithParams(page, pageSize, searchValue, sortValue);
+            const users = await getDataFromClient.getUsersWithParams(
+                page,
+                pageSize,
+                search,
+                sort,
+            );
+            setIsLoading(false);
             setUsers(users);
         } catch (err) {
-            const error = err as AxiosError;
-            console.error("Failed to fetch users:", err);
-            if (error.status === 401) {
-                router.push("/");
-            }
+            setIsLoading(false);
+            const e = err as AxiosError;
+            setError(e);
+            throw e;
         }
-    }, [page, pageSize, router, searchValue, setUsers, sortValue]);
+    }, [pageSize, search, sort, page]);
 
-    return { fetchUsers };
-}; 
-    
+    return {
+        users, setUsers,
+        fetchUsers,
+        isLoading,
+        error,
+    };
+};

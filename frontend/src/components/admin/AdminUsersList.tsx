@@ -1,7 +1,7 @@
 "use client";
 import AdminActions from "@/components/admin/AdminActions";
 import { useUserSelection } from "@/hooks/admin/useUserSelection";
-import React, { FC, memo, useEffect, useState } from "react";
+import React, { FC, memo, useEffect, useMemo, useState } from "react";
 import { IUsersResponseWithParams } from "@/interfaces/user/IUserResponse";
 import { useAdminActions } from "@/hooks/admin/useAdminActions";
 import DefaultModal from "@/components/ui/modals/DefaultModal";
@@ -11,7 +11,6 @@ import { AnimatePresence } from "framer-motion";
 import { useNotification } from "@/hooks/useNotification";
 import Pagination from "@/components/ui/pagination/Pagination";
 import AdminUserItem from "@/components/admin/AdminUserItem/AdminUserItem";
-import { getDataFromClient } from "@/services/api/getDataFromClient";
 import { useFetchUsers } from "@/hooks/admin/useFetchUsers";
 
 type Props = {
@@ -19,11 +18,11 @@ type Props = {
 };
 
 const AdminUserList: FC<Props> = ({ currentUsers }) => {
-    const [users, setUsers] = useState<IUsersResponseWithParams>(currentUsers);
     const [searchValue, setSearchValue] = useState("");
     const [showModal, setShowModal] = useState<boolean>(false);
     const [sortValue, setSortValue] = useState<string | undefined>(undefined);
     const { addNotification, closeNotification, notifications } = useNotification();
+
     const {
         page, setPage, pageSize, setPageSize,
         chooseMode,
@@ -35,34 +34,18 @@ const AdminUserList: FC<Props> = ({ currentUsers }) => {
         setSelectedIds,
     } = useUserSelection();
 
+    const { fetchUsers,users,setUsers } = useFetchUsers(page, pageSize, searchValue, sortValue, currentUsers);
 
-    const selectedUsers = users.data?.filter(item => selectedIds.has(item._id));
-    const { fetchUsers } = useFetchUsers(page, pageSize, searchValue, sortValue, setUsers);
+    const selectedUsers = useMemo(() =>
+        users.data?.filter(item => selectedIds.has(item._id)) ?? [], [users, selectedIds]);
 
     const {
-        handleDelete,
-        handleBlock,
-        handleUnblock,
-        handleVerify,
-        handleSendVerification,
         handleChangeRole,
     } = useAdminActions(selectedIds, setSelectedIds, addNotification);
 
-    const handleSearch = async () => {
-        setPage(1);
-        const users = await getDataFromClient.getUsersWithParams(1, 3, searchValue, sortValue);
-        setUsers(users);
-    };
-
-
     useEffect(() => {
         fetchUsers();
-        if (selectedIds.size === 0 && showOnlySelected) {
-            setShowOnlySelected(false);
-
-        }
-    }, [showOnlySelected, setShowOnlySelected, fetchUsers, selectedIds.size]);
-
+    }, [fetchUsers]);
 
     return (
         <>
@@ -77,18 +60,17 @@ const AdminUserList: FC<Props> = ({ currentUsers }) => {
                     }
                 </AnimatePresence>
                 <AdminActions
+                    setUsers={setUsers}
                     setPage={setPage}
                     pageSize={pageSize}
                     setPageSize={setPageSize}
                     chooseMode={chooseMode}
-                    selectedCount={selectedIds.size}
-                    onDelete={handleDelete}
-                    onBlock={() => handleBlock(selectedIds,fetchUsers)}
-                    onUnblock={() => handleUnblock(selectedIds,fetchUsers)}
-                    onVerify={handleVerify}
-                    onSendVerification={handleSendVerification}
+                    selectedIds={selectedIds}
+                    setSelectedIds={setSelectedIds}
+                    addNotification={addNotification}
+                    fetchUsers={fetchUsers}
                     setSearchValue={setSearchValue}
-                    onSearch={handleSearch}
+                    searchValue={searchValue}
                     sortValue={sortValue}
                     setSortValue={setSortValue}
                     showOnlySelected={showOnlySelected}
@@ -116,6 +98,7 @@ const AdminUserList: FC<Props> = ({ currentUsers }) => {
                                 isSelected={selectedIds.has(user._id)}
                                 activateChooseMode={activateChooseMode}
                                 changeRole={handleChangeRole}
+                                fetchUsers={fetchUsers}
                             />
                         ))
                     )}
@@ -125,7 +108,6 @@ const AdminUserList: FC<Props> = ({ currentUsers }) => {
                     users?.data?.length !== 0 && !showOnlySelected &&
                     <Pagination actionPrev={() => {
                         setPage(page - 1);
-                        fetchUsers();
                     }} actionNext={() => setPage(page + 1)} page={page}
                                 disabledPrev={page === 1}
                                 disabledNext={page === currentUsers?.totalPages || showOnlySelected || pageSize >= users?.total} />

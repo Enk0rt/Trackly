@@ -11,8 +11,9 @@ type Props = {
     isOpen: boolean;
     onClose: () => void;
     user: IUser;
-    changeRole: (id: string, role: RoleEnum) => void;
+    changeRole: (id: string, role: RoleEnum, fetchUsers: () => void) => void;
     onCritical: (action: () => void) => void;
+    fetchUsers: () => void
 };
 
 export const UserRoleModal: React.FC<Props> = ({
@@ -20,6 +21,7 @@ export const UserRoleModal: React.FC<Props> = ({
                                                    onClose,
                                                    user,
                                                    changeRole,
+                                                   fetchUsers,
                                                    onCritical,
                                                }) => {
     const roles = [
@@ -46,8 +48,8 @@ export const UserRoleModal: React.FC<Props> = ({
                         const disabled = user.role === role;
                         const handleClick = () =>
                             critical
-                                ? onCritical(() => changeRole(user._id, role))
-                                : changeRole(user._id, role);
+                                ? onCritical(() => changeRole(user._id, role,fetchUsers))
+                                : changeRole(user._id, role, fetchUsers);
 
                         return (
                             <RoleChangeButton
