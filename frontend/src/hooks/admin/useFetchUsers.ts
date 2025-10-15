@@ -26,6 +26,8 @@ export const useFetchUsers = (
             );
             setIsLoading(false);
             setUsers(users);
+            console.log("Action from fetchUsers")
+
         } catch (err) {
             setIsLoading(false);
             const e = err as AxiosError;

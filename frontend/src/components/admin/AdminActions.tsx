@@ -19,7 +19,6 @@ type Props = {
     setUsers:Dispatch<SetStateAction<IUsersResponseWithParams>>,
     setPage: Dispatch<SetStateAction<number>>
     pageSize: number,
-    setPageSize: Dispatch<SetStateAction<number>>
     chooseMode: boolean;
     selectedIds: Set<string>;
     setSelectedIds: Dispatch<SetStateAction<Set<string>>>,
@@ -38,7 +37,6 @@ type Props = {
 const AdminActions: FC<Props> = ({
                                      setUsers,
                                      pageSize,
-                                     setPageSize,
                                      chooseMode,
                                      selectedIds,
                                      setSelectedIds,
@@ -66,7 +64,7 @@ const AdminActions: FC<Props> = ({
         handleDelete,
         handleVerify,
         handleSendVerification,
-    } = useAdminActions(selectedIds, setSelectedIds, addNotification);
+    } = useAdminActions(selectedIds, setSelectedIds, addNotification,setShowOnlySelected);
 
     const actions = [
         { onClick: ()=>handleBlock(selectedIds,fetchUsers), icon: UserBlockIcon, label: "Block user" },
@@ -77,6 +75,16 @@ const AdminActions: FC<Props> = ({
         { onClick: () => setShowModal(true), icon: SettingsIcon, label: "Open settings" },
     ];
 
+    const action = useCallback(async () => {
+        setShowOnlySelected(prev => !prev);
+
+        if (!showOnlySelected) {
+            const users = await getDataFromClient.getUsersWithParams(1,selectedIds.size,'',undefined,undefined,[...selectedIds]);
+            setUsers(users);
+        } else {
+            await fetchUsers();
+        }
+    }, [setShowOnlySelected, showOnlySelected, selectedIds, setUsers, fetchUsers]);
     return (
         <div className="flex items-center w-full justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -100,18 +108,7 @@ const AdminActions: FC<Props> = ({
                                     Only selected
                                 </p>
                                 <DefaultCheckbox
-                                    action={async () => {
-                                        if (selectedIds.size === 0) {
-                                            return;
-                                        }
-
-                                        setShowOnlySelected(prev => {
-                                            const next = !prev;
-                                            setPage(1);
-                                            setPageSize(next ? 9999 : 3);
-                                            return next;
-                                        });
-                                    }}
+                                    action={action}
                                     condition={showOnlySelected}
                                 />
                             </div>
