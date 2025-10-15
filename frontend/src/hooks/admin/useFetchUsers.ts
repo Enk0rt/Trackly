@@ -1,27 +1,45 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { getDataFromClient } from "@/services/api/getDataFromClient";
+import { useCallback, useState } from "react";
 import { IUsersResponseWithParams } from "@/interfaces/user/IUserResponse";
+import { getDataFromClient } from "@/services/api/getDataFromClient";
+import { AxiosError } from "axios";
 
 export const useFetchUsers = (
     page: number,
     pageSize: number,
     search: string,
-    sort?: string,
-    sortDirection?: "asc" | "desc" | 1 | -1,
-    initialData?: IUsersResponseWithParams
+    sort: string | undefined,
+    currentUsers: IUsersResponseWithParams,
 ) => {
-    return useQuery<IUsersResponseWithParams>({
-        queryKey: ["users", page, pageSize, search, sort, sortDirection],
-        queryFn: () =>
-            getDataFromClient.getUsersWithParams(page, pageSize, search?.trim() || undefined, sort, sortDirection),
+    const [users, setUsers] = useState<IUsersResponseWithParams>(currentUsers);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<AxiosError | null>(null);
 
-        initialData: page === 1 && !search?.trim() ? initialData : undefined,
-        initialDataUpdatedAt: initialData ? Date.now() : undefined,
+    const fetchUsers = useCallback(async() => {
+        setIsLoading(true);
+        setError(null);
+        try {
+            const users = await getDataFromClient.getUsersWithParams(
+                page,
+                pageSize,
+                search,
+                sort,
+            );
+            setIsLoading(false);
+            setUsers(users);
+            console.log("Action from fetchUsers")
 
-        placeholderData: keepPreviousData,
-        refetchOnWindowFocus: false,
-        refetchOnReconnect: false,
-        refetchOnMount: false,
-        staleTime: 0,
-    });
+        } catch (err) {
+            setIsLoading(false);
+            const e = err as AxiosError;
+            setError(e);
+            throw e;
+        }
+    }, [pageSize, search, sort, page]);
+
+    return {
+        users, setUsers,
+        fetchUsers,
+        isLoading,
+        error,
+    };
 };

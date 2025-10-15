@@ -6,61 +6,85 @@ import UserUnblockIcon from "@/components/ui/svg/user/UserUnblockIcon";
 import UserVerifyIcon from "@/components/ui/svg/user/UserVerifyIcon";
 import UserSendVerificationIcon from "@/components/ui/svg/user/UserSendVerificationIcon";
 import AdminUserSearch from "@/components/admin/AdminUserSearch";
-import React, { Dispatch, FC, memo, SetStateAction } from "react";
+import React, { Dispatch, FC, memo, SetStateAction, useCallback } from "react";
 import AdminSort from "@/components/admin/AdminSort";
 import DefaultCheckbox from "@/components/ui/checkboxes/DefaultCheckbox";
 import SettingsIcon from "@/components/ui/svg/buttons/SettingsIcon";
+import { NotificationEnum } from "@/enums/notificationEnum";
+import { useAdminActions } from "@/hooks/admin/useAdminActions";
+import { IUsersResponseWithParams } from "@/interfaces/user/IUserResponse";
+import { getDataFromClient } from "@/services/api/getDataFromClient";
 
 type Props = {
+    setUsers:Dispatch<SetStateAction<IUsersResponseWithParams>>,
     setPage: Dispatch<SetStateAction<number>>
     pageSize: number,
-    setPageSize: Dispatch<SetStateAction<number>>
     chooseMode: boolean;
-    selectedCount: number;
-    onDelete: () => void;
-    onBlock: () => void;
-    onUnblock: () => void;
-    onVerify: () => void;
-    onSendVerification: () => void;
+    selectedIds: Set<string>;
+    setSelectedIds: Dispatch<SetStateAction<Set<string>>>,
+    addNotification: (message: string, type: NotificationEnum) => void,
+    fetchUsers: () => Promise<void>
     setSearchValue: Dispatch<SetStateAction<string>>;
     setSortValue: Dispatch<SetStateAction<string | undefined>>;
     sortValue: string | undefined;
-    onSearch: () => void;
+    searchValue: string;
     showOnlySelected: boolean,
     setShowOnlySelected: Dispatch<SetStateAction<boolean>>,
     setShowModal: Dispatch<SetStateAction<boolean>>
 };
 
 
-const AdminActions:FC<Props> = ({
-                                 setPageSize,
-                                 chooseMode,
-                                 selectedCount,
-                                 onDelete,
-                                 onBlock,
-                                 onUnblock,
-                                 onVerify,
-                                 onSendVerification,
-                                 setSearchValue,
-                                 setSortValue,
-                                 sortValue,
-                                 onSearch,
-                                 setPage,
-                                 showOnlySelected,
-                                 setShowOnlySelected,
-                                 setShowModal,
-                             }) => {
+const AdminActions: FC<Props> = ({
+                                     setUsers,
+                                     pageSize,
+                                     chooseMode,
+                                     selectedIds,
+                                     setSelectedIds,
+                                     addNotification,
+                                     fetchUsers,
+                                     setSearchValue,
+                                     setSortValue,
+                                     sortValue,
+                                     searchValue,
+                                     setPage,
+                                     showOnlySelected,
+                                     setShowOnlySelected,
+                                     setShowModal,
+                                 }) => {
 
+    const handleSearch = useCallback(async () => {
+        setPage(1);
+        const users = await getDataFromClient.getUsersWithParams(1, pageSize, searchValue, sortValue);
+        setUsers(users);
+    }, [pageSize, searchValue, sortValue, setPage, setUsers]);
+
+    const {
+        handleBlock,
+        handleUnblock,
+        handleDelete,
+        handleVerify,
+        handleSendVerification,
+    } = useAdminActions(selectedIds, setSelectedIds, addNotification,setShowOnlySelected);
 
     const actions = [
-        { onClick: onBlock, icon: UserBlockIcon, label: "Block user" },
-        { onClick: onUnblock, icon: UserUnblockIcon, label: "Unblock user" },
-        { onClick: onVerify, icon: UserVerifyIcon, label: "Verify user" },
-        { onClick: onSendVerification, icon: UserSendVerificationIcon, label: "Send verification" },
-        { onClick: onDelete, icon: Delete, label: "Delete user" },
+        { onClick: ()=>handleBlock(selectedIds,fetchUsers), icon: UserBlockIcon, label: "Block user" },
+        { onClick: ()=>handleUnblock(selectedIds,fetchUsers), icon: UserUnblockIcon, label: "Unblock user" },
+        { onClick: ()=>handleVerify(selectedIds,fetchUsers), icon: UserVerifyIcon, label: "Verify user" },
+        { onClick: ()=>handleSendVerification(selectedIds), icon: UserSendVerificationIcon, label: "Send verification" },
+        { onClick: ()=>handleDelete(selectedIds,fetchUsers), icon: Delete, label: "Delete user" },
         { onClick: () => setShowModal(true), icon: SettingsIcon, label: "Open settings" },
     ];
 
+    const action = useCallback(async () => {
+        setShowOnlySelected(prev => !prev);
+
+        if (!showOnlySelected) {
+            const users = await getDataFromClient.getUsersWithParams(1,selectedIds.size,'',undefined,undefined,[...selectedIds]);
+            setUsers(users);
+        } else {
+            await fetchUsers();
+        }
+    }, [setShowOnlySelected, showOnlySelected, selectedIds, setUsers, fetchUsers]);
     return (
         <div className="flex items-center w-full justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -77,25 +101,14 @@ const AdminActions:FC<Props> = ({
                                 transition={{ duration: 0.25 }}
                                 className="text-[#33674E] dark:text-white"
                             >
-                                Total selected items : {selectedCount}
+                                Total selected items : {selectedIds.size}
                             </motion.p>
                             <div className="flex items-center gap-2 ">
                                 <p className="text-[#33674E] dark:text-white">
                                     Only selected
                                 </p>
                                 <DefaultCheckbox
-                                    action={async () => {
-                                        if (selectedCount === 0) {
-                                            return;
-                                        }
-
-                                        setShowOnlySelected(prev => {
-                                            const next = !prev;
-                                            setPage(1);
-                                            setPageSize(next ? 9999 : 3);
-                                            return next;
-                                        });
-                                    }}
+                                    action={action}
                                     condition={showOnlySelected}
                                 />
                             </div>
@@ -106,7 +119,7 @@ const AdminActions:FC<Props> = ({
                 </AnimatePresence>
             </div>
             <div className="flex items-center">
-                <AdminUserSearch setSearchValue={setSearchValue} onSearch={onSearch} />
+                <AdminUserSearch setSearchValue={setSearchValue} onSearch={()=>handleSearch} />
 
                 <div className="flex gap-2 justify-end">
                     {actions.map((item, index) =>

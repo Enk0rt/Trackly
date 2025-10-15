@@ -1,9 +1,9 @@
 import ActionButton from "@/components/ui/buttons/action-button/ActionButton";
-import { Dispatch, FC, memo, SetStateAction, useEffect, useMemo, useState } from "react";
+import { Dispatch, FC, memo, SetStateAction} from "react";
 import SearchIcon from "@/components/ui/svg/other/SearchIcon";
 import { motion, AnimatePresence } from "framer-motion";
-import { debounce } from "lodash";
 import ClearIcon from "@/components/ui/svg/other/ClearIcon";
+import { useAdminSearch } from "@/hooks/admin/useAdminSearch";
 
 type Props = {
     setSearchValue: Dispatch<SetStateAction<string>>
@@ -11,41 +11,8 @@ type Props = {
 }
 
 const AdminUserSearch:FC<Props> = ({ setSearchValue, onSearch }) => {
-    const [active, setActive] = useState<boolean>(false);
-    const [inputVal, setInputVal] = useState<string>("");
-
-    const debouncedSearch = useMemo(
-        () => debounce((val: string) => {
-            setSearchValue(val);
-            onSearch();
-        }, 500),
-        [onSearch, setSearchValue],
-    );
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault();
-        const val = e.target.value;
-        if (!active) setActive(true);
-        setInputVal(val);
-        debouncedSearch(val);
-    };
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        onSearch();
-    };
-
-    const handleClear = () => {
-        setSearchValue("");
-        setInputVal("");
-        onSearch();
-    };
-    useEffect(() => {
-        if (inputVal === "") {
-            setActive(false);
-        }
-    }, [inputVal]);
-
+    const { active, inputVal, handleChange, handleSubmit, handleClear } =
+        useAdminSearch(setSearchValue, onSearch);
     return (
         <form onSubmit={handleSubmit} className="relative flex w-[270px] items-center">
             <input

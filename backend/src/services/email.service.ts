@@ -5,6 +5,8 @@ import handlebars from "handlebars";
 import nodemailer, { Transporter } from "nodemailer";
 
 import { config } from "../configs/config";
+import { StatusCodeEnum } from "../enums/status-code.enum";
+import { ApiError } from "../errors/api.error";
 import { IEmailData } from "../interfaces/email.interface";
 
 class EmailService {
@@ -25,11 +27,18 @@ class EmailService {
         emailData: IEmailData,
         context: Record<string, any>,
     ) {
-        await this.transporter.sendMail({
-            to,
-            subject: emailData.subject,
-            html: await this._renderTemplate(emailData.template, context),
-        });
+        try {
+            await this.transporter.sendMail({
+                to,
+                subject: emailData.subject,
+                html: await this._renderTemplate(emailData.template, context),
+            });
+        } catch {
+            throw new ApiError(
+                StatusCodeEnum.BAD_REQUEST,
+                "Something went wrong, try again later",
+            );
+        }
     }
 
     private async _renderTemplate(

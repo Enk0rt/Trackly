@@ -48,6 +48,22 @@ Once backend container is up, open [http://localhost/api/docs](http://localhost/
 #### - For admins
 To change users amount on a page open settings and use either buttons (plus/minus) or set the number to input 
 
+#### - Environment settings (.env file)
+
+- Set up email login and app password in an empty fields of backend `.env file` for making email-verify and pass-recovery sending service available
+
+  `EMAIL_USER=`
+
+  `EMAIL_PASSWORD=`
+
+- If you don`t make the step above you will get the following error: 
+
+
+  `Something went wrong, try again later`
+
+Due to this error you won`t be able to sign up a new user, because email service will be unavailable
+
+
 <img width="1921" height="951" alt="image" src="https://github.com/user-attachments/assets/d4a3431f-9f3e-4da5-85e4-4cc369cfea44" />
 <img width="1902" height="950" alt="image" src="https://github.com/user-attachments/assets/ed776c65-60d8-4a4b-868d-fb062fe16989" />
 <img width="1906" height="954" alt="image" src="https://github.com/user-attachments/assets/4f529a52-43cb-420a-8926-f86487cdc7e6" />

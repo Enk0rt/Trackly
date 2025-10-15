@@ -41,7 +41,7 @@ export const getDataFromServer = {
         }
     },
 
-    async getUsersWithParams(page?: number, pageSize?: number, search?: string, sort?: string, sortDirection?: "desc" | "asc" | 1 | -1): Promise<IUsersResponseWithParams | null> {
+    async getUsersWithParams(page?: number, pageSize?: number, search?: string, sort?: string, sortDirection?: "desc" | "asc" | 1 | -1): Promise<IUsersResponseWithParams> {
         const params = new URLSearchParams();
 
         if (page !== undefined) params.append("page", page.toString());
@@ -50,7 +50,6 @@ export const getDataFromServer = {
         if (sort) params.append("sort", sort);
         if (sortDirection) params.append("sortDirection", sortDirection.toString());
 
-        try {
             const res = await apiFetch(
                 `/admin/users/params?${params.toString()}`, {
                     method: "GET",
@@ -59,9 +58,6 @@ export const getDataFromServer = {
                     },
                 });
             return await res.json();
-        } catch (e) {
-            console.error("Failed to fetch users:", e);
-            return null;
-        }
+
     }
 }

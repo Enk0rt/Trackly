@@ -8,10 +8,10 @@ import { capitalize } from "lodash";
 import ProfileAvatar from "@/components/profile/profile-avatar/ProfileAvatar";
 import CustomCheckbox from "@/components/ui/checkboxes/CustomCheckbox";
 import UserRoleSwitchIcon from "@/components/ui/svg/user/UserRoleSwitchIcon";
-import { RoleEnum } from "@/enums/roleEnum";
 import { ConfirmModal } from "@/components/ui/modals/ConfirmModal";
 import { UserRoleModal } from "@/components/admin/AdminUserItem/UserRoleModal";
 import { UserInfoGroup } from "@/components/admin/AdminUserItem/UserInfoGroup";
+import { RoleEnum } from "@/enums/roleEnum";
 
 type Props = {
     user: IUser;
@@ -19,17 +19,19 @@ type Props = {
     isSelected: boolean;
     toggleUserSelection: (userId: string) => void;
     activateChooseMode: (userId: string) => void;
-    changeRole: (id: string, role: RoleEnum) => void;
+    changeRole: (id: string, role: RoleEnum, fetchUsers: () => void) => void;
+    fetchUsers: () => void
 };
 
 const AdminUsersItem: FC<Props> = ({
-                                             user,
-                                             isChooseMode,
-                                             isSelected,
-                                             toggleUserSelection,
-                                             activateChooseMode,
-                                             changeRole,
-                                         }) => {
+                                       user,
+                                       isChooseMode,
+                                       isSelected,
+                                       toggleUserSelection,
+                                       activateChooseMode,
+                                       changeRole,
+                                       fetchUsers
+                                   }) => {
     const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
@@ -61,6 +63,7 @@ const AdminUsersItem: FC<Props> = ({
                 onClose={() => setIsRoleModalOpen(false)}
                 user={user}
                 changeRole={changeRole}
+                fetchUsers={fetchUsers}
                 onCritical={(action) => {
                     setPendingAction(() => action);
                     setIsConfirmOpen(true);
