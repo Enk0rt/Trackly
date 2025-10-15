@@ -34,14 +34,18 @@ const AdminUserList: FC<Props> = ({ currentUsers }) => {
         setSelectedIds,
     } = useUserSelection();
 
-    const { fetchUsers,users,setUsers } = useFetchUsers(page, pageSize, searchValue, sortValue, currentUsers);
+    const { fetchUsers, users, setUsers } = useFetchUsers(page, pageSize, searchValue, sortValue, currentUsers);
 
-    const selectedUsers = useMemo(() =>
-        users.data?.filter(item => selectedIds.has(item._id)) ?? [], [users, selectedIds]);
+    const displayedUsers = useMemo(() => {
+        if (showOnlySelected) {
+            return users.data.filter(user => selectedIds.has(user._id));
+        }
+        return users.data;
+    }, [showOnlySelected, users, selectedIds]);
 
     const {
         handleChangeRole,
-    } = useAdminActions(selectedIds, setSelectedIds, addNotification);
+    } = useAdminActions(selectedIds, setSelectedIds, addNotification,setShowOnlySelected);
 
     useEffect(() => {
         fetchUsers();
@@ -63,7 +67,6 @@ const AdminUserList: FC<Props> = ({ currentUsers }) => {
                     setUsers={setUsers}
                     setPage={setPage}
                     pageSize={pageSize}
-                    setPageSize={setPageSize}
                     chooseMode={chooseMode}
                     selectedIds={selectedIds}
                     setSelectedIds={setSelectedIds}
@@ -86,22 +89,30 @@ const AdminUserList: FC<Props> = ({ currentUsers }) => {
                             </p>
                         </div>
                     ) : (
-                        (showOnlySelected && selectedUsers
-                                ? selectedUsers
-                                : users.data || []
-                        ).map(user => (
-                            <AdminUserItem
-                                key={user._id}
-                                user={user}
-                                isChooseMode={chooseMode}
-                                toggleUserSelection={toggleUserSelection}
-                                isSelected={selectedIds.has(user._id)}
-                                activateChooseMode={activateChooseMode}
-                                changeRole={handleChangeRole}
-                                fetchUsers={fetchUsers}
-                            />
-                        ))
-                    )}
+                        <>
+                            {
+                                showOnlySelected && selectedIds.size === 0 ?
+                                    <div className="flex justify-center items-center h-[50vh]">
+                                        <p className="text-[20px] text-[#33674E] dark:text-white">
+                                            No users are chosen
+                                        </p>
+                                    </div> :
+                                    displayedUsers.map(user => (
+                                        <AdminUserItem
+                                            key={user._id}
+                                            user={user}
+                                            isChooseMode={chooseMode}
+                                            toggleUserSelection={toggleUserSelection}
+                                            isSelected={selectedIds.has(user._id)}
+                                            activateChooseMode={activateChooseMode}
+                                            changeRole={handleChangeRole}
+                                            fetchUsers={fetchUsers}
+                                        />
+                                    ))
+                            }
+                        </>
+                    )
+                    }
                 </div>
 
                 {

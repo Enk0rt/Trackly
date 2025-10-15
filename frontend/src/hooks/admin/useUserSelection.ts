@@ -27,17 +27,16 @@ export const useUserSelection = () => {
     };
 
     useEffect(() => {
-        if (selectedIds.size === 0) {
-                    setPageSize(3);
-                    setPage(1);
-            const timeout = setTimeout(() => {
-                    setChooseMode(false);
-                    setShowOnlySelected(false);
-                }
-                , 300);
-            return () => clearTimeout(timeout);
+        if (selectedIds.size === 0 && showOnlySelected) {
+            return;
         }
-    }, [selectedIds.size], );
+        if (selectedIds.size === 0 && !showOnlySelected) {
+            setChooseMode(false);
+            setShowOnlySelected(false);
+            return;
+        }
+        console.log("Action from useUserSelection");
+    }, [selectedIds.size, showOnlySelected]);
 
     return {
         chooseMode,

@@ -19,13 +19,41 @@ class UserRepository {
         const pageSize =
             Number(query.pageSize) > 0 ? Number(query.pageSize) : 10;
         const skip = (page - 1) * pageSize;
+        const {
+            ids,
+            role,
+            isBlocked,
+            isVerified,
+            search,
+            sort,
+            sortDirection,
+        } = query;
 
         const filteredObject: FilterQuery<IUser> = {
-            isDeleted: false,
             _id: { $ne: currentUserId },
         };
-        if (query.search) {
-            const regex = new RegExp(`.*${query.search}.*`, "i");
+
+        if (ids) {
+            const idArray = Array.isArray(ids)
+                ? ids
+                : (ids as string).split(",").map((id) => id.trim());
+            filteredObject._id = { $in: idArray, $ne: currentUserId };
+        }
+
+        if (role) {
+            filteredObject.role = role;
+        }
+
+        if (isBlocked !== undefined) {
+            filteredObject.isBlocked = isBlocked === "true";
+        }
+
+        if (isVerified !== undefined) {
+            filteredObject.isVerified = isVerified === "true";
+        }
+
+        if (search) {
+            const regex = new RegExp(`.*${search}.*`, "i");
             filteredObject.$or = [
                 { name: { $regex: regex } },
                 { surname: { $regex: regex } },
@@ -36,16 +64,14 @@ class UserRepository {
             ];
         }
 
-        const sortDirection: SortOrder =
-            Number(query.sortDirection) === -1 || query.sortDirection === "desc"
-                ? -1
-                : 1;
+        const sortOrder: SortOrder =
+            Number(sortDirection) === -1 || sortDirection === "desc" ? -1 : 1;
 
         const [data, total] = await Promise.all([
             User.find(filteredObject)
                 .skip(skip)
                 .limit(pageSize)
-                .sort(query.sort ? { [query.sort]: sortDirection } : {}),
+                .sort(sort ? { [sort]: sortOrder } : {}),
             User.countDocuments(filteredObject),
         ]);
 

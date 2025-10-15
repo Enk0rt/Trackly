@@ -1,8 +1,8 @@
-import { useCallback, useMemo } from "react";
+import { Dispatch, SetStateAction, useCallback, useMemo } from "react";
 import { NotificationEnum } from "@/enums/notificationEnum";
 import { adminService } from "@/services/admin/adminService";
 
-export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: Set<string>) => void, setNotification: (message: string, type: NotificationEnum) => void) => {
+export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: Set<string>) => void, setNotification: (message: string, type: NotificationEnum) => void, setShowOnlySelected: Dispatch<SetStateAction<boolean>>) => {
     const clearSelection = useCallback(() => setSelectedIds(new Set()), [setSelectedIds]);
 
     return useMemo(() => ({
@@ -14,6 +14,7 @@ export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: 
                     setNotification("User is deleted", NotificationEnum.SUCCESS);
                     fetchUsers();
                     clearSelection();
+                    setShowOnlySelected(false)
                     return;
                 }
                 if (ids.size === 0) {
@@ -25,6 +26,7 @@ export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: 
                     setNotification("Users are deleted", NotificationEnum.SUCCESS);
                     fetchUsers();
                     clearSelection();
+                    setShowOnlySelected(false)
                     return;
                 }
             } catch {
@@ -38,6 +40,7 @@ export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: 
                     setNotification("User is blocked", NotificationEnum.SUCCESS);
                     fetchUsers();
                     clearSelection();
+                    setShowOnlySelected(false)
                     return;
                 }
                 if (ids.size === 0) {
@@ -49,6 +52,7 @@ export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: 
                     setNotification("Users are blocked", NotificationEnum.SUCCESS);
                     fetchUsers();
                     clearSelection();
+                    setShowOnlySelected(false)
                     return;
                 }
             } catch {
@@ -62,6 +66,7 @@ export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: 
                     setNotification("User is unblocked", NotificationEnum.SUCCESS);
                     fetchUsers();
                     clearSelection();
+                    setShowOnlySelected(false)
                     return;
                 }
                 if (ids.size === 0) {
@@ -73,6 +78,7 @@ export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: 
                     setNotification("Users are unblocked", NotificationEnum.SUCCESS);
                     fetchUsers();
                     clearSelection();
+                    setShowOnlySelected(false)
                     return;
                 }
             } catch {
@@ -86,6 +92,7 @@ export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: 
                     setNotification("User is verified", NotificationEnum.SUCCESS);
                     fetchUsers();
                     clearSelection();
+                    setShowOnlySelected(false)
                     return;
                 }
                 if (ids.size === 0) {
@@ -97,6 +104,8 @@ export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: 
                     setNotification("Users are verified", NotificationEnum.SUCCESS);
                     fetchUsers();
                     clearSelection();
+                    setShowOnlySelected(false)
+                    return
                 }
             } catch {
             }
@@ -105,6 +114,7 @@ export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: 
             try {
                 if (selectedIds.size === 0) {
                     setNotification("User was not chosen, action is not taken", NotificationEnum.WARNING);
+                    setShowOnlySelected(false)
                     return;
                 }
                 if (selectedIds.size === 1) {
@@ -121,10 +131,10 @@ export const useAdminActions = (selectedIds: Set<string>, setSelectedIds: (ids: 
 
             }
         },
-        handleChangeRole: async (id: string, role: string,fetchUsers:()=>void) => {
+        handleChangeRole: async (id: string, role: string, fetchUsers: () => void) => {
             await adminService.changeRole(id, role);
             setNotification("Permissions were updated", NotificationEnum.SUCCESS);
             fetchUsers();
         },
-    }), [selectedIds, clearSelection, setNotification]);
+    }), [setNotification, clearSelection, setShowOnlySelected, selectedIds.size]);
 };

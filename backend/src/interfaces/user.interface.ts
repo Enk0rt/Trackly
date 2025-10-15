@@ -47,4 +47,8 @@ export interface IUserQuery {
     search?: string;
     sort?: string;
     sortDirection?: "asc" | "desc" | 1 | -1;
+    ids?: string;
+    role?: string;
+    isBlocked?: string;
+    isVerified?: string;
 }
