@@ -6,7 +6,7 @@ import { AxiosError } from "axios";
 export const useFetchUsers = (
     page: number,
     pageSize: number,
-    search: string,
+    search: string | undefined,
     sort: string | undefined,
     currentUsers: IUsersResponseWithParams,
 ) => {

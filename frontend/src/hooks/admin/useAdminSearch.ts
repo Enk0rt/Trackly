@@ -2,18 +2,21 @@ import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } f
 import { debounce } from "lodash";
 
 export function useAdminSearch(
-    setSearchValue: Dispatch<SetStateAction<string>>,
-    onSearch: () => void
+    setSearchValue: Dispatch<SetStateAction<string | undefined>>,
+    onSearch: () => void,
+    setPage: Dispatch<SetStateAction<number>>,
+    initialSearch: string | undefined
 ) {
     const [active, setActive] = useState(false);
-    const [inputVal, setInputVal] = useState("");
+    const [inputVal, setInputVal] = useState(initialSearch || '');
 
     const debouncedSearch = useMemo(
         () =>
             debounce((val: string) => {
                 setSearchValue(val);
+                setPage(1)
             }, 500),
-        [setSearchValue]
+        [setPage, setSearchValue]
     );
 
     const handleChange = useCallback(
@@ -30,9 +33,10 @@ export function useAdminSearch(
     const handleSubmit = useCallback(
         (e: React.FormEvent) => {
             e.preventDefault();
+            setPage(1)
             onSearch();
         },
-        [onSearch]
+        [onSearch, setPage]
     );
 
     const handleClear = useCallback(() => {

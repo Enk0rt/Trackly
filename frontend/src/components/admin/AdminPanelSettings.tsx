@@ -5,16 +5,18 @@ import { debounce } from "lodash";
 type Props = {
     pageSize: number,
     setPageSize: Dispatch<SetStateAction<number>>
+    setPage: Dispatch<SetStateAction<number>>
 }
 
-const AdminPanelSettings:FC<Props> = ({ pageSize, setPageSize }) => {
+const AdminPanelSettings:FC<Props> = ({ pageSize, setPageSize,setPage }) => {
     const [inputVal, setInputVal] = useState<number>(pageSize);
 
     const debouncedChanger = useMemo(
         () => debounce((val: number) => {
             setPageSize(val);
+            setPage(1)
         }, 500),
-        [setPageSize],
+        [setPage, setPageSize],
     );
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,6 +24,7 @@ const AdminPanelSettings:FC<Props> = ({ pageSize, setPageSize }) => {
         if(val <=0){
             setInputVal(1)
         }else setInputVal(val);
+        setPage(1)
         debouncedChanger(val);
     };
 
@@ -36,6 +39,7 @@ const AdminPanelSettings:FC<Props> = ({ pageSize, setPageSize }) => {
                         onClick={() => {
                             setInputVal((prev) => Math.max(1, prev - 1))
                             setPageSize((prev) => Math.max(1, prev - 1));
+                            setPage(1)
                         }}
                     >
                         <MinusCircleIcon className="w-[24px] h-[24px] cursor-pointer text-[#33674E] dark:text-white" />
@@ -57,6 +61,7 @@ const AdminPanelSettings:FC<Props> = ({ pageSize, setPageSize }) => {
                     <button onClick={() => {
                         setInputVal((prev) => Math.max(1, prev + 1))
                         setPageSize((prev) => Math.max(1, prev + 1));
+                        setPage(1)
                     }}>
                         <PlusCircleIcon className="w-[24px] h-[24px] cursor-pointer text-[#33674E] dark:text-white" />
                     </button>

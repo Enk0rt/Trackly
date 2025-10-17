@@ -24,13 +24,18 @@ type Props = {
     setSelectedIds: Dispatch<SetStateAction<Set<string>>>,
     addNotification: (message: string, type: NotificationEnum) => void,
     fetchUsers: () => Promise<void>
-    setSearchValue: Dispatch<SetStateAction<string>>;
+    setSearchValue: Dispatch<SetStateAction<string | undefined>>;
     setSortValue: Dispatch<SetStateAction<string | undefined>>;
     sortValue: string | undefined;
-    searchValue: string;
+    searchValue: string | undefined;
     showOnlySelected: boolean,
     setShowOnlySelected: Dispatch<SetStateAction<boolean>>,
     setShowModal: Dispatch<SetStateAction<boolean>>
+    initialQuery: {
+        search: string | undefined,
+        sort: string | undefined,
+        sortDirection: "desc" | "asc" | 1 | -1
+    }
 };
 
 
@@ -50,6 +55,7 @@ const AdminActions: FC<Props> = ({
                                      showOnlySelected,
                                      setShowOnlySelected,
                                      setShowModal,
+                                     initialQuery
                                  }) => {
 
     const handleSearch = useCallback(async () => {
@@ -119,7 +125,7 @@ const AdminActions: FC<Props> = ({
                 </AnimatePresence>
             </div>
             <div className="flex items-center">
-                <AdminUserSearch setSearchValue={setSearchValue} onSearch={()=>handleSearch} />
+                <AdminUserSearch setSearchValue={setSearchValue} onSearch={()=>handleSearch} setPage={setPage} initialSearch={initialQuery.search} />
 
                 <div className="flex gap-2 justify-end">
                     {actions.map((item, index) =>
