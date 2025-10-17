@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
 export const useUserSelection = () => {
-    const [page, setPage] = useState<number>(1);
-    const [pageSize, setPageSize] = useState<number>(3);
-
     const [chooseMode, setChooseMode] = useState(false);
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
     const [showOnlySelected, setShowOnlySelected] = useState<boolean>(false);
@@ -46,9 +43,5 @@ export const useUserSelection = () => {
         setSelectedIds,
         showOnlySelected,
         setShowOnlySelected,
-        page,
-        setPage,
-        pageSize,
-        setPageSize,
     };
 };

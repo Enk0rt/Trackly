@@ -1,18 +1,20 @@
 import ActionButton from "@/components/ui/buttons/action-button/ActionButton";
-import { Dispatch, FC, memo, SetStateAction} from "react";
+import { Dispatch, FC, memo, SetStateAction } from "react";
 import SearchIcon from "@/components/ui/svg/other/SearchIcon";
 import { motion, AnimatePresence } from "framer-motion";
 import ClearIcon from "@/components/ui/svg/other/ClearIcon";
 import { useAdminSearch } from "@/hooks/admin/useAdminSearch";
 
 type Props = {
-    setSearchValue: Dispatch<SetStateAction<string>>
+    setSearchValue: Dispatch<SetStateAction<string | undefined>>
     onSearch: () => void
+    setPage: Dispatch<SetStateAction<number>>,
+    initialSearch: string | undefined
 }
 
-const AdminUserSearch:FC<Props> = ({ setSearchValue, onSearch }) => {
+const AdminUserSearch: FC<Props> = ({ setSearchValue, onSearch, setPage, initialSearch }) => {
     const { active, inputVal, handleChange, handleSubmit, handleClear } =
-        useAdminSearch(setSearchValue, onSearch);
+        useAdminSearch(setSearchValue, onSearch, setPage, initialSearch);
     return (
         <form onSubmit={handleSubmit} className="relative flex w-[270px] items-center">
             <input
@@ -65,4 +67,4 @@ const AdminUserSearch:FC<Props> = ({ setSearchValue, onSearch }) => {
     );
 };
 
-export default memo(AdminUserSearch)
+export default memo(AdminUserSearch);

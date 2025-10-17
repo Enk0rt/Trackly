@@ -50,14 +50,14 @@ export const getDataFromServer = {
         if (sort) params.append("sort", sort);
         if (sortDirection) params.append("sortDirection", sortDirection.toString());
 
-            const res = await apiFetch(
-                `/admin/users/params?${params.toString()}`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                });
-            return await res.json();
+        const res = await apiFetch(
+            `/admin/users/params?${params.toString()}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+        return await res.json();
 
-    }
-}
+    },
+};

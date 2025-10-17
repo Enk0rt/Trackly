@@ -12,19 +12,36 @@ import { useNotification } from "@/hooks/useNotification";
 import Pagination from "@/components/ui/pagination/Pagination";
 import AdminUserItem from "@/components/admin/AdminUserItem/AdminUserItem";
 import { useFetchUsers } from "@/hooks/admin/useFetchUsers";
+import { useSetParams } from "@/hooks/admin/useSetParams";
 
 type Props = {
     currentUsers: IUsersResponseWithParams;
+    initialQuery: {
+        page: number,
+        pageSize: number,
+        search: string | undefined,
+        sort: string | undefined,
+        sortDirection: "desc" | "asc" | 1 | -1
+    }
 };
 
-const AdminUserList: FC<Props> = ({ currentUsers }) => {
-    const [searchValue, setSearchValue] = useState("");
+const AdminUserList: FC<Props> = ({ currentUsers, initialQuery }) => {
     const [showModal, setShowModal] = useState<boolean>(false);
-    const [sortValue, setSortValue] = useState<string | undefined>(undefined);
     const { addNotification, closeNotification, notifications } = useNotification();
 
     const {
-        page, setPage, pageSize, setPageSize,
+        params,
+        page,
+        setPage,
+        pageSize,
+        setPageSize,
+        searchValue,
+        setSearchValue,
+        sortValue,
+        setSortValue,
+    } = useSetParams(initialQuery);
+
+    const {
         chooseMode,
         selectedIds,
         showOnlySelected,
@@ -43,18 +60,21 @@ const AdminUserList: FC<Props> = ({ currentUsers }) => {
         return users.data;
     }, [showOnlySelected, users, selectedIds]);
 
+
     const {
         handleChangeRole,
-    } = useAdminActions(selectedIds, setSelectedIds, addNotification,setShowOnlySelected);
+    } = useAdminActions(selectedIds, setSelectedIds, addNotification, setShowOnlySelected);
 
     useEffect(() => {
+        window.history.replaceState({}, "", `?${params.toString()}`);
         fetchUsers();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fetchUsers]);
 
     return (
         <>
             <DefaultModal showModal={showModal} setShowModal={setShowModal}>
-                <AdminPanelSettings pageSize={pageSize} setPageSize={setPageSize} />
+                <AdminPanelSettings pageSize={pageSize} setPageSize={setPageSize} setPage={setPage} />
             </DefaultModal>
             <div className="w-[84%] max-w-[1249px]">
                 <AnimatePresence>
@@ -79,6 +99,7 @@ const AdminUserList: FC<Props> = ({ currentUsers }) => {
                     showOnlySelected={showOnlySelected}
                     setShowOnlySelected={setShowOnlySelected}
                     setShowModal={setShowModal}
+                    initialQuery={initialQuery}
                 />
 
                 <div className="mt-3 flex flex-col gap-5">
@@ -97,7 +118,7 @@ const AdminUserList: FC<Props> = ({ currentUsers }) => {
                                             No users are chosen
                                         </p>
                                     </div> :
-                                    displayedUsers.map(user => (
+                                    displayedUsers?.map(user => (
                                         <AdminUserItem
                                             key={user._id}
                                             user={user}
@@ -121,7 +142,7 @@ const AdminUserList: FC<Props> = ({ currentUsers }) => {
                         setPage(page - 1);
                     }} actionNext={() => setPage(page + 1)} page={page}
                                 disabledPrev={page === 1}
-                                disabledNext={page === currentUsers?.totalPages || showOnlySelected || pageSize >= users?.total} />
+                                disabledNext={page >= users?.totalPages || showOnlySelected} />
                 }
             </div>
         </>
