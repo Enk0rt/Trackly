@@ -1,12 +1,22 @@
 import { ObjectId } from "mongodb";
 
 import { IBase } from "./base.interface";
+import { IHabitHistory } from "./habit-history.interface";
 
 export interface IHabit extends IBase {
-    name: string;
-    userId: ObjectId;
+    _id: ObjectId;
+    title: string;
+    _userId: ObjectId;
     description: string;
+    time: string;
     deadline: Date;
-    isChecked: boolean;
+    targetValue: number;
+    targetUnit: string;
+    category: string;
+    frequency: string[];
+    icon: string;
+    streak: number;
+    history: IHabitHistory;
+    reminders: boolean;
     isSettled: boolean;
 }

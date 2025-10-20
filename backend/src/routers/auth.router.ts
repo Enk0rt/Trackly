@@ -3,6 +3,7 @@ import { Router } from "express";
 import { authController } from "../controllers/auth.controller";
 import { authMiddleware } from "../middleware/auth.middleware";
 import { commonMiddleware } from "../middleware/common.middleware";
+import { streakMiddleware } from "../middleware/streak.middleware";
 import { AuthValidator } from "../validators/auth.validator";
 import { UserValidator } from "../validators/user.validator";
 
@@ -20,10 +21,16 @@ router.post(
     "/sign-in",
     commonMiddleware.validateBody(AuthValidator.signIn),
     authController.signIn,
+    streakMiddleware.checkHabitStreak,
 );
 
 // RECEIVE AUTH USER
-router.get("/me", authMiddleware.checkAccessToken, authController.me);
+router.get(
+    "/me",
+    authMiddleware.checkAccessToken,
+    streakMiddleware.checkHabitStreak,
+    authController.me,
+);
 
 // REFRESH TOKENS
 router.get(
