@@ -4,7 +4,6 @@ import { habitController } from "../controllers/habit.controller";
 import { authMiddleware } from "../middleware/auth.middleware";
 import { commonMiddleware } from "../middleware/common.middleware";
 import { habitValidator } from "../validators/habit.validator";
-import { habitHistoryRouter } from "./habit-history.router";
 
 const router = Router();
 
@@ -30,5 +29,4 @@ router.delete(
     habitController.delete,
 );
 
-router.use("/history", habitHistoryRouter);
 export const habitRouter = router;

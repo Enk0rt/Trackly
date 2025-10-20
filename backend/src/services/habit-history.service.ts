@@ -2,16 +2,16 @@ import { HabitHistoryTypeEnum } from "../enums/habit-history-type.enum";
 import { StatusCodeEnum } from "../enums/status-code.enum";
 import { ApiError } from "../errors/api.error";
 import { increaseStreak } from "../helpers/update-streak";
-import { IHabitHistory } from "../interfaces/habit-history.interface";
+import { IHabitHistoryEntry } from "../interfaces/habit-history.interface";
+import { Habit } from "../models/habit.model";
 import { habitHistoryRepository } from "../repositories/habit-history.repository";
-import { habitService } from "./habit.service";
 
 class HabitHistory {
-    public async getAll(): Promise<IHabitHistory[]> {
+    public async getAll(): Promise<IHabitHistoryEntry[]> {
         return await habitHistoryRepository.getAll();
     }
 
-    public async getById(id: string): Promise<IHabitHistory> {
+    public async getById(id: string): Promise<IHabitHistoryEntry> {
         const habit = await habitHistoryRepository.getById(id);
 
         if (!habit) {
@@ -25,41 +25,24 @@ class HabitHistory {
     }
 
     public async create(
-        createData: Partial<IHabitHistory>,
-    ): Promise<IHabitHistory> {
-        const { _habitId, type, date, note, isChecked, currentValue } =
-            createData;
-        switch (type) {
-            case HabitHistoryTypeEnum.CHECK: {
-                const newStreak = await increaseStreak(String(_habitId));
-                const history = await habitHistoryRepository.create({
-                    _habitId,
-                    type,
-                    date,
-                    isChecked,
-                });
-                await habitService.update(String(_habitId), {
-                    streak: newStreak,
-                });
-                return history;
-            }
+        createData: Partial<IHabitHistoryEntry>,
+    ): Promise<IHabitHistoryEntry> {
+        const { _habitId, type, date, note, currentValue } = createData;
+        const habit = await Habit.findById(String(_habitId));
 
-            case HabitHistoryTypeEnum.NOTE: {
-                const newStreak = await increaseStreak(String(_habitId));
-                const history = await habitHistoryRepository.create({
-                    _habitId,
-                    type,
-                    date,
-                    note,
-                });
-                await habitService.update(String(_habitId), {
-                    streak: newStreak,
-                });
-                return history;
-            }
-            case HabitHistoryTypeEnum.PROGRESS: {
-                const newStreak = await increaseStreak(String(_habitId));
-                const history = await habitHistoryRepository.create({
+        if (!habit) {
+            throw new ApiError(StatusCodeEnum.NOT_FOUND, "Habit not found");
+        }
+
+        let newStreak: number;
+
+        let historyEntry: IHabitHistoryEntry;
+        switch (type) {
+            case HabitHistoryTypeEnum.CHECK:
+            case HabitHistoryTypeEnum.NOTE:
+            case HabitHistoryTypeEnum.PROGRESS:
+                newStreak = await increaseStreak(String(_habitId));
+                historyEntry = await habitHistoryRepository.create({
                     _habitId,
                     type,
                     date,
@@ -67,30 +50,29 @@ class HabitHistory {
                     currentValue,
                     isChecked: true,
                 });
-                await habitService.update(String(_habitId), {
-                    streak: newStreak,
-                });
-                return history;
-            }
+                habit.streak = newStreak;
+                habit.history.push(historyEntry._id);
+
+                await habit.save();
+                break;
+
             case HabitHistoryTypeEnum.CREATED:
-                return await habitHistoryRepository.create({
-                    _habitId,
-                    type,
-                    date,
-                });
             case HabitHistoryTypeEnum.UPDATED:
-                return await habitHistoryRepository.create({
+                historyEntry = await habitHistoryRepository.create({
                     _habitId,
                     type,
                     date,
                 });
+                break;
         }
+
+        return historyEntry;
     }
 
     public async update(
         id: string,
-        updateData: Partial<IHabitHistory>,
-    ): Promise<IHabitHistory> {
+        updateData: Partial<IHabitHistoryEntry>,
+    ): Promise<IHabitHistoryEntry> {
         const habit = await habitHistoryRepository.update(id, updateData);
 
         if (!habit) {
@@ -113,6 +95,17 @@ class HabitHistory {
             );
         }
 
+        const habit = await Habit.findById(String(habitHistory._habitId));
+
+        if (!habit) {
+            throw new ApiError(StatusCodeEnum.NOT_FOUND, "Habit is not found");
+        }
+
+        habit.history = habit.history.filter(
+            (habitId) => !habitId.equals(habitHistory._id),
+        );
+
+        habit.save();
         return;
     }
 }

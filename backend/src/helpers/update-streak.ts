@@ -13,27 +13,30 @@ export const increaseStreak = async (habitId: string): Promise<number> => {
         _habitId: habitId,
         date: { $gte: todayStart, $lte: todayEnd },
     });
+
     const habit = await habitService.getById(habitId);
     if (!habit) {
-        throw new ApiError(StatusCodeEnum.NOT_FOUND, "Habit is not found");
+        throw new ApiError(StatusCodeEnum.NOT_FOUND, "Habit not found");
     }
 
     let newStreak = habit.streak;
-    if (!habitHistoryToday) {
-        const habitHistoryYesterday = await HabitHistory.findOne({
-            habitId,
-            date: {
-                $gte: startOfDay(new Date(Date.now() - 24 * 60 * 60 * 1000)),
-                $lte: endOfDay(new Date(Date.now() - 24 * 60 * 60 * 1000)),
-            },
-        });
 
-        if (!habitHistoryYesterday) {
-            newStreak = 1;
-        }
-
-        newStreak = habit.streak + 1;
+    if (habitHistoryToday) {
         return newStreak;
     }
-    return;
+
+    const habitHistoryYesterday = await HabitHistory.findOne({
+        _habitId: habitId,
+        date: {
+            $gte: startOfDay(new Date(Date.now() - 24 * 60 * 60 * 1000)),
+            $lte: endOfDay(new Date(Date.now() - 24 * 60 * 60 * 1000)),
+        },
+    });
+
+    if (!habitHistoryYesterday) {
+        newStreak = 1;
+    } else {
+        newStreak = habit.streak + 1;
+    }
+    return newStreak;
 };

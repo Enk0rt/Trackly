@@ -15,10 +15,12 @@ const habitSchema = new Schema(
         category: { type: String, required: true },
         frequency: { type: [String], required: true },
         icon: { type: String, default: null },
-        history: {
-            type: Schema.Types.ObjectId,
-            ref: "habit",
-        },
+        history: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "habitHistory",
+            },
+        ],
         reminders: { type: Boolean, default: true },
         isSettled: { type: Boolean, default: false },
     },

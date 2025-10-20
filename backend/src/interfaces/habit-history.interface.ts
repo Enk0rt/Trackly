@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 
 import { HabitHistoryTypeEnum } from "../enums/habit-history-type.enum";
 
-export interface IHabitHistory {
+export interface IHabitHistoryEntry {
     _id: ObjectId;
     type: HabitHistoryTypeEnum;
     _habitId: ObjectId;

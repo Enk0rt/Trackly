@@ -1,13 +1,14 @@
 import { model, Schema } from "mongoose";
 
 import { HabitHistoryTypeEnum } from "../enums/habit-history-type.enum";
-import { IHabitHistory } from "../interfaces/habit-history.interface";
+import { IHabitHistoryEntry } from "../interfaces/habit-history.interface";
 
 const habitHistorySchema = new Schema(
     {
         _habitId: { type: Schema.Types.ObjectId, ref: "habit" },
         type: { type: String, default: HabitHistoryTypeEnum.CREATED },
         isChecked: { type: Boolean, default: false },
+        note: { type: String },
         currentValue: { type: Number },
         date: { type: Date, default: Date.now() },
     },
@@ -17,7 +18,7 @@ const habitHistorySchema = new Schema(
     },
 );
 
-export const HabitHistory = model<IHabitHistory>(
+export const HabitHistory = model<IHabitHistoryEntry>(
     "habitHistory",
     habitHistorySchema,
 );

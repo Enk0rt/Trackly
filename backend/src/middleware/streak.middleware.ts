@@ -29,22 +29,20 @@ class StreakMiddleware {
             await Promise.all(
                 user.habits.map(async (habitId) => {
                     const habit = await Habit.findById(String(habitId));
-                    if (!habitId) {
+                    if (!habit) {
                         throw new ApiError(
                             StatusCodeEnum.NOT_FOUND,
                             "Habit is not found",
                         );
                     }
-
                     const todayStart = startOfToday();
                     const todayEnd = endOfToday();
-
                     const habitHistoryToday = await HabitHistory.findOne({
-                        _habitId: habit._id,
+                        _habitId: habitId,
                         date: { $gte: todayStart, $lte: todayEnd },
                     });
                     const habitHistoryYesterday = await HabitHistory.findOne({
-                        _habitId: habit._id,
+                        _habitId: habitId,
                         date: {
                             $gte: startOfDay(
                                 new Date(Date.now() - 24 * 60 * 60 * 1000),
@@ -55,12 +53,13 @@ class StreakMiddleware {
                         },
                     });
 
-                    if (!habitHistoryToday && !habitHistoryYesterday) {
+                    if (!habitHistoryYesterday && !habitHistoryToday) {
                         habit.streak = 0;
                         await habit.save();
                     }
                 }),
             );
+
             next();
         } catch (e) {
             next(e);

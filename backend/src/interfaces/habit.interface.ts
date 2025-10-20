@@ -1,7 +1,6 @@
 import { ObjectId } from "mongodb";
 
 import { IBase } from "./base.interface";
-import { IHabitHistory } from "./habit-history.interface";
 
 export interface IHabit extends IBase {
     _id: ObjectId;
@@ -16,7 +15,7 @@ export interface IHabit extends IBase {
     frequency: string[];
     icon: string;
     streak: number;
-    history: IHabitHistory;
+    history: ObjectId[];
     reminders: boolean;
     isSettled: boolean;
 }

@@ -2,13 +2,13 @@ import { NextFunction, Request, Response } from "express";
 
 import { StatusCodeEnum } from "../enums/status-code.enum";
 import { IApiSuccessResponse } from "../interfaces/api-success-responce.interface";
-import { IHabitHistory } from "../interfaces/habit-history.interface";
+import { IHabitHistoryEntry } from "../interfaces/habit-history.interface";
 import { habitHistoryService } from "../services/habit-history.service";
 
 class HabitHistoryController {
     public async getAll(
         req: Request,
-        res: Response<IApiSuccessResponse<IHabitHistory[]>>,
+        res: Response<IApiSuccessResponse<IHabitHistoryEntry[]>>,
         next: NextFunction,
     ) {
         try {
@@ -21,7 +21,7 @@ class HabitHistoryController {
 
     public async getById(
         req: Request,
-        res: Response<IApiSuccessResponse<IHabitHistory>>,
+        res: Response<IApiSuccessResponse<IHabitHistoryEntry>>,
         next: NextFunction,
     ) {
         try {
@@ -35,7 +35,7 @@ class HabitHistoryController {
 
     public async create(
         req: Request,
-        res: Response<IApiSuccessResponse<IHabitHistory>>,
+        res: Response<IApiSuccessResponse<IHabitHistoryEntry>>,
         next: NextFunction,
     ) {
         try {
@@ -55,7 +55,7 @@ class HabitHistoryController {
 
     public async delete(
         req: Request,
-        res: Response<IApiSuccessResponse<IHabitHistory>>,
+        res: Response<IApiSuccessResponse<IHabitHistoryEntry>>,
         next: NextFunction,
     ) {
         try {
@@ -63,7 +63,7 @@ class HabitHistoryController {
             await habitHistoryService.delete(id);
             res.status(StatusCodeEnum.OK).json({
                 data: null,
-                details: "Habit is deleted successfully",
+                details: "Habit history entry is deleted successfully",
             });
         } catch (e) {
             next(e);
