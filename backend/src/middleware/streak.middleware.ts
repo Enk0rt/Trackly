@@ -59,7 +59,6 @@ class StreakMiddleware {
                     }
                 }),
             );
-
             next();
         } catch (e) {
             next(e);
