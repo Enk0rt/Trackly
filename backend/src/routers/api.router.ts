@@ -3,6 +3,8 @@ import { Router } from "express";
 import { accountRouter } from "./account.router";
 import { adminRouter } from "./admin.router";
 import { authRouter } from "./auth.router";
+import { habitRouter } from "./habit.router";
+import { habitHistoryRouter } from "./habit-history.router";
 import { planRouter } from "./plan.router";
 import { userRouter } from "./user.router";
 import { userActivityRouter } from "./user-activity.router";
@@ -15,5 +17,7 @@ router.use("/accounts", accountRouter);
 router.use("/plans", planRouter);
 router.use("/activity", userActivityRouter);
 router.use("/admin", adminRouter);
+router.use("/habits", habitRouter);
+router.use("/habit/history", habitHistoryRouter);
 
 export const apiRouter = router;
