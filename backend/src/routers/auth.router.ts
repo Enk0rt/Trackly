@@ -32,6 +32,14 @@ router.get(
     authController.me,
 );
 
+// RECEIVE AUTH USER HABITS
+router.get(
+    "/habits",
+    authMiddleware.checkAccessToken,
+    streakMiddleware.checkHabitStreak,
+    authController.getMyHabits,
+);
+
 // REFRESH TOKENS
 router.get(
     "/refresh",

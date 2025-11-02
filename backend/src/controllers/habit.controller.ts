@@ -3,7 +3,6 @@ import { NextFunction, Request, Response } from "express";
 import { StatusCodeEnum } from "../enums/status-code.enum";
 import { IApiSuccessResponse } from "../interfaces/api-success-responce.interface";
 import { IHabit } from "../interfaces/habit.interface";
-import { ITokenPayload } from "../interfaces/tokens.interface";
 import { habitService } from "../services/habit.service";
 
 class HabitController {
@@ -15,6 +14,22 @@ class HabitController {
         try {
             const habits = await habitService.getAll();
             res.status(StatusCodeEnum.OK).json({ data: habits });
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async getUserHabits(
+        req: Request,
+        res: Response<IApiSuccessResponse<IHabit[]>>,
+        next: NextFunction,
+    ) {
+        try {
+            const { userId } = req.params;
+            const habits = await habitService.getUserHabits(userId);
+            res.status(StatusCodeEnum.OK).json({
+                data: habits,
+            });
         } catch (e) {
             next(e);
         }
@@ -40,11 +55,11 @@ class HabitController {
         next: NextFunction,
     ) {
         try {
-            const { _userId } = res.locals.tokenPayload as ITokenPayload;
+            const { id } = req.params;
             const createData = req.body;
             const habit = await habitService.create({
                 ...createData,
-                _userId,
+                _userId: id,
             });
             res.status(StatusCodeEnum.OK).json({
                 data: habit,

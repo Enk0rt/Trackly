@@ -6,6 +6,10 @@ class HabitRepository {
         return Habit.find();
     }
 
+    public getUserHabits(userId: string): Promise<IHabit[]> {
+        return Habit.find({ _userId: userId });
+    }
+
     public getById(id: string): Promise<IHabit> {
         return Habit.findById(id);
     }

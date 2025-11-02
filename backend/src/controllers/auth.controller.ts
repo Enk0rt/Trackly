@@ -4,9 +4,11 @@ import { StatusCodeEnum } from "../enums/status-code.enum";
 import { TokenTypeEnum } from "../enums/token-type.enum";
 import { IApiSuccessResponse } from "../interfaces/api-success-responce.interface";
 import { IAuth } from "../interfaces/auth.interface";
+import { IHabit } from "../interfaces/habit.interface";
 import { ITokenPair, ITokenPayload } from "../interfaces/tokens.interface";
 import { IUser, IUserWithTokens } from "../interfaces/user.interface";
 import { authService } from "../services/auth.service";
+import { habitService } from "../services/habit.service";
 import { tokenService } from "../services/token.service";
 import { isLoginUsernameOrEmail } from "../utils/isLoginUsernameOrEmail";
 
@@ -69,6 +71,22 @@ class AuthController {
             const { _userId } = payload;
             const user = await authService.me(String(_userId));
             res.status(StatusCodeEnum.OK).json({ data: user });
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async getMyHabits(
+        req: Request,
+        res: Response<IApiSuccessResponse<IHabit[]>>,
+        next: NextFunction,
+    ) {
+        try {
+            const { _userId } = res.locals.tokenPayload as ITokenPayload;
+            const habits = await habitService.getUserHabits(String(_userId));
+            res.status(StatusCodeEnum.OK).json({
+                data: habits,
+            });
         } catch (e) {
             next(e);
         }
