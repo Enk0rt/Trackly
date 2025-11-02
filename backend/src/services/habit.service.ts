@@ -8,6 +8,9 @@ class HabitService {
     public async getAll(): Promise<IHabit[]> {
         return await habitRepository.getAll();
     }
+    public async getUserHabits(userId: string): Promise<IHabit[]> {
+        return await habitRepository.getUserHabits(userId);
+    }
 
     public async getById(id: string): Promise<IHabit> {
         const habit = await habitRepository.getById(id);

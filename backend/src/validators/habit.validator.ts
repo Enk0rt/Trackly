@@ -26,9 +26,12 @@ export class habitValidator {
             .string()
             .max(300, "You have reached characters limit (300)")
             .optional(),
-        currentValue: zod
-            .number()
-            .min(1, "Minimum allowed value is 1")
-            .optional(),
+        currentValue: zod.preprocess((val) => {
+            if (typeof val === "string") {
+                const parsed = Number(val);
+                return isNaN(parsed) ? val : parsed;
+            }
+            return val;
+        }, zod.number().min(1, "Minimum allowed value is 1").optional()),
     });
 }
