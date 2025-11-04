@@ -6,6 +6,7 @@ import { IHabitHistoryEntry } from "../interfaces/habit-history.interface";
 const habitHistorySchema = new Schema(
     {
         _habitId: { type: Schema.Types.ObjectId, ref: "habit" },
+        _userId: { type: Schema.Types.ObjectId, ref: "user" },
         type: { type: String, default: HabitHistoryTypeEnum.CREATED },
         isChecked: { type: Boolean, default: false },
         note: { type: String },

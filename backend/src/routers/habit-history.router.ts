@@ -8,28 +8,44 @@ import { habitValidator } from "../validators/habit.validator";
 
 const router = Router();
 
+// RECEIVE ALL HABIT HISTORY ENTRIES
 router.get(
     "/",
     authMiddleware.checkAccessToken,
     streakMiddleware.checkHabitStreak,
     habitHistoryController.getAll,
 );
+// RECEIVE ONE HABIT HISTORY ENTRY BY ID
 router.get(
-    "/:id",
+    "/entry/:id",
     authMiddleware.checkAccessToken,
     commonMiddleware.isValidated("id"),
-    habitHistoryController.getById,
+    habitHistoryController.getHabitHistoryEntryById,
 );
+// RECEIVE ALL HABIT HISTORY ENTRIES BY HABIT ID
+router.get(
+    "/all/:id",
+    authMiddleware.checkAccessToken,
+    commonMiddleware.isValidated("id"),
+    habitHistoryController.getHabitHistoryById,
+);
+// RECEIVE USER WEEKLY CHECKS
+router.get(
+    "/checks",
+    authMiddleware.checkAccessToken,
+    habitHistoryController.getHabitChecks,
+);
+// CREATE HABIT HISTORY ENTRY
 router.post(
-    "/:id",
+    "/create/:id",
     authMiddleware.checkAccessToken,
     commonMiddleware.isValidated("id"),
     commonMiddleware.validateBody(habitValidator.history),
     habitHistoryController.create,
 );
-
+// DELETE HABIT HISTORY ENTRY BY ID
 router.delete(
-    "/:id",
+    "/delete/:id",
     authMiddleware.checkAccessToken,
     commonMiddleware.isValidated("id"),
     habitHistoryController.delete,
