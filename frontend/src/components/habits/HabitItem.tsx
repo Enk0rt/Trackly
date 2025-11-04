@@ -12,9 +12,9 @@ type Props = {
 export const HabitItem: FC<Props> = ({ habit }) => {
     return (
         <div
-            className="px-8 py-5 -w-1/2 border border-black/10 shadow-[0_4px_10px_rgba(12,49,44,.08)] bg-white rounded-[18px]">
+            className="px-8 py-5 -w-1/2 border border-black/10 shadow-[0_4px_10px_rgba(12,49,44,.08)] bg-white dark:bg-[#33674E] rounded-[18px] dark:text-white">
             <div className="flex items-center gap-3">
-                <div className="border-2 border-black/20 flex self-start justify-center items-center p-3 rounded-full">
+                <div className="border-2 border-black/20 dark:border-white/20 flex self-start justify-center items-center p-3 rounded-full">
                     {
                         habit.icon && habit.icon
                     }
@@ -30,7 +30,7 @@ export const HabitItem: FC<Props> = ({ habit }) => {
                     </div>
                     <div className='flex items-center gap-3'>
                         <ActionButton icon={InfoIcon} iconLabel={"Info Button"} iconSize={"w-5 h-5"} size={"noPadding"}
-                                      variant={'ghost'} className='cursor-pointer dark:!text-[#33674E]' />
+                                      variant={'ghost'} className='cursor-pointer rounded-full' />
                         <ActionButton icon={EditIcon} iconPosition={'left'} iconLabel={"Edit Button"}
                                       iconSize={"w-5 h-5"} size={"sm"} variant={'secondary'} className='cursor-pointer'>
                             Edit
