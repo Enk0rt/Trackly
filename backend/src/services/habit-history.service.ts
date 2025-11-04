@@ -1,8 +1,13 @@
+import dayjs from "dayjs";
+
 import { HabitHistoryTypeEnum } from "../enums/habit-history-type.enum";
 import { StatusCodeEnum } from "../enums/status-code.enum";
 import { ApiError } from "../errors/api.error";
 import { increaseStreak } from "../helpers/update-streak";
-import { IHabitHistoryEntry } from "../interfaces/habit-history.interface";
+import {
+    IHabitChecks,
+    IHabitHistoryEntry,
+} from "../interfaces/habit-history.interface";
 import { Habit } from "../models/habit.model";
 import { habitHistoryRepository } from "../repositories/habit-history.repository";
 
@@ -11,8 +16,10 @@ class HabitHistory {
         return await habitHistoryRepository.getAll();
     }
 
-    public async getById(id: string): Promise<IHabitHistoryEntry> {
-        const habit = await habitHistoryRepository.getById(id);
+    public async getHabitHistoryEntryById(
+        id: string,
+    ): Promise<IHabitHistoryEntry> {
+        const habit = await habitHistoryRepository.getHabitHistoryEntryById(id);
 
         if (!habit) {
             throw new ApiError(
@@ -22,6 +29,56 @@ class HabitHistory {
         }
 
         return habit;
+    }
+
+    public async getHabitHistoryById(
+        id: string,
+    ): Promise<IHabitHistoryEntry[]> {
+        const habit = await habitHistoryRepository.getHabitHistoryById(id);
+
+        if (!habit) {
+            throw new ApiError(
+                StatusCodeEnum.NOT_FOUND,
+                "Habit history is not found",
+            );
+        }
+
+        return habit;
+    }
+
+    public async getHabitChecks(userId: string): Promise<IHabitChecks[]> {
+        const entries = await habitHistoryRepository.getUserWeekEntries(userId);
+
+        const habitMap = new Map<string, any>();
+
+        entries.forEach((entry) => {
+            if (!habitMap.has(String(entry._habitId))) {
+                habitMap.set(String(entry._habitId), []);
+            }
+            habitMap.get(String(entry._habitId)).push(entry);
+        });
+
+        const startOfWeek = dayjs().startOf("week");
+
+        return Array.from(habitMap.entries()).map(
+            ([_habitId, habitEntries]) => {
+                const week = Array.from({ length: 7 }).map((_, i) => {
+                    const date = startOfWeek.add(i, "day");
+                    const entry = habitEntries.find(
+                        (entry: IHabitHistoryEntry) =>
+                            dayjs(entry.date).isSame(date, "day"),
+                    );
+
+                    return {
+                        day: date.format("ddd"),
+                        date: date.toDate(),
+                        isChecked: !!entry?.isChecked,
+                    };
+                });
+
+                return { _habitId, week };
+            },
+        );
     }
 
     public async create(
@@ -44,6 +101,7 @@ class HabitHistory {
                 newStreak = await increaseStreak(String(_habitId));
                 historyEntry = await habitHistoryRepository.create({
                     _habitId,
+                    _userId: habit._userId,
                     type,
                     date,
                     note,

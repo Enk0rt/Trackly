@@ -1,6 +1,8 @@
 import { IUserResponse, IUsersResponseWithParams } from "@/interfaces/user/IUserResponse";
 import { IUser } from "@/interfaces/user/IUser";
 import { apiFetch } from "@/services/api/lib/apiFetch";
+import { IHabit, IHabitResponse } from "@/interfaces/habits/IHabit";
+import { IHabitChecks, IHabitChecksResponse } from "@/interfaces/habits/IHabitChecks";
 
 export const getDataFromServer = {
     async getUserByUsername(username: string): Promise<IUser | null> {
@@ -26,7 +28,6 @@ export const getDataFromServer = {
 
     async getMe(): Promise<IUser | null> {
         try {
-
             const res = await apiFetch(`/auth/me`, {
                 method: "GET",
                 headers: {
@@ -58,6 +59,52 @@ export const getDataFromServer = {
                 },
             });
         return await res.json();
+    },
 
+    async getUserHabits(id: string): Promise<IHabit | null> {
+        try {
+            const res = await apiFetch(`/habits/${id}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            return await res.json();
+        } catch (e) {
+            console.error("Failed to fetch user:", e);
+            return null;
+        }
+    },
+
+    async getMyHabits(): Promise<IHabit[] | null> {
+        try {
+            const res = await apiFetch(`/auth/habits`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            const data: IHabitResponse = await res.json();
+            return data.data;
+        } catch (e) {
+            console.error("Failed to fetch user:", e);
+            return null;
+        }
+    },
+
+    async getMyHabitChecks(): Promise<IHabitChecks[] | null> {
+        try {
+            const res = await apiFetch(`/habit/history/checks`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            const data: IHabitChecksResponse = await res.json();
+            return data.data;
+        } catch (e) {
+            console.error("Failed to fetch user:", e);
+            return null;
+        }
     },
 };
