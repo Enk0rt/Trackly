@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import isoWeek from "dayjs/plugin/isoWeek";
 
 import { HabitHistoryTypeEnum } from "../enums/habit-history-type.enum";
 import { StatusCodeEnum } from "../enums/status-code.enum";
@@ -10,6 +11,8 @@ import {
 } from "../interfaces/habit-history.interface";
 import { Habit } from "../models/habit.model";
 import { habitHistoryRepository } from "../repositories/habit-history.repository";
+
+dayjs.extend(isoWeek);
 
 class HabitHistory {
     public async getAll(): Promise<IHabitHistoryEntry[]> {
@@ -58,7 +61,7 @@ class HabitHistory {
             habitMap.get(String(entry._habitId)).push(entry);
         });
 
-        const startOfWeek = dayjs().startOf("week");
+        const startOfWeek = dayjs().startOf("isoWeek");
 
         return Array.from(habitMap.entries()).map(
             ([_habitId, habitEntries]) => {

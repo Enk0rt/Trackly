@@ -1,10 +1,10 @@
 "use client";
 import React, { FC, useMemo } from "react";
 import { IHabit } from "@/interfaces/habits/IHabit";
-import HabitItem from "@/components/habits/HabitItem";
 import { useQuery } from "@tanstack/react-query";
 import { getDataFromClient } from "@/services/api/getDataFromClient";
 import { IHabitChecks } from "@/interfaces/habits/IHabitChecks";
+import HabitItem from "@/components/habits/list/HabitItem";
 
 type Props = {
     habits: IHabit[] | undefined
@@ -29,8 +29,6 @@ export const HabitsList: FC<Props> = ({ habits, habitChecks }) => {
         refetchOnMount: true,
     });
 
-    console.log(queryHabitChecks)
-
     const mergedHabits = useMemo(() => {
         if (!queryHabits || !queryHabitChecks) return [];
         return queryHabits.map(habit => {
@@ -44,7 +42,7 @@ export const HabitsList: FC<Props> = ({ habits, habitChecks }) => {
 
 
     return (
-        <div className="mt-10 grid grid-cols-1 md:grid-cols-2 md:gap-x-4 gap-y-5">
+        <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 lg:gap-x-4 gap-y-5">
             {mergedHabits?.map(item => <HabitItem key={item._id} habit={item} />)}
         </div>
     );
