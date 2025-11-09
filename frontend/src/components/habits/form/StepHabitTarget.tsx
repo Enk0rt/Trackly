@@ -11,19 +11,22 @@ type Props = {
     errors: FieldErrors<HabitValidator>,
 }
 
-export const StepBasicInfo: FC<Props> = ({setStep, register,errors }) => {
+export const StepHabitTarget: FC<Props> = ({ step,setStep, register,errors }) => {
     return (
         <div
             className="px-6 py-8 flex flex-col gap-5 border border-black/10 shadow-[0_4px_10px_rgba(12,49,44,.08)] backdrop-blur rounded-[10px] text-[#33674E] dark:text-white">
             <h2 className="text-3xl font-medium">Step 1. Basic Info</h2>
-            <FormInput labelFor={"title"} labelText={"Title"} type={"text"} id={"title"} register={register}
-                       value={"title"} error={errors.title} />
-            <FormInput labelFor={"description"} labelText={"Description"} type={"text"} id={"description"}
+            <FormInput labelFor={"target"} labelText={"Target per day"} type={"text"} id={"target"} register={register}
+                       value={"targetValue"} error={errors.targetValue} />
+            <FormInput labelFor={"target-unit"} labelText={"Value Unit"} type={"text"} id={"target-unit"}
                        register={register}
-                       value={"description"} error={errors.description} />
-           <StepControls setStep={setStep}/>
+                       value={"targetUnit"} error={errors.targetUnit} />
+            <FormInput labelFor={"deadline"} labelText={"Deadline"} type={"text"} id={"deadline"}
+                       register={register}
+                       value={"deadline"} error={errors.deadline} />
+          <StepControls step={step} setStep={setStep}/>
         </div>
     );
 };
 
-export default StepBasicInfo;
+export default StepHabitTarget;

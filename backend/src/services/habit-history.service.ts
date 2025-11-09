@@ -61,7 +61,11 @@ class HabitHistory {
             habitMap.get(String(entry._habitId)).push(entry);
         });
 
-        const startOfWeek = dayjs().startOf("isoWeek");
+        const today = dayjs();
+        const effectiveDate =
+            today.isoWeekday() === 7 ? today.subtract(1, "day") : today;
+
+        let startOfWeek = effectiveDate.startOf("isoWeek");
 
         return Array.from(habitMap.entries()).map(
             ([_habitId, habitEntries]) => {

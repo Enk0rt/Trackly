@@ -1,7 +1,8 @@
 import { FieldError, FieldPath, UseFormRegister } from "react-hook-form";
 import { ChangePasswordForm, EmailPasswordRecoveryForm, SignInForm, SignUpForm } from "@/validators/authValidator";
+import { HabitValidator } from "@/validators/habitValidator";
 
-type Props<T extends SignUpForm | SignInForm | ChangePasswordForm | EmailPasswordRecoveryForm | {title:string,description:string}> = {
+type Props<T extends SignUpForm | SignInForm | ChangePasswordForm | EmailPasswordRecoveryForm | HabitValidator> = {
     labelFor: string,
     labelText: string,
     type: string,
@@ -12,9 +13,7 @@ type Props<T extends SignUpForm | SignInForm | ChangePasswordForm | EmailPasswor
 
 }
 
-export const FormInput = <T extends SignUpForm | SignInForm | ChangePasswordForm | EmailPasswordRecoveryForm | {
-    title: string,description:string
-}>({
+export const FormInput = <T extends SignUpForm | SignInForm | ChangePasswordForm | EmailPasswordRecoveryForm | HabitValidator>({
        labelFor,
        labelText,
        type,

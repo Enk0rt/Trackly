@@ -4,8 +4,8 @@ import { IBase } from "./base.interface";
 
 export interface IHabit extends IBase {
     _id: ObjectId;
-    title: string;
     _userId: ObjectId;
+    title: string;
     description: string;
     time: string;
     deadline: Date;

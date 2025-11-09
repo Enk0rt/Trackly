@@ -1,7 +1,10 @@
 import dayjs from "dayjs";
+import isoWeek from "dayjs/plugin/isoWeek";
 
 import { IHabitHistoryEntry } from "../interfaces/habit-history.interface";
 import { HabitHistory } from "../models/habit-history.model";
+
+dayjs.extend(isoWeek);
 
 class HabitHistoryRepository {
     public getAll(): Promise<IHabitHistoryEntry[]> {
@@ -17,8 +20,8 @@ class HabitHistoryRepository {
     }
 
     public getUserWeekEntries(_userId: string): Promise<IHabitHistoryEntry[]> {
-        const startOfWeek = dayjs().startOf("week").toDate();
-        const endOfWeek = dayjs().endOf("week").toDate();
+        const startOfWeek = dayjs().startOf("isoWeek").toDate();
+        const endOfWeek = dayjs().endOf("isoWeek").toDate();
 
         return HabitHistory.find({
             _userId,
