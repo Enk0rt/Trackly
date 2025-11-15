@@ -5,8 +5,7 @@ import { ThemeProvider } from "next-themes";
 import { Providers } from "@/query/providers/Providers";
 import React from "react";
 import { Menu } from "@/components/menu/Menu";
-import { QueryClient } from "@tanstack/react-query";
-import { getMe } from "@/services/api/auth";
+import { dehydrate, QueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { getDataFromServer } from "@/services/api/getDataFromServer";
 
@@ -34,17 +33,17 @@ export default async function RootLayout({
     const queryClient = new QueryClient();
     await queryClient.prefetchQuery({
         queryKey: ["user"],
-        queryFn: getMe,
+        queryFn: getDataFromServer.getMe,
     });
 
-    const currentUser = await getDataFromServer.getMe();
+    const dehydratedState = dehydrate(queryClient);
 
     return (
         <html lang="en" suppressHydrationWarning>
         <body
             className={`${poppins.className} relative text-[#0C312C] antialiased bg-white dark:bg-[#33674E]/90 transition-all duration-300 ease-in-out overflow-x-hidden`}
         >
-        <Providers>
+        <Providers dehydratedState={dehydratedState}>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
                 <div className="fixed inset-0 z-[-2] opacity-20 dark:opacity-14">
                     <Image
@@ -65,7 +64,7 @@ export default async function RootLayout({
 
                 <header className="flex items-center justify-center  opacity-0 animate-opacity">
                     <div className="w-[84%] max-w-[1249px]">
-                        <Menu currentUser={currentUser} />
+                        <Menu/>
                     </div>
                 </header>
                 <main>

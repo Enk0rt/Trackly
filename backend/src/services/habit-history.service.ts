@@ -10,7 +10,9 @@ import {
     IHabitHistoryEntry,
 } from "../interfaces/habit-history.interface";
 import { Habit } from "../models/habit.model";
+import { habitRepository } from "../repositories/habit.repository";
 import { habitHistoryRepository } from "../repositories/habit-history.repository";
+import { buildWeek } from "../utils/createHabitWeek";
 
 dayjs.extend(isoWeek);
 
@@ -50,9 +52,22 @@ class HabitHistory {
     }
 
     public async getHabitChecks(userId: string): Promise<IHabitChecks[]> {
-        const entries = await habitHistoryRepository.getUserWeekEntries(userId);
-
+        let entries = await habitHistoryRepository.getUserWeekEntries(userId);
         const habitMap = new Map<string, any>();
+
+        const today = dayjs();
+        const effectiveDate =
+            today.isoWeekday() === 7 ? today.subtract(1, "day") : today;
+        let startOfWeek = effectiveDate.startOf("isoWeek");
+
+        if (!entries.length) {
+            const habits = await habitRepository.getUserHabits(userId);
+
+            return habits.map((habit) => {
+                const week = buildWeek(null, startOfWeek);
+                return { _habitId: String(habit._id), week };
+            });
+        }
 
         entries.forEach((entry) => {
             if (!habitMap.has(String(entry._habitId))) {
@@ -61,27 +76,9 @@ class HabitHistory {
             habitMap.get(String(entry._habitId)).push(entry);
         });
 
-        const today = dayjs();
-        const effectiveDate =
-            today.isoWeekday() === 7 ? today.subtract(1, "day") : today;
-
-        let startOfWeek = effectiveDate.startOf("isoWeek");
-
         return Array.from(habitMap.entries()).map(
             ([_habitId, habitEntries]) => {
-                const week = Array.from({ length: 7 }).map((_, i) => {
-                    const date = startOfWeek.add(i, "day");
-                    const entry = habitEntries.find(
-                        (entry: IHabitHistoryEntry) =>
-                            dayjs(entry.date).isSame(date, "day"),
-                    );
-
-                    return {
-                        day: date.format("ddd"),
-                        date: date.toDate(),
-                        isChecked: !!entry?.isChecked,
-                    };
-                });
+                const week = buildWeek(habitEntries, startOfWeek);
 
                 return { _habitId, week };
             },

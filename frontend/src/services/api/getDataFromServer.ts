@@ -84,7 +84,22 @@ export const getDataFromServer = {
                     "Content-Type": "application/json",
                 },
             });
+            if (!res.ok) {
+                if (res.status === 401 || res.status === 403) {
+                    console.warn("User is not authorized to fetch habits");
+                    return null;
+                }
+
+                console.error("Failed to fetch habits:", res.status, res.statusText);
+                return null;
+            }
+
             const data: IHabitResponse = await res.json();
+
+            if (!data || !data.data) {
+                console.warn("Habits response has no data field");
+                return null;
+            }
             return data.data;
         } catch (e) {
             console.error("Failed to fetch user:", e);

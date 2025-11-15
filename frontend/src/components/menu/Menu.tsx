@@ -11,18 +11,13 @@ import MenuList from "@/components/menu/MenuList";
 import { ProfileButton } from "@/components/ui/buttons/profile-button/ProfileButton";
 import { MainBtn } from "../ui/buttons/main-btn/MainBtn";
 import { useAuth } from "@/hooks/useAuth";
-import { IUser } from "@/interfaces/user/IUser";
 
-type Props = {
-    currentUser: IUser | null
-}
-
-export const Menu = ({currentUser}:Props) => {
+export const Menu = () => {
     const [active, setActive] = useState<string>("signUp");
     const pathname = usePathname();
     const router = useRouter();
     const queryClient = useQueryClient();
-    const { data: user, isLoading } = useAuth(currentUser);
+    const { data: user, isLoading } = useAuth();
 
 
     const hideMenu =
