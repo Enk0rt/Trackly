@@ -1,4 +1,4 @@
-import { Stepper } from "@/components/habits/form/Stepper";
+import { Stepper } from "@/components/habits/stepper-form/Stepper";
 
 const AddHabitPage = () => {
     return (

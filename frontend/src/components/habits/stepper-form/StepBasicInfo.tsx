@@ -2,7 +2,7 @@ import { Dispatch, FC, SetStateAction } from "react";
 import { FormInput } from "@/components/ui/input/formInput";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { HabitValidator } from "@/validators/habitValidator";
-import { StepControls } from "@/components/habits/form/StepControls";
+import { StepControls } from "@/components/habits/stepper-form/StepControls";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
@@ -22,7 +22,7 @@ export const StepBasicInfo: FC<Props> = ({ step, setStep, stepDirection, setStep
             animate={{ left: 0, opacity: 1 }}
             exit={stepDirection === 1 ? { left: -200, opacity: 0 } :{ left: -200, opacity: 0 }}
             transition={{ duration: .3 }}
-            className="w-[90%] lg:w-[50%] px-6 py-8 absolute transform translate-x-[50%]  flex flex-col gap-5 border border-black/10 shadow-[0_4px_10px_rgba(12,49,44,.08)] backdrop-blur rounded-[10px] text-[#33674E] dark:text-white">
+            className="w-[90%] lg:w-[50%] px-6 py-8 relative justify-center flex flex-col gap-5 border border-black/10 shadow-[0_4px_10px_rgba(12,49,44,.08)] backdrop-blur rounded-[10px] text-[#33674E] dark:text-white">
             <div className="flex justify-between gap-4">
                 <form action="" className="grow-1">
                     <h2 className="mb-4 text-3xl font-medium">1. Basic Info</h2>

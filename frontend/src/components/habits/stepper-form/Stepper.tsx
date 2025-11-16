@@ -1,11 +1,12 @@
 "use client";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import StepBasicInfo from "@/components/habits/form/StepBasicInfo";
+import StepBasicInfo from "@/components/habits/stepper-form/StepBasicInfo";
 import { habitValidation, HabitValidator } from "@/validators/habitValidator";
 import { zodResolver } from "@hookform/resolvers/zod";
-import StepHabitTarget from "@/components/habits/form/StepHabitTarget";
+import StepHabitTarget from "@/components/habits/stepper-form/StepHabitTarget";
 import { AnimatePresence } from "framer-motion";
+import StepperStatusBar from "@/components/habits/stepper-form/StepperStatusBar";
 
 export const Stepper = () => {
     const [step, setStep] = useState<number>(1);
@@ -18,7 +19,8 @@ export const Stepper = () => {
     } = useForm<HabitValidator>({ resolver: zodResolver(habitValidation), mode: "onBlur" });
 
     return (
-        <div className="w-[84%] max-w-[1249px] flex justify-center relative">
+        <div className="w-[84%] max-w-[1249px] flex flex-col justify-center items-center">
+            <StepperStatusBar step={step} stepDirection={stepDirection} />
             <AnimatePresence key={1} mode={"wait"}>
                 {step === 1 &&
                     <StepBasicInfo step={step} setStep={setStep} stepDirection={stepDirection}

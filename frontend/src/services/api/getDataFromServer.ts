@@ -34,6 +34,9 @@ export const getDataFromServer = {
                     "Content-Type": "application/json",
                 },
             });
+
+            if (!res.ok) return null;
+
             const data: IUserResponse = await res.json();
             return data.data;
         } catch (e) {
