@@ -11,24 +11,27 @@ import StepperStatusBar from "@/components/habits/stepper-form/StepperStatusBar"
 export const Stepper = () => {
     const [step, setStep] = useState<number>(1);
     const [stepDirection, setStepDirection] = useState<number>(1);
+    const totalSteps = 5
     const {
-        reset,
         register,
         formState: { errors },
-        setError,
-    } = useForm<HabitValidator>({ resolver: zodResolver(habitValidation), mode: "onBlur" });
+        setValue,
+        getValues,
+        trigger
+    } = useForm<HabitValidator>({ resolver: zodResolver(habitValidation), mode: "onBlur"   });
+
 
     return (
         <div className="w-[84%] max-w-[1249px] flex flex-col justify-center items-center">
-            <StepperStatusBar step={step} stepDirection={stepDirection} />
+            <StepperStatusBar step={step} totalSteps={totalSteps} />
             <AnimatePresence key={1} mode={"wait"}>
                 {step === 1 &&
-                    <StepBasicInfo step={step} setStep={setStep} stepDirection={stepDirection}
-                                   setStepDirection={setStepDirection} register={register} errors={errors} />
+                    <StepBasicInfo key={1} step={step} setStep={setStep} stepDirection={stepDirection}
+                                   setStepDirection={setStepDirection} register={register} errors={errors} setValue={setValue} trigger={trigger} getValues={getValues}/>
                 }
                 {step === 2 &&
                     <StepHabitTarget key={2} step={step} setStep={setStep} stepDirection={stepDirection}
-                                     setStepDirection={setStepDirection} register={register} errors={errors} />
+                                     setStepDirection={setStepDirection} register={register} errors={errors} trigger={trigger} />
                 }
             </AnimatePresence>
         </div>

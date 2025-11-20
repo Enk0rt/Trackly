@@ -3,11 +3,10 @@ import { AnimatePresence, motion } from "framer-motion";
 
 type Props = {
     step: number
-    stepDirection: number
+    totalSteps: number
 }
 
-export const StepperStatusBar: FC<Props> = ({ step }) => {
-    const totalSteps = 5;
+export const StepperStatusBar: FC<Props> = ({ step,totalSteps }) => {
     return (
         <motion.ul
             initial={{ opacity: 0 }}

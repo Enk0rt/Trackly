@@ -1,10 +1,11 @@
-import { Dispatch, FC, SetStateAction } from "react";
+import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { FormInput } from "@/components/ui/input/formInput";
-import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { FieldErrors, UseFormGetValues, UseFormRegister, UseFormSetValue, UseFormTrigger } from "react-hook-form";
 import { HabitValidator } from "@/validators/habitValidator";
 import { StepControls } from "@/components/habits/stepper-form/StepControls";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import DefaultSelect from "@/components/ui/select/DefaultSelect";
 
 type Props = {
     step: number,
@@ -13,14 +14,39 @@ type Props = {
     setStepDirection: Dispatch<SetStateAction<number>>
     register: UseFormRegister<HabitValidator>,
     errors: FieldErrors<HabitValidator>,
+    setValue: UseFormSetValue<HabitValidator>,
+    trigger: UseFormTrigger<HabitValidator>
+    getValues: UseFormGetValues<HabitValidator>
 }
 
-export const StepBasicInfo: FC<Props> = ({ step, setStep, stepDirection, setStepDirection, register, errors }) => {
+export const StepBasicInfo: FC<Props> = ({
+                                             step,
+                                             setStep,
+                                             stepDirection,
+                                             setStepDirection,
+                                             register,
+                                             errors,
+                                             setValue,
+                                             trigger,
+                                             getValues
+                                         }) => {
+    const initialCategoryValue = getValues('category')
+    const [categoryValue, setCategoryValue] = useState<string | undefined>(initialCategoryValue as string | undefined);
+    const hasErrors = !!errors.title || !!errors.description || !!errors.category;
+
+    useEffect(() => {
+        if (categoryValue === undefined) return;
+        setValue("category", categoryValue, {
+            shouldValidate: true,
+            shouldTouch: true,
+        });
+    }, [categoryValue, setValue]);
+
     return (
         <motion.div
-            initial={stepDirection === 1 ? { left: 200, opacity: 0 } :{ left: -200, opacity: 0 } }
+            initial={stepDirection === 1 ? { left: 200, opacity: 0 } : { left: -200, opacity: 0 }}
             animate={{ left: 0, opacity: 1 }}
-            exit={stepDirection === 1 ? { left: -200, opacity: 0 } :{ left: -200, opacity: 0 }}
+            exit={stepDirection === 1 ? { left: -200, opacity: 0 } : { left: -200, opacity: 0 }}
             transition={{ duration: .3 }}
             className="w-[90%] lg:w-[50%] px-6 py-8 relative justify-center flex flex-col gap-5 border border-black/10 shadow-[0_4px_10px_rgba(12,49,44,.08)] backdrop-blur rounded-[10px] text-[#33674E] dark:text-white">
             <div className="flex justify-between gap-4">
@@ -28,13 +54,47 @@ export const StepBasicInfo: FC<Props> = ({ step, setStep, stepDirection, setStep
                     <h2 className="mb-4 text-3xl font-medium">1. Basic Info</h2>
                     <FormInput labelFor={"title"} labelText={"Title"} type={"text"} id={"title"} register={register}
                                value={"title"} error={errors.title} />
-                    <FormInput labelFor={"description"} labelText={"Description"} type={"text"} id={"description"}
-                               register={register}
-                               value={"description"} error={errors.description} />
+                    <label htmlFor={"description"} className="mt-1 flex flex-col  gap-1 font-light">
+                        <span className="opacity-[.6] dark:opacity-40 text-[14px] text-[#34684F] dark:text-[#FFFFFF]">
+                             Description {errors.description && <span className="text-red-500">*</span>}
+                        </span>
+                        <textarea id={"description"}
+                                  rows={3}
+                                  className={`pl-3 py-1 grow-1 border rounded-[8px] font-light text-sm lg:text-md text-[#33674E] dark:text-[#FFFFFF]/90 space tracking-[2px] min-h-[80px] 
+                                  ${errors.description
+                                      ? "border-red-500 !outline-none focus-within:border-[#34684F]/50 dark:focus-within:border-[#FFFFFF]/50"
+                                      : " dark:border-[#FFFFFF]/50 !outline-none focus-within:border-[#34684F]/60 dark:focus-within:border-[#FFFFFF]"
+                                  }`} {...register("description")} />
+                        <div className={`text-red-500 text-[12px] ${errors.description ? "mt-1" : ""} space-y-1`}>
+                            {errors.description &&
+                                <p>{errors.description.message}</p>
+                            }
+                        </div>
+                    </label>
+                    <label>
+                        <span className="opacity-[.6] dark:opacity-40 text-[14px] text-[#34684F] dark:text-[#FFFFFF]">
+                             Category {errors.category && <span className="text-red-500">*</span>}
+                        </span>
+                        <DefaultSelect categoryValue={categoryValue} setCategoryValue={setCategoryValue}
+                                       error={errors.category} />
+                        <div className="text-red-500 text-[12px] mt-1 space-y-1">
+                            {errors.category &&
+                                <p>{errors.category.message}</p>
+                            }
+                        </div>
+                    </label>
                 </form>
-                <Image src={"/step-1.png"} alt={"First step basic info"} width={300} height={300} />
+                <div
+                    className="hidden lg:block w-[320px] h-[300px] aspect-[5/4] relative shrink-0">
+                    <Image
+                        src="/step-1.png"
+                        alt="First step basic info"
+                        fill
+                    />
+                </div>
             </div>
-            <StepControls step={step} setStep={setStep} setStepDirection={setStepDirection} errors={errors} />
+            <StepControls step={step} setStep={setStep} setStepDirection={setStepDirection} hasErrors={hasErrors}
+                          trigger={trigger} />
         </motion.div>
     );
 };

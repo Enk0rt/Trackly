@@ -2,7 +2,7 @@ import { Stepper } from "@/components/habits/stepper-form/Stepper";
 
 const AddHabitPage = () => {
     return (
-        <div className='mt-10 flex justify-center'>
+        <div className='mt-7 flex justify-center'>
             <Stepper/>
         </div>
     );

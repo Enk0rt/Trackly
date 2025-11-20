@@ -35,7 +35,7 @@ const ActionButton: FC<ActionButtonProps> = ({
     const variantClasses: Record<Variant, string> = {
         primary: "bg-[#33674E] text-white border-none hover:bg-[#33674E] hover:text-white dark:bg-white dark:text-[#33674E] dark:hover:bg-[#33674E] dark:hover:text-white rounded-[14px]",
         secondary: "bg-white text-[#33674E] border border-[#33674E] hover:bg-[#33674E] hover:text-white dark:bg-[#33674E] dark:text-white dark:border-white dark:hover:bg-white dark:hover:text-[#33674E] rounded-lg",
-        ghost: "text-[#33674E] hover:bg-black/10 dark:text-white dark:hover:bg-white/10 border-none",
+        ghost: "text-[#33674E] hover:bg-black/10 dark:text-white dark:hover:bg-white/10 border-none rounded-[14px]",
     };
 
     return (
