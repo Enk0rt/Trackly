@@ -6,6 +6,7 @@ import { StepControls } from "@/components/habits/stepper-form/StepControls";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import DefaultSelect from "@/components/ui/select/DefaultSelect";
+import TextArea from "@/components/ui/input/TextArea";
 
 type Props = {
     step: number,
@@ -54,23 +55,7 @@ export const StepBasicInfo: FC<Props> = ({
                     <h2 className="mb-4 text-3xl font-medium">1. Basic Info</h2>
                     <FormInput labelFor={"title"} labelText={"Title"} type={"text"} id={"title"} register={register}
                                value={"title"} error={errors.title} />
-                    <label htmlFor={"description"} className="mt-1 flex flex-col  gap-1 font-light">
-                        <span className="opacity-[.6] dark:opacity-40 text-[14px] text-[#34684F] dark:text-[#FFFFFF]">
-                             Description {errors.description && <span className="text-red-500">*</span>}
-                        </span>
-                        <textarea id={"description"}
-                                  rows={3}
-                                  className={`pl-3 py-1 grow-1 border rounded-[8px] font-light text-sm lg:text-md text-[#33674E] dark:text-[#FFFFFF]/90 space tracking-[2px] min-h-[80px] 
-                                  ${errors.description
-                                      ? "border-red-500 !outline-none focus-within:border-[#34684F]/50 dark:focus-within:border-[#FFFFFF]/50"
-                                      : " dark:border-[#FFFFFF]/50 !outline-none focus-within:border-[#34684F]/60 dark:focus-within:border-[#FFFFFF]"
-                                  }`} {...register("description")} />
-                        <div className={`text-red-500 text-[12px] ${errors.description ? "mt-1" : ""} space-y-1`}>
-                            {errors.description &&
-                                <p>{errors.description.message}</p>
-                            }
-                        </div>
-                    </label>
+                    <TextArea labelFor={'description'} labelText={"Description"} error={errors.description!} register={register} registerValue={'description'}/>
                     <label>
                         <span className="opacity-[.6] dark:opacity-40 text-[14px] text-[#34684F] dark:text-[#FFFFFF]">
                              Category {errors.category && <span className="text-red-500">*</span>}
